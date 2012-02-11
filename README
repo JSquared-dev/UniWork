@@ -1,0 +1,5 @@
+This project is a source for all of my work at university. It contains all of my coursework elements as well as a few extra things here and there. It is provided as-is, with the hope it is helpful to somebody out there in the wild yonder. In the mean-time, it's just a global repo for getting things to and from university without too much trouble.
+
+Decoding folder names
+
+The folders in the root directory are separated into each year at university, while each subfolder relates to a specific module I have taken/am taking in that year. See the README in each year's directory to see what the folder names mean.

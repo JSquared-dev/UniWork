@@ -1,0 +1,8 @@
+Folder names:
+
+DDI - Digital Design and Instrumentation module. Raw logic analysis as well as simple electronics, lab equipment usage etc.
+DSD - Digital Systems Development module. Electronics development and micro controller programming. Mostly based on PIC for university work, but may contain a bit of TI's MSP too.
+CSA - Computer Systems Architecture module. A generic module about the (modern) history and development of computing. The main basis for this module is Networking and serial communication.
+ProgC - Programming in C module. Simple C programming module. Largely based around the Comedi library, and some university designed, Comedi compatible hardware, but exercises the use of the C language none the less.
+ProgDev - Program Development module. C# development on Windows. Mostly GUI work.
+SysDev - Systems Development module. Website design and implementation. Contains anything from HTML to Perl.
