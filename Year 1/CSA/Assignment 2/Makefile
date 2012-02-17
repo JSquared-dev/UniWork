@@ -1,13 +1,15 @@
 
+OBJECTS := main.o messageQueue.o receive.o transmit.o packet.o
+
 
 .PHONY: all clean
 
-all: main.o
-	gcc -std=c99 -o comms main.o -lc -lm -lpthread
+all: $(OBJECTS)
+	gcc -std=c99 -o comms $(OBJECTS) -lc -lm -lpthread
 
 clean:
-	rm comms
-	rm *.o
+	-rm comms
+	-rm *.o
 
-main.o: main.c
+.c.o:
 	gcc -std=c99 -c -o $@ $<

@@ -2,7 +2,12 @@
  *
  */
 
+#include "main.h"
+#include "messageQueue.h"
+#include "receive.h"
+#include "packet.h"
 #include <stdio.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <termios.h>
@@ -16,50 +21,91 @@
 
 #endif
 
-#define PACKET_START '{'
-#define PACKET_END '}'
+#define ESC_KEY 0x1B
 
-struct lanPacket_s {
-	char destination;
-	char source;
-	char packetType;
-	char payload[10];
-	char checksum;
-};
+void initThreadData(struct threadData_s *data);
+void destroyThreadData(struct threadData_s *data);
+
+void switchKbdBlocking();
 
 int kbdhit();
 int login(FILE *comPort);
 int logout(FILE *comPort, int id);
-char packetChecksum(struct lanPacket_s *packet);
-void transmit(FILE *comPort, struct lanPacket_s *packet);
-void *networkStart(void *comPort);
 
 int main(int argc, const char **argv) {
 	
-	printf("connecting to network...");
-	FILE *comPort = fopen(COM_PORT, "r+");
+	pthread_t receiveThread;
+	struct threadData_s data;
+	switchKbdBlocking(1);
+	initThreadData(&data);
+	pthread_create(&receiveThread, NULL, receiveStart, &data);
 	
-	pthread_t networkThread;
-	pthread_create(&networkThread, NULL, networkStart, comPort);
-	int id = login(comPort);
-	char input = 0;
-	
-	while (input != 'q') {
-		if ((input = kbdhit()) != EOF) {
-			putchar(input);
+	char letter = 'a';
+	while (letter != ESC_KEY) {
+		if(read(STDIN_FILENO, &letter, 1) > 0) {
+			printf("%c",letter);
+			letter = toupper(letter);
+			switch (letter) {
+				case 'D':
+					break;
+				default:
+//					showMenu();
+					break;
+			}
 		}
 	}
-	logout(comPort, id);
-	pthread_cancel(networkThread);
-	fclose(comPort);
+	
+	pthread_cancel(receiveThread);
+	destroyThreadData(&data);
+	switchKbdBlocking(0);
 	return 0;
 }
 
-void *networkStart(void *comPort) {
-	while(1) {
-		printf(".");
-		sleep(1);
+/* if type = 1, enable non blocking, else enable non-blocking */
+void switchKbdBlocking(int type) {
+	static int saved = 0;
+	static struct termios old;
+	if (saved != 1) {
+		tcgetattr(STDIN_FILENO, &old);
+		saved = 1;
 	}
+	if (type == 1) {
+		struct termios new = old;
+		new.c_lflag &= ~(ICANON|ECHO);
+		new.c_cc[VMIN] = 0;
+		new.c_cc[VTIME] = 0;
+		tcsetattr(STDIN_FILENO, TCSANOW, &new);
+	}
+	else {
+		tcsetattr(STDIN_FILENO, TCSANOW, &old);
+	}
+}
+
+void initThreadData(struct threadData_s *data) {
+	data->comPort = fopen(COM_PORT, "rb+");
+	pthread_mutex_init(&data->comPort_mutex, NULL);
+	
+	data->userID = 0;
+	pthread_mutex_init(&data->userID_mutex, NULL);
+	
+	createMessageQueue(&data->receiveQueue, 5);
+	pthread_mutex_init(&data->receiveQueue_mutex, NULL);
+	createMessageQueue(&data->transmitQueue, 5);
+	pthread_mutex_init(&data->transmitQueue_mutex, NULL);
+	
+}
+
+void destroyThreadData(struct threadData_s *data) {
+	
+	pthread_mutex_destroy(&data->comPort_mutex);
+	fclose(data->comPort);
+	
+	pthread_mutex_destroy(&data->userID_mutex);
+	
+	pthread_mutex_destroy(&data->receiveQueue_mutex);
+	destroyMessageQueue(&data->receiveQueue);
+	pthread_mutex_destroy(&data->transmitQueue_mutex);
+	destroyMessageQueue(&data->transmitQueue);
 }
 
 /* non-blocking keyboard input */
@@ -72,7 +118,7 @@ int kbdhit() {
 	}
 	newState = saveState;
 	
-	newState.c_lflag &= ~(ICANON|ECHO); /* disable screen echos of keyboard input */
+	newState.c_lflag &= ~(ICANON|ECHO);
 	newState.c_cc[VMIN] = 1;
 	newState.c_cc[VTIME] = 0;
 	
@@ -108,25 +154,8 @@ int logout(FILE *comPort, int id) {
 	packet.source = id;
 	packet.packetType = 'X';
 	packet.checksum = packetChecksum(&packet);
-	transmit(comPort, &packet);
+//	transmit(comPort, &packet);
 	
 	return 0;
-}
-
-char packetChecksum(struct lanPacket_s *packet) {
-	char sum = 0;
-	sum += packet->destination;
-	sum += packet->source;
-	sum += packet->packetType;
-	for (int i = 0; i < 10; i++) {
-		sum += packet->payload[i];
-	}
-	return sum;
-}
-
-void transmit(FILE *comPort, struct lanPacket_s *packet) {
-	/* lock comPort */
-	/* transmit contents of packet on comPort */
-	/* unlock comPort */
 }
 
