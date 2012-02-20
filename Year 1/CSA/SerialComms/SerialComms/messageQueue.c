@@ -48,7 +48,7 @@ void *removeFrontOfMessageQueue(struct messageQueue_s *queue) {
 	}
 }
 
-int addMessageToQueue(struct messageQueue_s *queue, void *message) {
+void addMessageToQueue(struct messageQueue_s *queue, void *message) {
 	int ref = queue->back;
 	queue->queue[ref] = message;
 	queue->back += 1;

@@ -25,6 +25,6 @@ int createMessageQueue(struct messageQueue_s *queue, int initialSize);
 int destroyMessageQueue(struct messageQueue_s *queue);
 int increaseMessageQueue(struct messageQueue_s *queue, int amount);
 void *removeFrontOfMessageQueue(struct messageQueue_s *queue);
-int addMessageToQueue(struct messageQueue_s *queue, void *message);
+void addMessageToQueue(struct messageQueue_s *queue, void *message);
 
 #endif

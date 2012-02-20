@@ -1,0 +1,239 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3DF14F01F7F0030FFDD /* main.c */; };
+		FCF0C3EC14F01F7F0030FFDD /* messageQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* messageQueue.c */; };
+		FCF0C3ED14F01F7F0030FFDD /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E414F01F7F0030FFDD /* packet.c */; };
+		FCF0C3EE14F01F7F0030FFDD /* receive.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E614F01F7F0030FFDD /* receive.c */; };
+		FCF0C3EF14F01F7F0030FFDD /* transmit.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E814F01F7F0030FFDD /* transmit.c */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		FCF0C3CF14F01F250030FFDD /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		FCF0C3D114F01F250030FFDD /* SerialComms */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialComms; sourceTree = BUILT_PRODUCTS_DIR; };
+		FCF0C3D714F01F250030FFDD /* SerialComms.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SerialComms.1; sourceTree = "<group>"; };
+		FCF0C3DE14F01F7F0030FFDD /* FSM.graffle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FSM.graffle; sourceTree = "<group>"; };
+		FCF0C3DF14F01F7F0030FFDD /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		FCF0C3E014F01F7F0030FFDD /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
+		FCF0C3E114F01F7F0030FFDD /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
+		FCF0C3E214F01F7F0030FFDD /* messageQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = messageQueue.c; sourceTree = "<group>"; };
+		FCF0C3E314F01F7F0030FFDD /* messageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messageQueue.h; sourceTree = "<group>"; };
+		FCF0C3E414F01F7F0030FFDD /* packet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = packet.c; sourceTree = "<group>"; };
+		FCF0C3E514F01F7F0030FFDD /* packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packet.h; sourceTree = "<group>"; };
+		FCF0C3E614F01F7F0030FFDD /* receive.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = receive.c; sourceTree = "<group>"; };
+		FCF0C3E714F01F7F0030FFDD /* receive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = receive.h; sourceTree = "<group>"; };
+		FCF0C3E814F01F7F0030FFDD /* transmit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = transmit.c; sourceTree = "<group>"; };
+		FCF0C3E914F01F7F0030FFDD /* transmit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transmit.h; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FCF0C3CE14F01F250030FFDD /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FCF0C3C614F01F250030FFDD = {
+			isa = PBXGroup;
+			children = (
+				FCF0C3D414F01F250030FFDD /* SerialComms */,
+				FCF0C3D214F01F250030FFDD /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FCF0C3D214F01F250030FFDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FCF0C3D114F01F250030FFDD /* SerialComms */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FCF0C3D414F01F250030FFDD /* SerialComms */ = {
+			isa = PBXGroup;
+			children = (
+				FCF0C3DD14F01F7F0030FFDD /* design */,
+				FCF0C3DF14F01F7F0030FFDD /* main.c */,
+				FCF0C3E014F01F7F0030FFDD /* main.h */,
+				FCF0C3E114F01F7F0030FFDD /* Makefile */,
+				FCF0C3E214F01F7F0030FFDD /* messageQueue.c */,
+				FCF0C3E314F01F7F0030FFDD /* messageQueue.h */,
+				FCF0C3E414F01F7F0030FFDD /* packet.c */,
+				FCF0C3E514F01F7F0030FFDD /* packet.h */,
+				FCF0C3E614F01F7F0030FFDD /* receive.c */,
+				FCF0C3E714F01F7F0030FFDD /* receive.h */,
+				FCF0C3E814F01F7F0030FFDD /* transmit.c */,
+				FCF0C3E914F01F7F0030FFDD /* transmit.h */,
+				FCF0C3D714F01F250030FFDD /* SerialComms.1 */,
+			);
+			path = SerialComms;
+			sourceTree = "<group>";
+		};
+		FCF0C3DD14F01F7F0030FFDD /* design */ = {
+			isa = PBXGroup;
+			children = (
+				FCF0C3DE14F01F7F0030FFDD /* FSM.graffle */,
+			);
+			path = design;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FCF0C3D014F01F250030FFDD /* SerialComms */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FCF0C3DA14F01F250030FFDD /* Build configuration list for PBXNativeTarget "SerialComms" */;
+			buildPhases = (
+				FCF0C3CD14F01F250030FFDD /* Sources */,
+				FCF0C3CE14F01F250030FFDD /* Frameworks */,
+				FCF0C3CF14F01F250030FFDD /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SerialComms;
+			productName = SerialComms;
+			productReference = FCF0C3D114F01F250030FFDD /* SerialComms */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FCF0C3C814F01F250030FFDD /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				ORGANIZATIONNAME = "James Johns";
+			};
+			buildConfigurationList = FCF0C3CB14F01F250030FFDD /* Build configuration list for PBXProject "SerialComms" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = FCF0C3C614F01F250030FFDD;
+			productRefGroup = FCF0C3D214F01F250030FFDD /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FCF0C3D014F01F250030FFDD /* SerialComms */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FCF0C3CD14F01F250030FFDD /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */,
+				FCF0C3EC14F01F7F0030FFDD /* messageQueue.c in Sources */,
+				FCF0C3ED14F01F7F0030FFDD /* packet.c in Sources */,
+				FCF0C3EE14F01F7F0030FFDD /* receive.c in Sources */,
+				FCF0C3EF14F01F7F0030FFDD /* transmit.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		FCF0C3D814F01F250030FFDD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		FCF0C3D914F01F250030FFDD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_64_BIT)";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		FCF0C3DB14F01F250030FFDD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FCF0C3DC14F01F250030FFDD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FCF0C3CB14F01F250030FFDD /* Build configuration list for PBXProject "SerialComms" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCF0C3D814F01F250030FFDD /* Debug */,
+				FCF0C3D914F01F250030FFDD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FCF0C3DA14F01F250030FFDD /* Build configuration list for PBXNativeTarget "SerialComms" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FCF0C3DB14F01F250030FFDD /* Debug */,
+				FCF0C3DC14F01F250030FFDD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FCF0C3C814F01F250030FFDD /* Project object */;
+}

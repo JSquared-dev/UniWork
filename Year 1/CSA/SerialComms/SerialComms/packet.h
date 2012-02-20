@@ -16,6 +16,8 @@ struct lanPacket_s {
 	char checksum;
 };
 
+struct lanPacket_s *createLanPacket(char source, char destination, char type, char data[10]);
+void destroyPacket(struct lanPacket_s *packet);
 char packetChecksum(struct lanPacket_s *packet);
 
 #endif
