@@ -2,14 +2,14 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <comedilib.h>
+	//#include <comedilib.h>
 #include <math.h>
 
 	//int usleep(useconds_t usec);
 #define PI 3.1415926535897	/* PI for converting radians to degrees easily */
 #define RAD_TO_DEG(x) ((x/PI)*180)
 #define MOTOR_MAX 2048		/* max value a motor can be in 1 direction. multiply by 2 to get max 
-							 * value a motor can be. */
+* value a motor can be. */
 
 /* for compile testing. remove ASAP */
 #ifndef AREF_GROUND
@@ -61,14 +61,14 @@ int main (int argc, const char **argv) {
 	
 	while (1) {
 		/* TODO - fix recording mechanism. wasn't supposed to work in the first place */
-		time1 = gettime();
+			//	time1 = gettime();
 		readJoystick(device, &joystickData);
 		calculateMotorValue(joystickCalibData, joystickData, &motorValues);
 		runMotors(device, motorValues);
-		time2 = gettime();
+			//	time2 = gettime();
 		
-		int timeDiff = time2 - time1;
-		recordMovement(timeDiff, motorValues);
+			//	int timeDiff = time2 - time1;
+			//recordMovement(timeDiff, motorValues);
 		
 		sleep(1);
 	}
@@ -78,9 +78,9 @@ int main (int argc, const char **argv) {
 }
 
 void calibrateJoystick(comedi_t *device, struct joystick_calib *calibration) {
-
+	
 	printf("Calibrating Joystick...\n");
-
+	
 	/* calibrate neutral data values */
 	printf("Please let go of the joystick and press enter\n");
 	while (getchar() != '\n'); /* loop endlessly until user presses enter */
@@ -93,7 +93,7 @@ void calibrateJoystick(comedi_t *device, struct joystick_calib *calibration) {
 	while (getchar() != '\n'); /* loop endlessly until user presses enter */
 	comedi_data_read(device, 0, 0, 1, AREF_GROUND, &calibration->forward);
 	printf("calibration value: %d", calibration->forward);
-
+	
 	printf("Please hold the joystick backward and press enter\n");
 	while (getchar() != '\n'); /* loop endlessly until user presses enter */
 	comedi_data_read(device, 0, 0, 1, AREF_GROUND, &calibration->backward);
@@ -104,12 +104,12 @@ void calibrateJoystick(comedi_t *device, struct joystick_calib *calibration) {
 	while (getchar() != '\n'); /* loop endlessly until user presses enter */
 	comedi_data_read(device, 0, 1, 1, AREF_GROUND, &calibration->left);
 	printf("calibration value: %d", calibration->left);
-
+	
 	printf("Please hold the joystick right and press enter\n");
 	while (getchar() != '\n'); /* loop endlessly until user presses enter */
 	comedi_data_read(device, 0, 1, 1, AREF_GROUND, &calibration->right);
 	printf("calibration value: %d", calibration->right);
-
+	
 	calibration->stepBlock = (double)MOTOR_MAX/(double)((calibration->forward)-(calibration->neutral.y));
 	printf("\nBlock Step val: %f", calibration->stepBlock);
 }
@@ -125,34 +125,41 @@ void calculateMotorValue(struct joystick_calib	calibration,
 						 struct joystick		joystickValue, 
 						 struct motor_s		   *motorValue)
 {
-	
-	printf("\njoystick data x: %d", joystickValue.x);
-	printf("\njoystick data y: %d", joystickValue.y);
-
 	/* normalise joystick values */
 	signed int dataX = joystickValue.x;
 	signed int dataY = joystickValue.y;
 	dataX -= calibration.neutral.x;
-	dataY -= calibration.neutral.x;
+	dataY -= calibration.neutral.y;
+	
+	printf("\ndata x: %d", dataX);
+	printf("\ndata y: %d", dataY);
+	
+	/* if very little movement on joystick, ignore input and stay still */
+	if (dataX < 15 && dataX > -15 && dataY < 15 && dataY > -15) {
+		motorValue->left = MOTOR_MAX;
+		motorValue->right = MOTOR_MAX;
+		printf("No motor value applicable");
+		return;
+	}
 	
 	/* calculate proportions of joystick in X and Y directions */
 	/* use MOTOR_MAX as reference to minimise complexity */
-	dataX = floor(((double)joystickValue.x)*((double)calibration.stepBlock));
-//	dataX += MOTOR_MAX;
-	dataY = floor(((double)joystickValue.y)*((double)calibration.stepBlock));
-//	dataY += MOTOR_MAX;
-
+		//	dataX = floor(((double)joystickValue.x)*((double)calibration.stepBlock));
+		//	dataX += MOTOR_MAX;
+		//	dataY = floor(((double)joystickValue.y)*((double)calibration.stepBlock));
+		//	dataY += MOTOR_MAX;
+	
 	double angle = atan(((double) dataY)/((double)dataX));
 	angle = RAD_TO_DEG(angle);
 	/* angle is the angle created by dataX and dataY. +ve angle means forwards, -ve angle means backwards */
-	/* there are some states we need to deal with, as arctan only gives values between +90 and -90 degrees (+PI/4 and -PI/4 really) */
-	if ((dataX < 0) && (dataY < 0)) { /* lower left quadrant */
-		angle = ((-180) + angle);
+	/* there are some states we need to deal with, as arctan only gives values between +90 and -90 degrees (+PI/2 and -PI/2 really) */
+	if ((dataX < 0) && (dataY < 0) && angle >= 0) { /* lower left quadrant */
+		angle = (angle - 180);
 	}
-	else if ((dataX < 0) && dataY >= 0) { /* upper left quadrant */
-		angle = (180 - angle);
+	else if ((dataX < 0) && dataY >= 0 && angle <= 0) { /* upper left quadrant */
+		angle = (180 + angle);
 	} /* else arctan gives angle as it is */
-	
+	printf("\nCalculated angle: %f", angle);
 	
 	if (angle >= 0) {
 		/* set motor values to max, so all we need to do is calculate a multiplier to 
@@ -161,27 +168,27 @@ void calculateMotorValue(struct joystick_calib	calibration,
 		motorValue->right = MOTOR_MAX;
 		
 		if (angle < 45) {
-				/* left motor full forwards
-				 * right motor variable backwards; 45 = 0, 0 = full */
+			/* left motor full forwards
+			 * right motor variable backwards; 45 = 0, 0 = full */
 			motorValue->right /= 45;
 			motorValue->right *= (45-angle);
 			motorValue->right *= (-1); /* negative motor value makes for reversed direction. */
 		}
 		else if (angle < 90) {
-				/* left motor full forwards
-				 * right motor variable forwards; 90 = full, 45 = 0 */
+			/* left motor full forwards
+			 * right motor variable forwards; 90 = full, 45 = 0 */
 			motorValue->right /= 45;
 			motorValue->right *= (angle - 45);
 		}
 		else if (angle < 135) {
-				/* left motor variable forwards; 135 = 0, 90 = full
-				 * right motor full forwards */
+			/* left motor variable forwards; 135 = 0, 90 = full
+			 * right motor full forwards */
 			motorValue->left /= 45;
 			motorValue->left *= (45 - (angle - 90));
 		}
 		else {
-				/* left motor variable backwards; 135 = 0, 180 = full
-				 * right motor full forwards */
+			/* left motor variable backwards; 135 = 0, 180 = full
+			 * right motor full forwards */
 			motorValue->left /= 45;
 			motorValue->left *= (angle - 135);
 			motorValue->left *= -1; /* negative motor value makes for reversed direction */
@@ -193,27 +200,27 @@ void calculateMotorValue(struct joystick_calib	calibration,
 		motorValue->left = 0-MOTOR_MAX;
 		motorValue->right = 0-MOTOR_MAX;
 		if (angle > -45) {
-				/* left motor full backwards
-				 * right motor variable backwards; -45 = 0, 0 = full */
+			/* left motor full backwards
+			 * right motor variable backwards; -45 = 0, 0 = full */
 			motorValue->right /= 45;
 			motorValue->right *= (angle + 45);
 		}
 		else if (angle > -90) {
-				/* left motor full backwards
-				 * right motor variable backwards; -90 = full, -45 = 0; */
+			/* left motor full backwards
+			 * right motor variable backwards; -90 = full, -45 = 0; */
 			motorValue->right /= 45;
 			motorValue->right *= (45 - (angle + 90));
 		}
 		else if (angle > -135) {
-				/* left motor variable backwards; -135 = 0, -90 = full
-				 * right motor full backwards */
+			/* left motor variable backwards; -135 = 0, -90 = full
+			 * right motor full backwards */
 			motorValue->left /= 45;
 			motorValue->left *= (angle + 135);
 			
 		}
 		else {
-				/* left motor variable forwards; -135 = 0, -180 = full
-				 * right motor full backwards */
+			/* left motor variable forwards; -135 = 0, -180 = full
+			 * right motor full backwards */
 			motorValue->left /= 45;
 			motorValue->left *= (45 - (angle + 180));
 		}
