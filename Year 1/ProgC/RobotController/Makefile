@@ -3,7 +3,7 @@
 OBJECTS := main.c
 UTILS := utils/stop.c
 
-.PHONY: all utils clean joystick
+.PHONY: all utils clean joystick linefollow
 
 clean:
 	-rm -rf stop
@@ -11,7 +11,7 @@ clean:
 	-rm -rf joystick
 	-rm -rf *.o
 
-all: $(OBJECTS) utils
+all: joystick linefollow utils
 	cc -std=c99 -Wall -o RobotController $(OBJECTS) -lcomedi -lncurses -lc -lm
 
 utils: utils/stop.c
