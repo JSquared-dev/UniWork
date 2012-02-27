@@ -125,14 +125,15 @@ void calculateMotorValue(struct joystick_calib	calibration,
 						 struct joystick		joystickValue, 
 						 struct motor_s		   *motorValue)
 {
+	signed int left, right;
 	/* normalise joystick values */
 	signed int dataX = joystickValue.x;
 	signed int dataY = joystickValue.y;
 	dataX -= calibration.neutral.x;
 	dataY -= calibration.neutral.y;
 	
-	printf("\ndata x: %d", dataX);
-	printf("\ndata y: %d", dataY);
+		//	printf("\ndata x: %d", dataX);
+		//	printf("\ndata y: %d", dataY);
 	
 	/* if very little movement on joystick, ignore input and stay still */
 	if (dataX < 15 && dataX > -15 && dataY < 15 && dataY > -15) {
@@ -164,77 +165,84 @@ void calculateMotorValue(struct joystick_calib	calibration,
 	if (angle >= 0) {
 		/* set motor values to max, so all we need to do is calculate a multiplier to 
 		 * change each motor. Add MOTOR_MAX to this value to make final motor values. */
-		motorValue->left = MOTOR_MAX;
-		motorValue->right = MOTOR_MAX;
+		left = MOTOR_MAX;
+		right = MOTOR_MAX;
 		
 		if (angle < 45) {
 			/* left motor full forwards
 			 * right motor variable backwards; 45 = 0, 0 = full */
-			motorValue->right /= 45;
-			motorValue->right *= (45-angle);
-			motorValue->right *= (-1); /* negative motor value makes for reversed direction. */
+			right /= 45;
+			right *= (45-angle);
+			right *= (-1); /* negative motor value makes for reversed direction. */
 		}
 		else if (angle < 90) {
 			/* left motor full forwards
 			 * right motor variable forwards; 90 = full, 45 = 0 */
-			motorValue->right /= 45;
-			motorValue->right *= (angle - 45);
+			right /= 45;
+			right *= (angle - 45);
 		}
 		else if (angle < 135) {
 			/* left motor variable forwards; 135 = 0, 90 = full
 			 * right motor full forwards */
-			motorValue->left /= 45;
-			motorValue->left *= (45 - (angle - 90));
+			left /= 45;
+			left *= (45 - (angle - 90));
 		}
 		else {
 			/* left motor variable backwards; 135 = 0, 180 = full
 			 * right motor full forwards */
-			motorValue->left /= 45;
-			motorValue->left *= (angle - 135);
-			motorValue->left *= -1; /* negative motor value makes for reversed direction */
+			left /= 45;
+			left *= (angle - 135);
+			left *= -1; /* negative motor value makes for reversed direction */
 		}
 	}
 	else {
 		/* set motor values to max, so all we need to do is calculate a multiplier to 
 		 * change each motor. Add MOTOR_MAX to this value to make final motor values. */
-		motorValue->left = 0-MOTOR_MAX;
-		motorValue->right = 0-MOTOR_MAX;
+		left = 0-MOTOR_MAX;
+		right = 0-MOTOR_MAX;
 		if (angle > -45) {
 			/* left motor full backwards
 			 * right motor variable backwards; -45 = 0, 0 = full */
-			motorValue->right /= 45;
-			motorValue->right *= (angle + 45);
+			right /= 45;
+			right *= (angle + 45);
 		}
 		else if (angle > -90) {
 			/* left motor full backwards
 			 * right motor variable backwards; -90 = full, -45 = 0; */
-			motorValue->right /= 45;
-			motorValue->right *= (45 - (angle + 90));
+			right /= 45;
+			right *= (45 - (angle + 90));
 		}
 		else if (angle > -135) {
 			/* left motor variable backwards; -135 = 0, -90 = full
 			 * right motor full backwards */
-			motorValue->left /= 45;
-			motorValue->left *= (angle + 135);
+			left /= 45;
+			left *= (angle + 135);
 			
 		}
 		else {
 			/* left motor variable forwards; -135 = 0, -180 = full
 			 * right motor full backwards */
-			motorValue->left /= 45;
-			motorValue->left *= (45 - (angle + 180));
+			left /= 45;
+			left *= (45 - (angle + 180));
 		}
 	}
 	
+	printf("\nLeft Motor: %d", left);
+	printf("\nRight Motor: %d", right);
 	/* motorValues are currently at their maximum possible value.
 	 * make the joystick more interactive by scaling the motor values depending on how far
 	 * the joystick has been pushed. */
 	double hypotenuse = sqrt((dataX*dataX) + (dataY*dataY)); /* combined value the joystick has been pushed by. */
-	double maxHyp = sqrt((calibration.right*calibration.right) + (calibration.forward*calibration.forward));
+	unsigned int a = (calibration.left - calibration.neutral.x); a *= a;
+	unsigned int b = (calibration.forward - calibration.neutral.y); b *= b;
+	
+	double maxHyp = sqrt(a + b);
 	double multiplier = hypotenuse/maxHyp;
 	
-	motorValue->left = (motorValue->left * multiplier) + MOTOR_MAX;
-	motorValue->right = (motorValue->right * multiplier) + MOTOR_MAX;
+	motorValue->left = (left * multiplier) + MOTOR_MAX;
+	motorValue->right = (right * multiplier) + MOTOR_MAX;
+	printf("\nLeft Motor: %d", motorValue->left);
+	printf("\nRight Motor: %d", motorValue->right);
 }
 
 void runMotors(comedi_t *device, struct motor_s motorValues) {
