@@ -5,9 +5,22 @@
 #define _MAIN_H_
 
 #include <stdio.h>
-#include <pthread.h>
+#include "thread.h"
 #include "messageQueue.h"
 
+/******************************************/
+#ifdef _WIN32						/* windows only definitions */
+	#include <process.h>
+	#define COM_PORT "COM1"				/* first serial port available on windows systems */
+/******************************************/
+#elif defined (__APPLE__)				/* mac os x only definitions */
+	#include <pthread.h>
+	#define COM_PORT "/dev/master"
+/******************************************/
+#else									/* unix only definitions */
+	#include <pthread.h>				/* posix threading */
+	#define COM_PORT "/dev/ttyS0"		/* first serial port available on linux systems */
+#endif
 
 enum progState {
 	LOGIN, /* login state requires user to choose a user id */
@@ -25,11 +38,12 @@ struct threadData_s {
 	struct messageQueue_s transmitQueue;	/* packets to be transmitted */
 	
 	/* unique locks for individual data elements */
-	pthread_mutex_t programState_mutex;
-	pthread_mutex_t comPort_mutex;
-	pthread_mutex_t userID_mutex;
-	pthread_mutex_t receiveQueue_mutex;
-	pthread_mutex_t transmitQueue_mutex;
+	/* indexes in mutex list */
+	int programState_mutex;
+	int comPort_mutex;
+	int userID_mutex;
+	int receiveQueue_mutex;
+	int transmitQueue_mutex;
 };
 
 

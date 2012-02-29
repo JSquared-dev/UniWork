@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FCD221B514F40E06007F6B8B /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = FCD221B314F40E06007F6B8B /* thread.c */; };
 		FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3DF14F01F7F0030FFDD /* main.c */; };
 		FCF0C3EC14F01F7F0030FFDD /* messageQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* messageQueue.c */; };
 		FCF0C3ED14F01F7F0030FFDD /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E414F01F7F0030FFDD /* packet.c */; };
@@ -27,8 +28,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FCD221B314F40E06007F6B8B /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread.c; sourceTree = "<group>"; };
+		FCD221B414F40E06007F6B8B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		FCF0C3D114F01F250030FFDD /* SerialComms */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialComms; sourceTree = BUILT_PRODUCTS_DIR; };
-		FCF0C3D714F01F250030FFDD /* SerialComms.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SerialComms.1; sourceTree = "<group>"; };
 		FCF0C3DE14F01F7F0030FFDD /* FSM.graffle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FSM.graffle; sourceTree = "<group>"; };
 		FCF0C3DF14F01F7F0030FFDD /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
 		FCF0C3E014F01F7F0030FFDD /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
@@ -85,7 +87,8 @@
 				FCF0C3E714F01F7F0030FFDD /* receive.h */,
 				FCF0C3E814F01F7F0030FFDD /* transmit.c */,
 				FCF0C3E914F01F7F0030FFDD /* transmit.h */,
-				FCF0C3D714F01F250030FFDD /* SerialComms.1 */,
+				FCD221B314F40E06007F6B8B /* thread.c */,
+				FCD221B414F40E06007F6B8B /* thread.h */,
 			);
 			path = SerialComms;
 			sourceTree = "<group>";
@@ -153,6 +156,7 @@
 				FCF0C3ED14F01F7F0030FFDD /* packet.c in Sources */,
 				FCF0C3EE14F01F7F0030FFDD /* receive.c in Sources */,
 				FCF0C3EF14F01F7F0030FFDD /* transmit.c in Sources */,
+				FCD221B514F40E06007F6B8B /* thread.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -232,6 +236,7 @@
 				FCF0C3DC14F01F250030FFDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

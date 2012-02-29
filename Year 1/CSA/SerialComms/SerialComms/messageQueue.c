@@ -12,7 +12,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
+/* Function Name: createMessageQueue
+ * Parameters: 
+ *		IN:
+ *			queue		- pointer to structure to initialise
+ *			initialSize - initial number of positions in queue.
+ *		OUT:
+ *			queue		- fully intialised message queue structure
+ *
+ * initialises the structure pointed to by 'queue', and allocates memory for the queue data.
+ * destroyMessageQueue should be called on queue when finished with it.
+ */
 int createMessageQueue(struct messageQueue_s *queue, int initialSize) {
 	queue->front = queue->back = 0;
 	queue->maxQueueSize = initialSize;
@@ -20,6 +30,15 @@ int createMessageQueue(struct messageQueue_s *queue, int initialSize) {
 	return 0;
 }
 
+/* Function Name: destroyMessageQueue
+ * Parameters: 
+ *		IN:
+ *			queue		- pointer to structure to initialise
+ *
+ * Destroys the structure pointed to by 'queue', and frees any memory allocated to it 
+ * by the message queue functions.
+ * If necessary, the address of queue should be freed after this function.
+ */
 int destroyMessageQueue(struct messageQueue_s *queue) {
 	queue->front = queue->back = 0;
 	queue->maxQueueSize = 0;
@@ -27,12 +46,30 @@ int destroyMessageQueue(struct messageQueue_s *queue) {
 	return 0;
 }
 
+/* Function Name: increaseMessageQueue
+ * Parameters: 
+ *		IN:
+ *			queue		- pointer to structure to initialise.
+ *			amount		- size of modify the queue length by.
+ *
+ * Reallocates the memory allocated for the queue data, to allow 'amount' more positions.
+ */
 int increaseMessageQueue(struct messageQueue_s *queue, int amount) {
 	int newSize = queue->maxQueueSize + amount;
 	queue->queue = realloc(queue->queue, sizeof(void*)*newSize);
+	queue->maxQueueSize += amount;
 	return 0;
 }
 
+/* Function Name: removeFrontOfMessageQueue
+ * Parameters: 
+ *		IN:
+ *			queue		- pointer to structure to initialise.
+ *		OUT:
+ *			return		- address of the first object entered into queue.
+ *
+ * returns the address of the first object placed into queue, and removes it from the queue.
+ */
 void *removeFrontOfMessageQueue(struct messageQueue_s *queue) {
 	if (queue->front == queue->back) {
 			// empty queue
@@ -48,23 +85,33 @@ void *removeFrontOfMessageQueue(struct messageQueue_s *queue) {
 	}
 }
 
+/* Function Name: addMessageToQueue
+ * Parameters: 
+ *		IN:
+ *			queue		- pointer to structure to initialise.
+ *			message		- object to place onto queue.
+ *
+ * Adds message onto the back of the queue, increasing the size of the queue if necessary.
+ */
 void addMessageToQueue(struct messageQueue_s *queue, void *message) {
 	int ref = queue->back;
+	int newQueueLoc, i;
+
 	queue->queue[ref] = message;
 	queue->back += 1;
 	if (queue->back >= queue->maxQueueSize && queue->front != 0) {
 		queue->back = 0;
 	}
-	else {
-		increaseMessageQueue(queue, 5);
+	else if(queue->back >= queue->maxQueueSize && queue->front == 0) {
+		increaseMessageQueue(queue, 15);
 	}
 	if (queue->back == queue->front) {
 		/* queue collision */
 		/* Increase queue length and move queue into new space freeing up a gap between the front 
 		 * and back of the queue */
 		increaseMessageQueue(queue, 5);
-		int newQueueLoc = queue->maxQueueSize - 5; /* start moving data into new area at top of queue */
-		for (int i = 0; i < queue->back; i++) {
+		newQueueLoc = queue->maxQueueSize - 5; /* start moving data into new area at top of queue */
+		for (i = 0; i < queue->back; i++) {
 			queue->queue[newQueueLoc] = queue->queue[i];
 			newQueueLoc += 1;
 			if (newQueueLoc >= queue->maxQueueSize) {
