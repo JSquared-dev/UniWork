@@ -35,12 +35,14 @@ void *transmitStart(void *data) {
 				/* add to pend table to keep track of packet */
 			}
 			lockMutex(threadData->comPort_mutex);
+			fputc(PACKET_START, threadData->comPort);
 			fputc(packet->destination, threadData->comPort);
 			fputc(packet->source, threadData->comPort);
 			fputc(packet->packetType, threadData->comPort);
 			for (i = 0; i < 10; i ++)
 				fputc(packet->payload[i], threadData->comPort);
 			fputc(packet->checksum, threadData->comPort);
+			fputc(PACKET_END, threadData->comPort);
 			fflush(threadData->comPort);
 			unlockMutex(threadData->comPort_mutex);
 		}
