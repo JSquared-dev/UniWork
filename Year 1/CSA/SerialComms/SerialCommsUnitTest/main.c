@@ -8,11 +8,11 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "messageQueue.h"
+#include "queue.h"
 
 int main (int argc, const char * argv[])
 {
-	struct messageQueue_s *queue = createMessageQueue();
+	struct queue_s *queue = createQueue();
 	if (queue->data != NULL) {
 		printf("Invalid Data init");
 		return 1;

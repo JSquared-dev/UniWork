@@ -6,7 +6,7 @@
 
 #include <stdio.h>
 #include "thread.h"
-#include "messageQueue.h"
+#include "queue.h"
 
 /******************************************/
 #ifdef _WIN32						/* windows only definitions */
@@ -34,8 +34,8 @@ struct threadData_s {
 	enum progState programState;			/* current state of the program */
 	FILE *comPort;							/* COM port file stream */
 	char userID;							/* user id of current logged in user */
-	struct messageQueue_s receiveQueue;		/* packets received for current user */
-	struct messageQueue_s transmitQueue;	/* packets to be transmitted */
+	struct queue_s receiveQueue;		/* packets received for current user */
+	struct queue_s transmitQueue;	/* packets to be transmitted */
 	
 	/* unique locks for individual data elements */
 	/* indexes in mutex list */

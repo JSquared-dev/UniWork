@@ -8,11 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		FC57A82D14FEBE2000CA16D0 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FC57A82C14FEBE2000CA16D0 /* main.c */; };
-		FC57A83514FEBEB500CA16D0 /* messageQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* messageQueue.c */; };
-		FC57A83614FEBEB500CA16D0 /* messageQueue.h in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E314F01F7F0030FFDD /* messageQueue.h */; };
+		FC57A83514FEBEB500CA16D0 /* queue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* queue.c */; };
+		FC57A83614FEBEB500CA16D0 /* queue.h in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E314F01F7F0030FFDD /* queue.h */; };
 		FCD221B514F40E06007F6B8B /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = FCD221B314F40E06007F6B8B /* thread.c */; };
 		FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3DF14F01F7F0030FFDD /* main.c */; };
-		FCF0C3EC14F01F7F0030FFDD /* messageQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* messageQueue.c */; };
+		FCF0C3EC14F01F7F0030FFDD /* queue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* queue.c */; };
 		FCF0C3ED14F01F7F0030FFDD /* packet.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E414F01F7F0030FFDD /* packet.c */; };
 		FCF0C3EE14F01F7F0030FFDD /* receive.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E614F01F7F0030FFDD /* receive.c */; };
 		FCF0C3EF14F01F7F0030FFDD /* transmit.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E814F01F7F0030FFDD /* transmit.c */; };
@@ -41,22 +41,22 @@
 
 /* Begin PBXFileReference section */
 		FC57A82914FEBE2000CA16D0 /* SerialCommsUnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialCommsUnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
-		FC57A82C14FEBE2000CA16D0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		FC57A82C14FEBE2000CA16D0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = main.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		FC57A82E14FEBE2000CA16D0 /* SerialCommsUnitTest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SerialCommsUnitTest.1; sourceTree = "<group>"; };
 		FCD221B314F40E06007F6B8B /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread.c; sourceTree = "<group>"; };
 		FCD221B414F40E06007F6B8B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		FCF0C3D114F01F250030FFDD /* SerialComms */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialComms; sourceTree = BUILT_PRODUCTS_DIR; };
 		FCF0C3DE14F01F7F0030FFDD /* FSM.graffle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = FSM.graffle; sourceTree = "<group>"; };
-		FCF0C3DF14F01F7F0030FFDD /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		FCF0C3E014F01F7F0030FFDD /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = main.h; sourceTree = "<group>"; };
-		FCF0C3E114F01F7F0030FFDD /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = Makefile; sourceTree = "<group>"; };
-		FCF0C3E214F01F7F0030FFDD /* messageQueue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = messageQueue.c; sourceTree = "<group>"; };
-		FCF0C3E314F01F7F0030FFDD /* messageQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = messageQueue.h; sourceTree = "<group>"; };
+		FCF0C3DF14F01F7F0030FFDD /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = main.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
+		FCF0C3E014F01F7F0030FFDD /* main.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = main.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		FCF0C3E114F01F7F0030FFDD /* Makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; lineEnding = 0; path = Makefile; sourceTree = "<group>"; };
+		FCF0C3E214F01F7F0030FFDD /* queue.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = queue.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
+		FCF0C3E314F01F7F0030FFDD /* queue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = queue.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		FCF0C3E414F01F7F0030FFDD /* packet.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = packet.c; sourceTree = "<group>"; };
 		FCF0C3E514F01F7F0030FFDD /* packet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = packet.h; sourceTree = "<group>"; };
 		FCF0C3E614F01F7F0030FFDD /* receive.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = receive.c; sourceTree = "<group>"; };
 		FCF0C3E714F01F7F0030FFDD /* receive.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = receive.h; sourceTree = "<group>"; };
-		FCF0C3E814F01F7F0030FFDD /* transmit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = transmit.c; sourceTree = "<group>"; };
+		FCF0C3E814F01F7F0030FFDD /* transmit.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = transmit.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		FCF0C3E914F01F7F0030FFDD /* transmit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transmit.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -112,8 +112,8 @@
 				FCF0C3DF14F01F7F0030FFDD /* main.c */,
 				FCF0C3E014F01F7F0030FFDD /* main.h */,
 				FCF0C3E114F01F7F0030FFDD /* Makefile */,
-				FCF0C3E214F01F7F0030FFDD /* messageQueue.c */,
-				FCF0C3E314F01F7F0030FFDD /* messageQueue.h */,
+				FCF0C3E214F01F7F0030FFDD /* queue.c */,
+				FCF0C3E314F01F7F0030FFDD /* queue.h */,
 				FCF0C3E414F01F7F0030FFDD /* packet.c */,
 				FCF0C3E514F01F7F0030FFDD /* packet.h */,
 				FCF0C3E614F01F7F0030FFDD /* receive.c */,
@@ -202,8 +202,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				FC57A83514FEBEB500CA16D0 /* messageQueue.c in Sources */,
-				FC57A83614FEBEB500CA16D0 /* messageQueue.h in Sources */,
+				FC57A83514FEBEB500CA16D0 /* queue.c in Sources */,
+				FC57A83614FEBEB500CA16D0 /* queue.h in Sources */,
 				FC57A82D14FEBE2000CA16D0 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -213,7 +213,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */,
-				FCF0C3EC14F01F7F0030FFDD /* messageQueue.c in Sources */,
+				FCF0C3EC14F01F7F0030FFDD /* queue.c in Sources */,
 				FCF0C3ED14F01F7F0030FFDD /* packet.c in Sources */,
 				FCF0C3EE14F01F7F0030FFDD /* receive.c in Sources */,
 				FCF0C3EF14F01F7F0030FFDD /* transmit.c in Sources */,
@@ -310,6 +310,7 @@
 				FC57A83014FEBE2000CA16D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		FCF0C3CB14F01F250030FFDD /* Build configuration list for PBXProject "SerialComms" */ = {
 			isa = XCConfigurationList;

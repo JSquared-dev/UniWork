@@ -14,14 +14,14 @@
 #include <stdio.h>
 #include "main.h"
 #include "packet.h"
-#include "messageQueue.h"
+#include "queue.h"
 #include "transmit.h"
 
 void *transmitStart(void *data) {
 	int i;
 	struct lanPacket_s *packet;
 	struct threadData_s *threadData = (struct threadData_s *) data;
-	struct messageQueue_s *transmitQueue = &threadData->transmitQueue;
+	struct queue_s *transmitQueue = &threadData->transmitQueue;
 
 	while (1) {
 		packet = (struct lanPacket_s *) removeFrontOfQueue(transmitQueue);

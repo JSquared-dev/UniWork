@@ -1,18 +1,18 @@
-/* Filename: messageQueue.c
+/* Filename: queue.c
  * Written by: James Johns.
  * Date: 16/2/2012
  *
  *
- * messageQueue is a collection of functions for manipulating a messageQueue_s structure.
- * messageQueue implements a FIFO buffer, or a basic queue. The queue length is dynamically
+ * queue is a collection of functions for manipulating a queue_s structure.
+ * queue implements a FIFO buffer, or a basic queue. The queue length is dynamically
  * modified as required.
  */
 
-#include "messageQueue.h"
+#include "queue.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-/* Function Name: createMessageQueue
+/* Function Name: createqueue
  * Parameters: 
  *		IN:
  *			queue		- pointer to structure to initialise
@@ -21,17 +21,17 @@
  *			queue		- fully intialised message queue structure
  *
  * initialises the structure pointed to by 'queue', and allocates memory for the queue data.
- * destroyMessageQueue should be called on queue when finished with it.
+ * destroyqueue should be called on queue when finished with it.
  */
-struct messageQueue_s *createMessageQueue() {
-	struct messageQueue_s *queue = malloc(sizeof(struct messageQueue_s));
+struct queue_s *createQueue() {
+	struct queue_s *queue = malloc(sizeof(struct queue_s));
 	queue->next = queue->previous = queue;
 	queue->data = NULL;
 	queue->mutexIndex = createMutex();
 	return queue;
 }
 
-/* Function Name: destroyMessageQueue
+/* Function Name: destroyqueue
  * Parameters: 
  *		IN:
  *			queue		- pointer to structure to initialise
@@ -40,9 +40,9 @@ struct messageQueue_s *createMessageQueue() {
  * by the message queue functions.
  * If necessary, the address of queue should be freed after this function.
  */
-int destroyMessageQueue(struct messageQueue_s *queue) {
+int destroyQueue(struct queue_s *queue) {
 	lockMutex(queue->mutexIndex);
-	struct messageQueue_s *message;
+	struct queue_s *message;
 	while (queue != NULL) {
 		message = removeFrontOfQueue(queue);
 		free(message);
@@ -52,7 +52,7 @@ int destroyMessageQueue(struct messageQueue_s *queue) {
 	return 0;
 }
 
-/* Function Name: removeFrontOfMessageQueue
+/* Function Name: removeFrontOfqueue
  * Parameters: 
  *		IN:
  *			queue		- pointer to structure to initialise.
@@ -61,9 +61,9 @@ int destroyMessageQueue(struct messageQueue_s *queue) {
  *
  * returns the address of the first object placed into queue, and removes it from the queue.
  */
-void *removeFrontOfQueue(struct messageQueue_s *queue) {
+void *removeFrontOfQueue(struct queue_s *queue) {
 	void *ret = NULL;
-	struct messageQueue_s *nextItem;
+	struct queue_s *nextItem;
 	lockMutex(queue->mutexIndex);
 	if (queue->data == NULL) {
 		// empty queue
@@ -97,13 +97,13 @@ void *removeFrontOfQueue(struct messageQueue_s *queue) {
  *
  * Adds message onto the back of the queue, increasing the size of the queue if necessary.
  */
-void addToQueue(struct messageQueue_s *queue, void *message) {
+void addToQueue(struct queue_s *queue, void *message) {
 	lockMutex(queue->mutexIndex);
 	if (queue->data == NULL) {
 		queue->data = message;
 	}
 	else {
-		struct messageQueue_s *newItem = malloc(sizeof(struct messageQueue_s));
+		struct queue_s *newItem = malloc(sizeof(struct queue_s));
 		newItem->data = message;
 		/* replace the end of the queue to fit in new item in queue, 
 		 * and tie it into the cyclic buffer */

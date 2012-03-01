@@ -7,7 +7,7 @@
  */
 
 #include "main.h"
-#include "messageQueue.h"
+#include "queue.h"
 #include "receive.h"
 #include "transmit.h"
 #include "packet.h"
@@ -160,8 +160,8 @@ void initThreadData(struct threadData_s *data) {
 		exit(3);
 	}
 	
-	createMessageQueue(&data->receiveQueue, 5);
-	createMessageQueue(&data->transmitQueue, 5);
+	createQueue(&data->receiveQueue, 5);
+	createQueue(&data->transmitQueue, 5);
 }
 
 void destroyThreadData(struct threadData_s *data) {
@@ -171,8 +171,8 @@ void destroyThreadData(struct threadData_s *data) {
 	
 	destroyMutex(data->userID_mutex);
 	
-	destroyMessageQueue(&data->receiveQueue);
-	destroyMessageQueue(&data->transmitQueue);
+	destroyQueue(&data->receiveQueue);
+	destroyQueue(&data->transmitQueue);
 	destroyLists();
 }
 
