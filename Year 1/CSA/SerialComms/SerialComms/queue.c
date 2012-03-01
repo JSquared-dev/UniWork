@@ -72,7 +72,7 @@ void *removeFrontOfQueue(struct queue_s *queue) {
 	else {
 		ret = queue->data;
 		/* if the queue loops back on itself, then we just need to clear the data field */
-		if (queue->next == queue->previous) {
+		if (queue->next == queue) {
 			queue->data = NULL;
 		}
 		/* otherwise knock item out of the queue */
@@ -82,6 +82,9 @@ void *removeFrontOfQueue(struct queue_s *queue) {
 			nextItem = queue->next;
 			queue->data = nextItem->data;
 			queue->next = nextItem->next;
+			if (queue->previous == nextItem) {
+				queue->previous = queue;
+			}
 			free(nextItem);
 		}
 	}
