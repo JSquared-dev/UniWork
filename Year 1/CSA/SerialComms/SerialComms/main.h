@@ -42,8 +42,6 @@ struct threadData_s {
 	int programState_mutex;
 	int comPort_mutex;
 	int userID_mutex;
-	int receiveQueue_mutex;
-	int transmitQueue_mutex;
 };
 
 

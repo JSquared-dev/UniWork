@@ -24,9 +24,7 @@ void *transmitStart(void *data) {
 	struct messageQueue_s *transmitQueue = &threadData->transmitQueue;
 
 	while (1) {
-		lockMutex(threadData->transmitQueue_mutex); /* prevent modification of transmit queue by locking it */
-		packet = (struct lanPacket_s *) removeFrontOfMessageQueue(transmitQueue);
-		unlockMutex(threadData->transmitQueue_mutex);
+		packet = (struct lanPacket_s *) removeFrontOfQueue(transmitQueue);
 		if (packet != NULL) {
 			printf("{%c%c%c%10s%c}\n", packet->source, packet->destination, packet->packetType, packet->payload, packet->checksum);
 			fflush(stdout);

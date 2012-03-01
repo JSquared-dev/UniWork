@@ -23,11 +23,12 @@
  * initialises the structure pointed to by 'queue', and allocates memory for the queue data.
  * destroyMessageQueue should be called on queue when finished with it.
  */
-int createMessageQueue(struct messageQueue_s *queue, int initialSize) {
-	queue->front = queue->back = 0;
-	queue->maxQueueSize = initialSize;
-	queue->queue = malloc(sizeof(void *)*initialSize);
-	return 0;
+struct messageQueue_s *createMessageQueue() {
+	struct messageQueue_s *queue = malloc(sizeof(struct messageQueue_s));
+	queue->next = queue->previous = queue;
+	queue->data = NULL;
+	queue->mutexIndex = createMutex();
+	return queue;
 }
 
 /* Function Name: destroyMessageQueue
@@ -40,24 +41,14 @@ int createMessageQueue(struct messageQueue_s *queue, int initialSize) {
  * If necessary, the address of queue should be freed after this function.
  */
 int destroyMessageQueue(struct messageQueue_s *queue) {
-	queue->front = queue->back = 0;
-	queue->maxQueueSize = 0;
-	free(queue->queue);
-	return 0;
-}
-
-/* Function Name: increaseMessageQueue
- * Parameters: 
- *		IN:
- *			queue		- pointer to structure to initialise.
- *			amount		- size of modify the queue length by.
- *
- * Reallocates the memory allocated for the queue data, to allow 'amount' more positions.
- */
-int increaseMessageQueue(struct messageQueue_s *queue, int amount) {
-	int newSize = queue->maxQueueSize + amount;
-	queue->queue = realloc(queue->queue, sizeof(void*)*newSize);
-	queue->maxQueueSize += amount;
+	lockMutex(queue->mutexIndex);
+	struct messageQueue_s *message;
+	while (queue != NULL) {
+		message = removeFrontOfQueue(queue);
+		free(message);
+	}
+	destroyMutex(queue->mutexIndex);
+	free(queue);
 	return 0;
 }
 
@@ -70,19 +61,32 @@ int increaseMessageQueue(struct messageQueue_s *queue, int amount) {
  *
  * returns the address of the first object placed into queue, and removes it from the queue.
  */
-void *removeFrontOfMessageQueue(struct messageQueue_s *queue) {
-	if (queue->front == queue->back) {
-			// empty queue
-		return NULL;
+void *removeFrontOfQueue(struct messageQueue_s *queue) {
+	void *ret = NULL;
+	struct messageQueue_s *nextItem;
+	lockMutex(queue->mutexIndex);
+	if (queue->data == NULL) {
+		// empty queue
+		ret = NULL;
 	}
 	else {
-		int ref = queue->front;
-		queue->front += 1;
-		if (queue->front >= queue->maxQueueSize) {
-			queue->front = 0;
+		ret = queue->data;
+		/* if the queue loops back on itself, then we just need to clear the data field */
+		if (queue->next == queue->previous) {
+			queue->data = NULL;
 		}
-		return queue->queue[ref];
+		/* otherwise knock item out of the queue */
+		else {
+			/* hacky version - move the data of the 2nd item into the front of the queue,
+			 *                 link front of the queue to 3rd item in queue and free item 2 */
+			nextItem = queue->next;
+			queue->data = nextItem->data;
+			queue->next = nextItem->next;
+			free(nextItem);
+		}
 	}
+	unlockMutex(queue->mutexIndex);
+	return ret;
 }
 
 /* Function Name: addMessageToQueue
@@ -93,31 +97,22 @@ void *removeFrontOfMessageQueue(struct messageQueue_s *queue) {
  *
  * Adds message onto the back of the queue, increasing the size of the queue if necessary.
  */
-void addMessageToQueue(struct messageQueue_s *queue, void *message) {
-	int ref = queue->back;
-	int newQueueLoc, i;
-
-	queue->queue[ref] = message;
-	queue->back += 1;
-	if (queue->back >= queue->maxQueueSize && queue->front != 0) {
-		queue->back = 0;
+void addToQueue(struct messageQueue_s *queue, void *message) {
+	lockMutex(queue->mutexIndex);
+	if (queue->data == NULL) {
+		queue->data = message;
 	}
-	else if(queue->back >= queue->maxQueueSize && queue->front == 0) {
-		increaseMessageQueue(queue, 15);
+	else {
+		struct messageQueue_s *newItem = malloc(sizeof(struct messageQueue_s));
+		newItem->data = message;
+		/* replace the end of the queue to fit in new item in queue, 
+		 * and tie it into the cyclic buffer */
+		newItem->previous = queue->previous;
+		newItem->next = queue->previous->next;
+		newItem->mutexIndex = queue->mutexIndex;
+		
+		(queue->previous)->next = newItem;
+		queue->previous = newItem;
 	}
-	if (queue->back == queue->front) {
-		/* queue collision */
-		/* Increase queue length and move queue into new space freeing up a gap between the front 
-		 * and back of the queue */
-		increaseMessageQueue(queue, 5);
-		newQueueLoc = queue->maxQueueSize - 5; /* start moving data into new area at top of queue */
-		for (i = 0; i < queue->back; i++) {
-			queue->queue[newQueueLoc] = queue->queue[i];
-			newQueueLoc += 1;
-			if (newQueueLoc >= queue->maxQueueSize) {
-				newQueueLoc = 0; /* once we run over the end of the new are, it is safe to 
-								  * re-use lower end of queue */
-			}
-		}
-	}
+	unlockMutex(queue->mutexIndex);
 }

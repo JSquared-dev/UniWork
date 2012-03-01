@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FC57A82D14FEBE2000CA16D0 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FC57A82C14FEBE2000CA16D0 /* main.c */; };
+		FC57A83514FEBEB500CA16D0 /* messageQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* messageQueue.c */; };
+		FC57A83614FEBEB500CA16D0 /* messageQueue.h in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E314F01F7F0030FFDD /* messageQueue.h */; };
 		FCD221B514F40E06007F6B8B /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = FCD221B314F40E06007F6B8B /* thread.c */; };
 		FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3DF14F01F7F0030FFDD /* main.c */; };
 		FCF0C3EC14F01F7F0030FFDD /* messageQueue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* messageQueue.c */; };
@@ -16,6 +19,15 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		FC57A82714FEBE2000CA16D0 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		FCF0C3CF14F01F250030FFDD /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -28,6 +40,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		FC57A82914FEBE2000CA16D0 /* SerialCommsUnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialCommsUnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FC57A82C14FEBE2000CA16D0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
+		FC57A82E14FEBE2000CA16D0 /* SerialCommsUnitTest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SerialCommsUnitTest.1; sourceTree = "<group>"; };
 		FCD221B314F40E06007F6B8B /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread.c; sourceTree = "<group>"; };
 		FCD221B414F40E06007F6B8B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		FCF0C3D114F01F250030FFDD /* SerialComms */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialComms; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +61,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		FC57A82614FEBE2000CA16D0 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCF0C3CE14F01F250030FFDD /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -56,10 +78,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FC57A82B14FEBE2000CA16D0 /* SerialCommsUnitTest */ = {
+			isa = PBXGroup;
+			children = (
+				FC57A82C14FEBE2000CA16D0 /* main.c */,
+				FC57A82E14FEBE2000CA16D0 /* SerialCommsUnitTest.1 */,
+			);
+			path = SerialCommsUnitTest;
+			sourceTree = "<group>";
+		};
 		FCF0C3C614F01F250030FFDD = {
 			isa = PBXGroup;
 			children = (
 				FCF0C3D414F01F250030FFDD /* SerialComms */,
+				FC57A82B14FEBE2000CA16D0 /* SerialCommsUnitTest */,
 				FCF0C3D214F01F250030FFDD /* Products */,
 			);
 			sourceTree = "<group>";
@@ -68,6 +100,7 @@
 			isa = PBXGroup;
 			children = (
 				FCF0C3D114F01F250030FFDD /* SerialComms */,
+				FC57A82914FEBE2000CA16D0 /* SerialCommsUnitTest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -104,6 +137,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		FC57A82814FEBE2000CA16D0 /* SerialCommsUnitTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FC57A83114FEBE2000CA16D0 /* Build configuration list for PBXNativeTarget "SerialCommsUnitTest" */;
+			buildPhases = (
+				FC57A82514FEBE2000CA16D0 /* Sources */,
+				FC57A82614FEBE2000CA16D0 /* Frameworks */,
+				FC57A82714FEBE2000CA16D0 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SerialCommsUnitTest;
+			productName = SerialCommsUnitTest;
+			productReference = FC57A82914FEBE2000CA16D0 /* SerialCommsUnitTest */;
+			productType = "com.apple.product-type.tool";
+		};
 		FCF0C3D014F01F250030FFDD /* SerialComms */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = FCF0C3DA14F01F250030FFDD /* Build configuration list for PBXNativeTarget "SerialComms" */;
@@ -142,11 +192,22 @@
 			projectRoot = "";
 			targets = (
 				FCF0C3D014F01F250030FFDD /* SerialComms */,
+				FC57A82814FEBE2000CA16D0 /* SerialCommsUnitTest */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
+		FC57A82514FEBE2000CA16D0 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FC57A83514FEBEB500CA16D0 /* messageQueue.c in Sources */,
+				FC57A83614FEBEB500CA16D0 /* messageQueue.h in Sources */,
+				FC57A82D14FEBE2000CA16D0 /* main.c in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		FCF0C3CD14F01F250030FFDD /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -163,6 +224,28 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
+		FC57A82F14FEBE2000CA16D0 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = NO;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		FC57A83014FEBE2000CA16D0 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		FCF0C3D814F01F250030FFDD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -220,6 +303,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		FC57A83114FEBE2000CA16D0 /* Build configuration list for PBXNativeTarget "SerialCommsUnitTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FC57A82F14FEBE2000CA16D0 /* Debug */,
+				FC57A83014FEBE2000CA16D0 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		FCF0C3CB14F01F250030FFDD /* Build configuration list for PBXProject "SerialComms" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

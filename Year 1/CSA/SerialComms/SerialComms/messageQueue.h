@@ -15,16 +15,19 @@
 
 #define MAX_QUEUE_SIZE 64
 
+#include "thread.h"
+
 struct messageQueue_s {
-	int front, back;
-	void **queue;
-	int maxQueueSize;
+	struct messageQueue_s *previous; /* previsou item in queue. wraps when underflowing the queue */
+	struct messageQueue_s *next; /* next item in queue. wraps when overflowing the queue */
+	void *data; /* data to be held in queue */
+	int mutexIndex; /* mutex for this queue */
 };
 
-int createMessageQueue(struct messageQueue_s *queue, int initialSize);
+struct messageQueue_s *createMessageQueue();
 int destroyMessageQueue(struct messageQueue_s *queue);
 int increaseMessageQueue(struct messageQueue_s *queue, int amount);
-void *removeFrontOfMessageQueue(struct messageQueue_s *queue);
-void addMessageToQueue(struct messageQueue_s *queue, void *message);
+void *removeFrontOfQueue(struct messageQueue_s *queue);
+void addToQueue(struct messageQueue_s *queue, void *message);
 
 #endif

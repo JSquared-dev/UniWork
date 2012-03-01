@@ -40,20 +40,6 @@
          timestampString = "351530994.234657"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "130"
-         endingLineNumber = "130"
-         landmarkName = "checkLogin()"
-         landmarkType = "7">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         isPathRelative = "1"
-         filePath = "SerialComms/main.c"
-         timestampString = "351530994.234657"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
          startingLineNumber = "86"
          endingLineNumber = "86"
          landmarkName = "mainMenu()"
@@ -85,6 +71,20 @@
          startingLineNumber = "32"
          endingLineNumber = "32"
          landmarkName = "transmitStart()"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "SerialComms/messageQueue.c"
+         timestampString = "352240113.585838"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "99"
+         endingLineNumber = "99"
+         landmarkName = "addToQueue()"
          landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>

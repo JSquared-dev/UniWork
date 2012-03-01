@@ -106,9 +106,7 @@ enum progState loginPrompt(struct threadData_s *data) {
 	unlockMutex(data->userID_mutex);
 	
 	/* send packet to transmit queue to be sent onto LAN */
-	lockMutex(data->transmitQueue_mutex);
-	addMessageToQueue(&data->transmitQueue, loginPacket);
-	unlockMutex(data->transmitQueue_mutex);
+	addToQueue(&data->transmitQueue, loginPacket);
 	
 	return LOGIN_PEND;
 }
@@ -117,17 +115,14 @@ enum progState checkLogin(struct threadData_s *data) {
 	
 	/* receiveQueue only contains packets targetted at us */
 	struct lanPacket_s *packet;
-	lockMutex(data->receiveQueue_mutex);
-	packet = (struct lanPacket_s *)removeFrontOfMessageQueue(&data->receiveQueue);
+	packet = (struct lanPacket_s *)removeFrontOfQueue(&data->receiveQueue);
 	
 	if (packet != NULL) {
 		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
-			unlockMutex(data->receiveQueue_mutex);
 			printf("Welcome to the network, %c\n", data->userID);
 			return MENU;
 		}
 		else if (packet->packetType == NAK_PACKET) {
-			unlockMutex(data->receiveQueue_mutex);
 			data->userID = 0;
 			printf("\nYour selected login ID is already active, please use another one\n");
 			return LOGIN; /* user id was taken, so we need a new one */
@@ -138,13 +133,11 @@ enum progState checkLogin(struct threadData_s *data) {
 		}
 		else {
 			printf("received early packet\n");
-			addMessageToQueue(&data->receiveQueue, packet); /* wrong time to read, so leave it for later */
-			unlockMutex(data->receiveQueue_mutex);
+			addToQueue(&data->receiveQueue, packet); /* wrong time to read, so leave it for later */
 			return LOGIN_PEND;								/* not logged in, but still waiting to check login so carry on */
 		}
 	}
 	else {
-		unlockMutex(data->receiveQueue_mutex);
 		return LOGIN_PEND;
 	}
 }
@@ -168,16 +161,7 @@ void initThreadData(struct threadData_s *data) {
 	}
 	
 	createMessageQueue(&data->receiveQueue, 5);
-	if ((data->receiveQueue_mutex = createMutex()) < 0) {
-		printf("Error making Receive Queue mutex");
-		exit(4);
-	}
 	createMessageQueue(&data->transmitQueue, 5);
-	if ((data->transmitQueue_mutex = createMutex()) < 0) {
-		printf("Error making Transmit Queue mutex");
-		exit(5);
-	}
-	
 }
 
 void destroyThreadData(struct threadData_s *data) {
@@ -187,9 +171,7 @@ void destroyThreadData(struct threadData_s *data) {
 	
 	destroyMutex(data->userID_mutex);
 	
-	destroyMutex(data->receiveQueue_mutex);
 	destroyMessageQueue(&data->receiveQueue);
-	destroyMutex(data->transmitQueue_mutex);
 	destroyMessageQueue(&data->transmitQueue);
 	destroyLists();
 }
