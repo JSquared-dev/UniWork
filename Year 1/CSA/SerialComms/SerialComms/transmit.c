@@ -17,7 +17,7 @@
 #include "queue.h"
 #include "transmit.h"
 
-void *transmitStart(void *data) {
+THREAD_RET transmitStart(void *data) {
 	int i;
 	struct lanPacket_s *packet;
 	struct threadData_s *threadData = (struct threadData_s *) data;

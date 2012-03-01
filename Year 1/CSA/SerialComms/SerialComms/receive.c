@@ -10,7 +10,7 @@
 #include "main.h"
 #include "packet.h"
 
-void *receiveStart(void *data) {
+THREAD_RET receiveStart(void *data) {
 	
 	while (1) {
 #ifdef _WIN32

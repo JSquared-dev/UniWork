@@ -15,11 +15,13 @@
 /* typedefs make things easier to deal with */
 typedef HANDLE mutex_t;
 typedef HANDLE thread_t;
+#define THREAD_RET DWORD WINAPI
 #else
 #include <pthread.h>
 /* typedefs make things easier to deal with */
 typedef pthread_mutex_t mutex_t;
 typedef pthread_t thread_t;
+#define THREAD_RET void *
 #endif
 
 /* basic, all purpose structures for functions below */
@@ -35,7 +37,7 @@ struct mutexList_s {
 void destroyLists();
 
 /* returns threadIndex on succes, -1 on error */
-int createThread(void (*entryPoint)(void *), void *data);
+int createThread(THREAD_RET (*entryPoint)(void *), void *data);
 void endThread(int threadIndex);
 
 /* returns mutexIndex on success, -1 on error */

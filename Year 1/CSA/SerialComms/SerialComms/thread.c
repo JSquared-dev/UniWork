@@ -32,7 +32,7 @@ void destroyLists() {
 
 /* platform independently start a thread */
 /* returns threadIndex on succes, -1 on error */
-int createThread(void (*entryPoint)(void *), void *data) {
+int createThread(THREAD_RET (*entryPoint)(void *), void *data) {
 	int ret = 0;
 	/* increase size of threadList to accomodate new thread */
 	if (threadList.size == 0) {
