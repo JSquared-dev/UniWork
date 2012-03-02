@@ -1,5 +1,5 @@
 
-OBJECTS := main.o queue.o receive.o transmit.o packet.o
+OBJECTS := main.o queue.o receive.o transmit.o packet.o thread.o
 
 
 .PHONY: all clean
