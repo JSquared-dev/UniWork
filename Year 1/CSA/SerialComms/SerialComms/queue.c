@@ -41,7 +41,7 @@ struct queue_s *createQueue() {
  * If necessary, the address of queue should be freed after this function.
  */
 int destroyQueue(struct queue_s *queue) {
-	lockMutex(queue->mutexIndex);
+//	lockMutex(queue->mutexIndex);
 	struct queue_s *message;
 	while (queue != NULL) {
 		message = removeFrontOfQueue(queue);
