@@ -15,13 +15,13 @@
 /* typedefs make things easier to deal with */
 typedef HANDLE mutex_t;
 typedef HANDLE thread_t;
-#define THREAD_RET DWORD WINAPI
+typedef DWORD THREAD_RET;
 #else
 #include <pthread.h>
 /* typedefs make things easier to deal with */
 typedef pthread_mutex_t mutex_t;
 typedef pthread_t thread_t;
-#define THREAD_RET void *
+typedef void * THREAD_RET;
 #endif
 
 /* basic, all purpose structures for functions below */
