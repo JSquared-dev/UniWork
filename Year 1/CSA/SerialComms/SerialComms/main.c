@@ -106,7 +106,7 @@ enum progState loginPrompt(struct threadData_s *data) {
 	unlockMutex(data->userID_mutex);
 	
 	/* send packet to transmit queue to be sent onto LAN */
-	addToQueue(&data->transmitQueue, loginPacket);
+	addToQueue(data->transmitQueue, loginPacket);
 	
 	return LOGIN_PEND;
 }
@@ -115,7 +115,7 @@ enum progState checkLogin(struct threadData_s *data) {
 	
 	/* receiveQueue only contains packets targetted at us */
 	struct lanPacket_s *packet;
-	packet = (struct lanPacket_s *)removeFrontOfQueue(&data->receiveQueue);
+	packet = (struct lanPacket_s *)removeFrontOfQueue(data->receiveQueue);
 	
 	if (packet != NULL) {
 		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
@@ -133,7 +133,7 @@ enum progState checkLogin(struct threadData_s *data) {
 		}
 		else {
 			printf("received early packet\n");
-			addToQueue(&data->receiveQueue, packet); /* wrong time to read, so leave it for later */
+			addToQueue(data->receiveQueue, packet); /* wrong time to read, so leave it for later */
 			return LOGIN_PEND;								/* not logged in, but still waiting to check login so carry on */
 		}
 	}
@@ -160,8 +160,8 @@ void initThreadData(struct threadData_s *data) {
 		exit(3);
 	}
 	
-	createQueue(&data->receiveQueue, 5);
-	createQueue(&data->transmitQueue, 5);
+	data->receiveQueue = createQueue(&data->receiveQueue);
+	data->transmitQueue = createQueue(&data->transmitQueue);
 }
 
 void destroyThreadData(struct threadData_s *data) {
@@ -171,8 +171,8 @@ void destroyThreadData(struct threadData_s *data) {
 	
 	destroyMutex(data->userID_mutex);
 	
-	destroyQueue(&data->receiveQueue);
-	destroyQueue(&data->transmitQueue);
+	destroyQueue(data->receiveQueue);
+	destroyQueue(data->transmitQueue);
 	destroyLists();
 }
 

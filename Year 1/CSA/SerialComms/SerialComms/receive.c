@@ -38,7 +38,7 @@ void receiveStart(void *data) {
 			switch (programState) {
 				case LOGIN:
 					/*------------------------------------------------------------*/
-					addToQueue(&threadData->transmitQueue, Packet);
+					addToQueue(threadData->transmitQueue, Packet);
 					break;
 					
 				case LOGIN_PEND:
@@ -47,22 +47,22 @@ void receiveStart(void *data) {
 						case LOGIN_PACKET:
 							if (Destination == threadData->userTable.ID) {
 								/*------------------------------------------------------------*/
-								addToQueue(&threadData->receiveQueue, Packet);
+								addToQueue(threadData->receiveQueue, Packet);
 							}
 							else {
 								/*------------------------------------------------------------*/
-								addToQueue(&threadData->transmitQueue, Packet);
+								addToQueue(threadData->transmitQueue, Packet);
 							}
 							break;
 							
 						case ACK_PACKET:
 							if (Destination == threadData->userTable.ID) {
 								/*------------------------------------------------------------*/
-								addToQueue(&threadData->receiveQueue, Packet);
+								addToQueue(threadData->receiveQueue, Packet);
 							}
 							else {
 								/*------------------------------------------------------------*/
-								addToQueue(&threadData->transmitQueue, Packet);
+								addToQueue(threadData->transmitQueue, Packet);
 							}
 							break;
 					}
