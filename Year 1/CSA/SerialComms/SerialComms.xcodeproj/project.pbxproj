@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		FC57A82D14FEBE2000CA16D0 /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FC57A82C14FEBE2000CA16D0 /* main.c */; };
 		FC57A83514FEBEB500CA16D0 /* queue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* queue.c */; };
-		FC57A83614FEBEB500CA16D0 /* queue.h in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E314F01F7F0030FFDD /* queue.h */; };
+		FC57A84A14FF0CC900CA16D0 /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = FCD221B314F40E06007F6B8B /* thread.c */; };
+		FC58E3F3150193B900F64941 /* userTable.c in Sources */ = {isa = PBXBuildFile; fileRef = FC58E3F1150193B900F64941 /* userTable.c */; };
 		FCD221B514F40E06007F6B8B /* thread.c in Sources */ = {isa = PBXBuildFile; fileRef = FCD221B314F40E06007F6B8B /* thread.c */; };
 		FCF0C3EA14F01F7F0030FFDD /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3DF14F01F7F0030FFDD /* main.c */; };
 		FCF0C3EC14F01F7F0030FFDD /* queue.c in Sources */ = {isa = PBXBuildFile; fileRef = FCF0C3E214F01F7F0030FFDD /* queue.c */; };
@@ -43,6 +44,8 @@
 		FC57A82914FEBE2000CA16D0 /* SerialCommsUnitTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialCommsUnitTest; sourceTree = BUILT_PRODUCTS_DIR; };
 		FC57A82C14FEBE2000CA16D0 /* main.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; lineEnding = 0; path = main.c; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.c; };
 		FC57A82E14FEBE2000CA16D0 /* SerialCommsUnitTest.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = SerialCommsUnitTest.1; sourceTree = "<group>"; };
+		FC58E3F1150193B900F64941 /* userTable.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = userTable.c; sourceTree = "<group>"; };
+		FC58E3F2150193B900F64941 /* userTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = userTable.h; sourceTree = "<group>"; };
 		FCD221B314F40E06007F6B8B /* thread.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = thread.c; sourceTree = "<group>"; };
 		FCD221B414F40E06007F6B8B /* thread.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = thread.h; sourceTree = "<group>"; };
 		FCF0C3D114F01F250030FFDD /* SerialComms */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = SerialComms; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -108,6 +111,8 @@
 		FCF0C3D414F01F250030FFDD /* SerialComms */ = {
 			isa = PBXGroup;
 			children = (
+				FC58E3F1150193B900F64941 /* userTable.c */,
+				FC58E3F2150193B900F64941 /* userTable.h */,
 				FCF0C3DD14F01F7F0030FFDD /* design */,
 				FCF0C3DF14F01F7F0030FFDD /* main.c */,
 				FCF0C3E014F01F7F0030FFDD /* main.h */,
@@ -202,8 +207,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC57A84A14FF0CC900CA16D0 /* thread.c in Sources */,
 				FC57A83514FEBEB500CA16D0 /* queue.c in Sources */,
-				FC57A83614FEBEB500CA16D0 /* queue.h in Sources */,
 				FC57A82D14FEBE2000CA16D0 /* main.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -218,6 +223,7 @@
 				FCF0C3EE14F01F7F0030FFDD /* receive.c in Sources */,
 				FCF0C3EF14F01F7F0030FFDD /* transmit.c in Sources */,
 				FCD221B514F40E06007F6B8B /* thread.c in Sources */,
+				FC58E3F3150193B900F64941 /* userTable.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

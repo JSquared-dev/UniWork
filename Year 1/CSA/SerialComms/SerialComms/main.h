@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include "thread.h"
 #include "queue.h"
+#include "userTable.h"
 
 /******************************************/
 #ifdef _WIN32						/* windows only definitions */
@@ -36,7 +37,8 @@ struct threadData_s {
 	char userID;							/* user id of current logged in user */
 	struct queue_s receiveQueue;		/* packets received for current user */
 	struct queue_s transmitQueue;	/* packets to be transmitted */
-	
+	struct userTable_s userTable;			/* list of stations in a ring */
+
 	/* unique locks for individual data elements */
 	/* indexes in mutex list */
 	int programState_mutex;

@@ -9,15 +9,76 @@
 
 #include "main.h"
 #include "packet.h"
+#include "queue.h"
 
-THREAD_RET receiveStart(void *data) {
+void receiveStart(void *data) {
+	struct threadData_s *threadData = (struct threadData_s *) data;
+	struct lanPacket_s *Packet;
+	char Destination;
+	char Source;
+	enum PacketType packetType;
+	enum progState programState;
+	int i;
 	
 	while (1) {
-#ifdef _WIN32
-		Sleep(20);
-#else
-		usleep(20000);
-#endif
+		
+		if (fgetc(threadData->comPort) == '{') {
+			Destination = fgetc(threadData->comPort);
+			Source = fgetc(threadData->comPort);
+			packetType = (enum PacketType) fgetc(threadData->comPort);
+			Packet = createLanPacket(Source, Destination, packetType, NULL);
+			i = 0;
+			while (fgetc(threadData->comPort) != '}') {
+				Packet->payload[i++] = fgetc(threadData->comPort);
+			}
+			
+			lockMutex (threadData->programState_mutex);
+			programState = threadData->programState;
+			unlockMutex (threadData->programState_mutex);
+			switch (programState) {
+				case LOGIN:
+					/*------------------------------------------------------------*/
+					addToQueue(&threadData->transmitQueue, Packet);
+					break;
+					
+				case LOGIN_PEND:
+					/************switch in case*************/
+					switch (packetType) {
+						case LOGIN_PACKET:
+							if (Destination == threadData->userTable.ID) {
+								/*------------------------------------------------------------*/
+								addToQueue(&threadData->receiveQueue, Packet);
+							}
+							else {
+								/*------------------------------------------------------------*/
+								addToQueue(&threadData->transmitQueue, Packet);
+							}
+							break;
+							
+						case ACK_PACKET:
+							if (Destination == threadData->userTable.ID) {
+								/*------------------------------------------------------------*/
+								addToQueue(&threadData->receiveQueue, Packet);
+							}
+							else {
+								/*------------------------------------------------------------*/
+								addToQueue(&threadData->transmitQueue, Packet);
+							}
+							break;
+					}
+					/***************************************/
+					break;
+					
+			}
+			
+		}
 	}
-	return NULL;
+	
+	
+#ifdef _WIN32
+	/* Sleep(20); */
+#else
+	/*usleep(20000);*/
+#endif
+	/*return NULL;*/
 }

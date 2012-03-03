@@ -65,11 +65,11 @@
          continueAfterRunningActions = "No"
          isPathRelative = "1"
          filePath = "SerialComms/transmit.c"
-         timestampString = "352168246.877472"
+         timestampString = "352259275.506596"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "32"
-         endingLineNumber = "32"
+         startingLineNumber = "30"
+         endingLineNumber = "30"
          landmarkName = "transmitStart()"
          landmarkType = "7">
       </FileBreakpoint>
@@ -85,6 +85,20 @@
          startingLineNumber = "99"
          endingLineNumber = "99"
          landmarkName = "addToQueue()"
+         landmarkType = "7">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         isPathRelative = "1"
+         filePath = "SerialComms/queue.c"
+         timestampString = "352259325.949484"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "65"
+         endingLineNumber = "65"
+         landmarkName = "removeFrontOfQueue()"
          landmarkType = "7">
       </FileBreakpoint>
    </FileBreakpoints>
