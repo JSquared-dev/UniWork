@@ -7,24 +7,19 @@
  */
 
 #include "main.h"
-#include "messageQueue.h"
+#include "queue.h"
 #include "receive.h"
 #include "transmit.h"
 #include "packet.h"
+#include "thread.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
+#else
 #include <unistd.h>
 #include <termios.h>
-
-#ifdef _WIN32						/* windows only definitions */
-#define COM_PORT "COM1"				/* first serial port available on windows systems */
-#elif defined (__APPLE__)				/* mac os x only definitions */
-#include <pthread.h>
-#define COM_PORT "/dev/master"
-#else								/* non windows only definitions */
-#include <pthread.h>				/* posix threading */
-#define COM_PORT "/dev/ttyS0"		/* first serial port available on linux systems */
 #endif
 
 #define ESC_KEY 0x1B
@@ -33,7 +28,6 @@ void initThreadData(struct threadData_s *data);
 void destroyThreadData(struct threadData_s *data);
 
 void switchKbdBlocking();
-int kbdhit();
 
 enum progState loginPrompt(struct threadData_s *data);
 enum progState checkLogin(struct threadData_s *data);
@@ -41,14 +35,14 @@ enum progState mainMenu(struct threadData_s *data);
 
 int main(int argc, const char **argv) {
 	
-	pthread_t receiveThread, transmitThread;
+	int receiveThread, transmitThread; /* indexes in thread list */
 	struct threadData_s data;
 	
 		//	switchKbdBlocking(1);
 	initThreadData(&data);
-	pthread_create(&receiveThread, NULL, receiveStart, &data);
-	pthread_create(&transmitThread, NULL, transmitStart, &data);
-	
+	receiveThread = createThread(receiveStart, &data);
+	transmitThread = createThread(transmitStart, &data);
+
 	data.programState = LOGIN;
 	while (data.programState != EXIT) {
 		switch (data.programState) {
@@ -72,12 +66,13 @@ int main(int argc, const char **argv) {
 	}
 	
 	/* clean up by destroying created threads and dynamic data */
-	pthread_cancel(receiveThread);
-	pthread_cancel(transmitThread);
+	endThread(receiveThread);
+	endThread(transmitThread);
+	
 	destroyThreadData(&data);
 	
 	/* restore terminal settings to how they were before we modified them */
-	switchKbdBlocking(0);
+	//switchKbdBlocking(0);
 	return 0;
 }
 
@@ -88,63 +83,61 @@ enum progState mainMenu(struct threadData_s *data) {
 
 enum progState loginPrompt(struct threadData_s *data) {
 	char letter;
+	struct lanPacket_s *loginPacket;
 	printf("login: ");
-	if(read(STDIN_FILENO, &letter, 1) > 0) {
-		printf("%c",letter); /* echo back letter */
-		letter = toupper(letter);
-		/* create login packet and queue it for transmission */
-		struct lanPacket_s *loginPacket = createLanPacket(letter, letter, 'L', NULL);
-		
-		/* set up usedID for receive task to be able to identify which packets are targetted at us */
-		if (pthread_mutex_lock(&data->userID_mutex) == 0) {
-			data->userID = letter;
-			pthread_mutex_unlock(&data->userID_mutex);
-		}
-		else {
-			printf("Error locking userID");
-			return LOGIN;
-		}
-		
-		/* send packet to transmit queue to be sent onto LAN */
-		if (pthread_mutex_lock(&data->transmitQueue_mutex) == 0) {
-			
-			addMessageToQueue(&data->transmitQueue, loginPacket);
-			pthread_mutex_unlock(&data->transmitQueue_mutex);
-		}
-		else {
-			printf("Error locking transmit queue");
-			return LOGIN;
-		}
-		return LOGIN_PEND;
+	fflush(stdout);
+	letter = getchar();
+	
+	while (letter == '\n') {
+		letter = getchar();
 	}
-	else {
+
+	letter = toupper(letter);
+	if (letter < 'A' && letter > 'Z') {
+		printf("Please enter a valid login ID.\n ID should be a letter between A and Z\n");
 		return LOGIN;
 	}
+	/* create login packet and queue it for transmission */
+	loginPacket = createLanPacket(letter, letter, 'L', NULL);
+	
+	/* set up usedID for receive task to be able to identify which packets are targetted at us */
+	lockMutex(data->userID_mutex);
+	data->userID = letter;
+	unlockMutex(data->userID_mutex);
+	
+	/* send packet to transmit queue to be sent onto LAN */
+	addToQueue(data->transmitQueue, loginPacket);
+	
+	return LOGIN_PEND;
 }
 
 enum progState checkLogin(struct threadData_s *data) {
 	
-	pthread_mutex_lock(&data->receiveQueue_mutex);
-	struct lanPacket_s *packet = removeFrontOfMessageQueue(&data->receiveQueue);
+	/* receiveQueue only contains packets targetted at us */
+	struct lanPacket_s *packet;
+	packet = (struct lanPacket_s *)removeFrontOfQueue(data->receiveQueue);
+	
 	if (packet != NULL) {
-		if (packet->packetType == 'L') { /* successful round trip login packet so we are now logged in */
-			pthread_mutex_unlock(&data->receiveQueue_mutex);
+		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
+			printf("Welcome to the network, %c\n", data->userID);
 			return MENU;
 		}
-		else if (packet->packetType == 'R') { /* someone else has our userID so we need a new one */
-			pthread_mutex_unlock(&data->receiveQueue_mutex);
+		else if (packet->packetType == NAK_PACKET) {
 			data->userID = 0;
 			printf("\nYour selected login ID is already active, please use another one\n");
 			return LOGIN; /* user id was taken, so we need a new one */
 		}
+		else if (packet->packetType == RESPONSE_PACKET) { /* someone else has our userID so we need a new one */
+			printf("found user on network\n");
+			return LOGIN_PEND; /* still waiting for our login packet to return */
+		}
 		else {
-			addMessageToQueue(&data->receiveQueue, packet); /* wrong time to read, so leave it for later */
-			pthread_mutex_unlock(&data->receiveQueue_mutex);
+			printf("received early packet\n");
+			addToQueue(data->receiveQueue, packet); /* wrong time to read, so leave it for later */
 			return LOGIN_PEND;								/* not logged in, but still waiting to check login so carry on */
 		}
 	}
 	else {
-		pthread_mutex_unlock(&data->receiveQueue_mutex);
 		return LOGIN_PEND;
 	}
 }
@@ -156,44 +149,35 @@ void initThreadData(struct threadData_s *data) {
 		exit(1);
 	}
 	/* init COM port to be non-blocking to allow simultaneous read/write */
-	if (pthread_mutex_init(&data->comPort_mutex, NULL) != 0) {
+	if ((data->comPort_mutex = createMutex()) < 0) {
 		printf("Error making COM port mutex");
 		exit(2);
 	}
 	
 	data->userID = 0;
-	if (pthread_mutex_init(&data->userID_mutex, NULL) != 0) {
+	if ((data->userID_mutex = createMutex()) < 0) {
 		printf("Error making USer ID mutex");
-		exit(2);
+		exit(3);
 	}
 	
-	createMessageQueue(&data->receiveQueue, 5);
-	if (pthread_mutex_init(&data->receiveQueue_mutex, NULL) != 0) {
-		printf("Error making Receive Queue mutex");
-		exit(2);
-	}
-	createMessageQueue(&data->transmitQueue, 5);
-	if (pthread_mutex_init(&data->transmitQueue_mutex, NULL) != 0) {
-		printf("Error making Transmit Queue mutex");
-		exit(2);
-	}
-	
+	data->receiveQueue = createQueue(&data->receiveQueue);
+	data->transmitQueue = createQueue(&data->transmitQueue);
 }
 
 void destroyThreadData(struct threadData_s *data) {
 	
-	pthread_mutex_destroy(&data->comPort_mutex);
+	destroyMutex(data->comPort_mutex);
 	fclose(data->comPort);
 	
-	pthread_mutex_destroy(&data->userID_mutex);
+	destroyMutex(data->userID_mutex);
 	
-	pthread_mutex_destroy(&data->receiveQueue_mutex);
-	destroyMessageQueue(&data->receiveQueue);
-	pthread_mutex_destroy(&data->transmitQueue_mutex);
-	destroyMessageQueue(&data->transmitQueue);
+	destroyQueue(data->receiveQueue);
+	destroyQueue(data->transmitQueue);
+	destroyLists();
 }
 
 /* if type = 1, enable non blocking, else enable non-blocking */
+/*
 void switchKbdBlocking(int type) {
 	static int saved = 0;
 	static struct termios old;
@@ -211,33 +195,4 @@ void switchKbdBlocking(int type) {
 	else {
 		tcsetattr(STDIN_FILENO, TCSANOW, &old);
 	}
-}
-
-/* non-blocking keyboard input */
-int kbdhit() {
-	struct termios saveState;
-	struct termios newState;
-	int c;
-	if (tcgetattr(STDIN_FILENO, &saveState) < 0) {
-		return EOF;
-	}
-	newState = saveState;
-	
-	newState.c_lflag &= ~(ICANON|ECHO);
-	newState.c_cc[VMIN] = 1;
-	newState.c_cc[VTIME] = 0;
-	
-	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &newState) < 0) {
-		return EOF;
-	}
-	
-	if (read(STDIN_FILENO, &c, 1) != 1) {
-		c = EOF;
-	}
-	
-	if (tcsetattr(STDIN_FILENO, TCSAFLUSH, &saveState) < 0) { /* restore old terminal settings */
-		return EOF;											  /* takes effect after all required terminal */
-	}														  /* operations have finished */
-	
-	return c;
-}
+}*/
