@@ -1,18 +1,16 @@
 #ifndef _USERTABLE_H_
 #define _USERTABLE_H_
 
-
-/* waiting for comments */
 struct userTable_s {
-	char ID;
-	int *userList;
+	char ID;					/* Our station ID */
+	int userList;				/* Bitwise ring station list */
+	int ID_mutex;
+	int userList_mutex;
 };
 
-
-/* creates array with 'a to z' elements, id is ASCII code ( 0 is offline 1 is online) */
-int initUserTable (struct userTable_s *userTable);
+void initUserTable (struct userTable_s *userTable);
 void destroyUserTable (struct userTable_s *userTable);
-int addToUserTable (struct userTable_s *userTable, void* User);
-int removeFromUserTable (struct userTable_s *userTable, void* User);
-int checkIfUserActive (struct userTable_s *userTable, void* User);
+int addToUserTable (struct userTable_s *userTable, char User);
+int removeFromUserTable (struct userTable_s *userTable, char User);
+int checkIfUserActive (struct userTable_s *userTable, char User);
 #endif

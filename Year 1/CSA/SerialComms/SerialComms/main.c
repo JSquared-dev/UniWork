@@ -101,9 +101,9 @@ enum progState loginPrompt(struct threadData_s *data) {
 	loginPacket = createLanPacket(letter, letter, 'L', NULL);
 	
 	/* set up usedID for receive task to be able to identify which packets are targetted at us */
-	lockMutex(data->userID_mutex);
-	data->userID = letter;
-	unlockMutex(data->userID_mutex);
+	lockMutex(data->userTable.ID_mutex);
+	data->userTable.ID = letter;
+	unlockMutex(data->userTable.ID_mutex);
 	
 	/* send packet to transmit queue to be sent onto LAN */
 	addToQueue(data->transmitQueue, loginPacket);
@@ -119,11 +119,11 @@ enum progState checkLogin(struct threadData_s *data) {
 	
 	if (packet != NULL) {
 		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
-			printf("Welcome to the network, %c\n", data->userID);
+			printf("Welcome to the network, %c\n", data->userTable.ID);
 			return MENU;
 		}
 		else if (packet->packetType == NAK_PACKET) {
-			data->userID = 0;
+			destroyUserTable(&data->userTable);
 			printf("\nYour selected login ID is already active, please use another one\n");
 			return LOGIN; /* user id was taken, so we need a new one */
 		}
@@ -154,12 +154,12 @@ void initThreadData(struct threadData_s *data) {
 		exit(2);
 	}
 	
-	data->userID = 0;
-	if ((data->userID_mutex = createMutex()) < 0) {
+	
+	if ((data->userTable_mutex = createMutex()) < 0) {
 		printf("Error making USer ID mutex");
 		exit(3);
 	}
-	
+	initUserTable(&data->userTable);
 	data->receiveQueue = createQueue(&data->receiveQueue);
 	data->transmitQueue = createQueue(&data->transmitQueue);
 }
@@ -169,7 +169,8 @@ void destroyThreadData(struct threadData_s *data) {
 	destroyMutex(data->comPort_mutex);
 	fclose(data->comPort);
 	
-	destroyMutex(data->userID_mutex);
+	destroyUserTable(&data->userTable);
+	destroyMutex(data->userTable_mutex);
 	
 	destroyQueue(data->receiveQueue);
 	destroyQueue(data->transmitQueue);

@@ -34,7 +34,6 @@ enum progState {
 struct threadData_s {
 	enum progState programState;			/* current state of the program */
 	FILE *comPort;							/* COM port file stream */
-	char userID;							/* user id of current logged in user */
 	struct queue_s *receiveQueue;		/* packets received for current user */
 	struct queue_s *transmitQueue;	/* packets to be transmitted */
 	struct userTable_s userTable;			/* list of stations in a ring */
@@ -43,7 +42,7 @@ struct threadData_s {
 	/* indexes in mutex list */
 	int programState_mutex;
 	int comPort_mutex;
-	int userID_mutex;
+	int userTable_mutex;
 };
 
 

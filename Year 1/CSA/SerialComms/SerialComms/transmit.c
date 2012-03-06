@@ -29,7 +29,7 @@ THREAD_RET transmitStart(void *data) {
 			printf("{%c%c%c%10s%c}\n", packet->source, packet->destination, packet->packetType, packet->payload, packet->checksum);
 			fflush(stdout);
 			/* if the packet is self addressed, simulate a round trip by receiving it instantly */
-			if (packet->source == threadData->userID) {
+			if (packet->source == threadData->userTable.ID) {
 				/* add to pend table to keep track of packet */
 			}
 			lockMutex(threadData->comPort_mutex);
