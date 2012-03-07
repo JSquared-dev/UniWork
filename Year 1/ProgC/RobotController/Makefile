@@ -21,5 +21,5 @@ utils: $(UTILS)
 	cc -Wall -o stop utils/stop.c -lcomedi -lc -lm
 
 .c.o:
-	cc -std=c99 -Wall -o $@ $<
+	cc -std=c99 -Wall -c -o $@ $<
 
