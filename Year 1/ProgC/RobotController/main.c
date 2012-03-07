@@ -5,10 +5,12 @@
 #include <ncurses.h>
 #include <stdio.h>
 
-#define VERSION_STRING "v0.0.1"
+#define VERSION_STRING "v0.1"
 #define MENU_MIN_LINE 3
 #define MENU_MAX_LINE 7
 
+extern int joystick_start();
+void printMenu();
 void interpretKey(int key);
 void moveCursor(int direction);
 
@@ -18,16 +20,8 @@ int main(int argc, char **argv) {
 	timeout(0);
 	raw();
 	keypad(stdscr, TRUE);
-	printw("Welcome to the Robot Controller %s\n\n", VERSION_STRING);
-	printw("\n\t[ ] Line follower");
-	printw("\n\t[ ] Light follower");
-	printw("\n\t[ ] Joystick free-roaming");
-	printw("\n\t[ ] Retrace last Joystick track");
-	printw("\n\t[ ] Free flow AI");
-	refresh();
-	move(0,0); // move cursor to top left of screen
-	int ch = KEY_UP;// cheat to set cursor at top of menu
-	interpretKey(ch);
+	printMenu();
+	int ch = ' ';
 	while(ch != 'q') {
 		interpretKey(ch);
 		refresh();
@@ -38,20 +32,54 @@ int main(int argc, char **argv) {
 	return 0;
 }
 
+int runModule(int line) {
+  int ret = -1;
+     switch (line) {
+          case 5:
+	       ret = joystick_start();
+          break;
+          default:
+	      
+          break;
+     }
+     return ret;
+}
+
 void interpretKey(int key) {
-	
+  int ret, y, x;
 	switch (key) {
 		case KEY_UP:
 		case KEY_DOWN:
 			moveCursor(key);
 			break;
-		case KEY_SPACE:
-		case KEY_ENTER:
-			
+		case '\n':
+		  getyx(stdscr,y,x);
+		  move(0,0);
+		  ret = runModule(y);
+		  printMenu();
+		  if (ret > 0) {
+		    getyx(stdscr,y,x);
+		    move(y-1,x);
+		    printw("Error executing joystick %d", ret);
+		  }
 			break;
 		default:
 			break;
 	}
+}
+
+void printMenu() {
+     clear();
+     move(0,0);
+     printw("Welcome to the Robot Controller %s\n\n", VERSION_STRING);
+     printw("\n\t[ ] Line follower");
+     printw("\n\t[ ] Light follower");
+     printw("\n\t[ ] Joystick free-roaming");
+     printw("\n\t[ ] Retrace last Joystick track");
+     printw("\n\t[ ] Free flow AI");
+     move(0,0);
+     interpretKey(KEY_UP);
+     refresh();
 }
 
 void moveCursor(int direction) {

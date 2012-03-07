@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
-	//#include <comedilib.h>
+#include <comedilib.h>
 #include <math.h>
 
 	//int usleep(useconds_t usec);
@@ -42,7 +42,7 @@ void readJoystick(comedi_t *device, struct joystick *joystickData);
 void calculateMotorValue(struct joystick_calib calibration, struct joystick joystickValue, struct motor_s *motorValue);
 void runMotors(comedi_t *device, struct motor_s motorValues);
 
-int main (int argc, const char **argv) {
+int joystick_start () {
 	
 	struct joystick_calib joystickCalibData;
 	char *filename = "/dev/comedi0";
