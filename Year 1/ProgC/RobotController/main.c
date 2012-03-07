@@ -45,6 +45,10 @@ void interpretKey(int key) {
 		case KEY_DOWN:
 			moveCursor(key);
 			break;
+		case KEY_SPACE:
+		case KEY_ENTER:
+			
+			break;
 		default:
 			break;
 	}
