@@ -33,7 +33,7 @@ enum progState {
 
 struct threadData_s {
 	enum progState programState;			/* current state of the program */
-	FILE *comPort;							/* COM port file stream */
+	int comPort;							/* COM port file descriptor */
 	struct queue_s *receiveQueue;		/* packets received for current user */
 	struct queue_s *transmitQueue;	/* packets to be transmitted */
 	struct userTable_s userTable;			/* list of stations in a ring */

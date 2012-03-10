@@ -15,11 +15,13 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <sys/time.h>
 
 #ifdef _WIN32
 #else
 #include <unistd.h>
 #include <termios.h>
+#include <fcntl.h>
 #endif
 
 #define ESC_KEY 0x1B
@@ -98,7 +100,16 @@ enum progState loginPrompt(struct threadData_s *data) {
 		return LOGIN;
 	}
 	/* create login packet and queue it for transmission */
-	loginPacket = createLanPacket(letter, letter, 'L', NULL);
+	struct timeval time;
+	gettimeofday(&time, NULL);
+	char tmpdata[10];
+	for (int i = 0; i < 10 && i < sizeof(struct timeval); i ++) {
+		if (i < sizeof(time_t))
+			tmpdata[i] = (char)((time.tv_sec & (0xFF << i*8)) >> i*8); 
+		else if (i < sizeof(suseconds_t))
+			tmpdata[i] = (char)((time.tv_usec & (0xFF << (i-sizeof(time_t))*8)) >> (i-sizeof(time_t))*8);
+	}
+	loginPacket = createLanPacket(letter, letter, 'L', tmpdata);
 	
 	/* set up usedID for receive task to be able to identify which packets are targetted at us */
 	lockMutex(data->userTable.ID_mutex);
@@ -143,8 +154,8 @@ enum progState checkLogin(struct threadData_s *data) {
 }
 
 void initThreadData(struct threadData_s *data) {
-	data->comPort = fopen(COM_PORT, "rb+");
-	if (data->comPort == NULL) {
+	data->comPort = open(COM_PORT, O_RDWR | O_NOCTTY | O_NONBLOCK);
+	if (data->comPort < 0) {
 		printf("Error opening serial device");
 		exit(1);
 	}
@@ -167,7 +178,7 @@ void initThreadData(struct threadData_s *data) {
 void destroyThreadData(struct threadData_s *data) {
 	
 	destroyMutex(data->comPort_mutex);
-	fclose(data->comPort);
+	close(data->comPort);
 	
 	destroyUserTable(&data->userTable);
 	destroyMutex(data->userTable_mutex);
