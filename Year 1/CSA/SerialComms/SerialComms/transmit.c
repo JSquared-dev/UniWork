@@ -18,7 +18,7 @@
 #include "transmit.h"
 
 THREAD_RET transmitStart(void *data) {
-	int i;
+	int i; char tmp;
 	struct lanPacket_s *packet;
 	struct threadData_s *threadData = (struct threadData_s *) data;
 	struct queue_s *transmitQueue = threadData->transmitQueue;
@@ -29,19 +29,20 @@ THREAD_RET transmitStart(void *data) {
 			printf("{%c%c%c%10s%c}\n", packet->source, packet->destination, packet->packetType, packet->payload, packet->checksum);
 			fflush(stdout);
 			/* if the packet is self addressed, simulate a round trip by receiving it instantly */
-			if (packet->source == threadData->userID) {
+			if (packet->source == threadData->userTable.ID) {
 				/* add to pend table to keep track of packet */
 			}
 			lockMutex(threadData->comPort_mutex);
-			fputc(PACKET_START, threadData->comPort);
-			fputc(packet->destination, threadData->comPort);
-			fputc(packet->source, threadData->comPort);
-			fputc(packet->packetType, threadData->comPort);
+			tmp = PACKET_START;
+			write(threadData->comPort, &tmp, 1);
+			write(threadData->comPort, &packet->destination, 1);
+			write(threadData->comPort, &packet->source, 1);
+			write(threadData->comPort, &packet->packetType, 1);
 			for (i = 0; i < 10; i ++)
-				fputc(packet->payload[i], threadData->comPort);
-			fputc(packet->checksum, threadData->comPort);
-			fputc(PACKET_END, threadData->comPort);
-			fflush(threadData->comPort);
+				write(threadData->comPort, &packet->payload[i], 1);
+			write( threadData->comPort, &packet->checksum, 1);
+			tmp = PACKET_END;
+			write(threadData->comPort, &tmp, 1);
 			unlockMutex(threadData->comPort_mutex);
 		}
 		else {

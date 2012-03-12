@@ -9,17 +9,15 @@
  */
 struct lanPacket_s *createLanPacket(char source, char destination, enum PacketType type, char data[10]) {
 	struct lanPacket_s *packet = (struct lanPacket_s *) malloc(sizeof(struct lanPacket_s));
-	
+	int i;
 	packet->source = source;
 	packet->destination = destination;
 	packet->packetType = type;
 	if (data != NULL) {
-		int i;
 		for (i = 0; i < 10; i++) {
 			packet->payload[i] = data[i];
 		}
 	}
-	
 	packet->checksum = packetChecksum(packet);
 	
 	return packet;

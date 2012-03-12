@@ -1,9 +1,9 @@
 
 
-OBJECTS := main.c
-UTILS := utils/stop.c
+OBJECTS := main.o joystick.o 
+UTILS := utils/stop.o
 
-.PHONY: all utils clean joystick linefollow
+.PHONY: all utils clean RobotController
 
 clean:
 	-rm -rf stop
@@ -11,14 +11,15 @@ clean:
 	-rm -rf joystick
 	-rm -rf *.o
 
-all: joystick linefollow utils
-	cc -std=c99 -Wall -o RobotController $(OBJECTS) -lcomedi -lncurses -lc -lm
+all: RobotController utils
+	echo Build complete
 
-utils: utils/stop.c
-	cc -std=c99 -Wall -o stop utils/stop.c -lcomedi -lc -lm
+RobotController: $(OBJECTS)
+	cc -Wall -o $@ $(OBJECTS) -lcomedi -lncurses -lc -lm
 
-joystick: joystick.c
-	cc -std=c99 -Wall -o joystick joystick.c -lcomedi -lc -lm
+utils: $(UTILS)
+	cc -Wall -o stop utils/stop.c -lcomedi -lc -lm
 
-linefollow: linefollow.c
-	cc -std=c99 -Wall -o linefollow linefollow.c -lcomedi -lc -lm
+.c.o:
+	cc -std=c99 -Wall -c -o $@ $<
+
