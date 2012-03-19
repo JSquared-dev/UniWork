@@ -129,7 +129,8 @@ void calculateMotorValue(struct joystick_calib	calibration,
 	/* normalise joystick values */
 	signed int dataX = joystickValue.x;
 	signed int dataY = joystickValue.y;
-	dataX -= calibration.neutral.x;
+	dataX -= calibration.neutral.x; 
+	dataX *= -1; /* X axis is inverted on joysticks. after normalising about X axis, reverse sign to correct inversion */
 	dataY -= calibration.neutral.y;
 	
 		//	printf("\ndata x: %d", dataX);
@@ -169,7 +170,7 @@ void calculateMotorValue(struct joystick_calib	calibration,
 		right = MOTOR_MAX;
 		
 		if (angle < 45) {
-			/* left motor full forwards
+			/* left motor full forwards. 
 			 * right motor variable backwards; 45 = 0, 0 = full */
 			right /= 45;
 			right *= (45-angle);
@@ -201,10 +202,12 @@ void calculateMotorValue(struct joystick_calib	calibration,
 		left = 0-MOTOR_MAX;
 		right = 0-MOTOR_MAX;
 		if (angle > -45) {
-			/* left motor full backwards
+			/* left motor variable direction; 0 to -22.5 = fwd, -22.5 to -45 = bwd.
 			 * right motor variable backwards; -45 = 0, 0 = full */
 			right /= 45;
 			right *= (angle + 45);
+			left /= 22.5;
+			left *= (-1 * (angle + 22.5)); /* normalise angle about 0, multiply by negative 1 to invert direction */
 		}
 		else if (angle > -90) {
 			/* left motor full backwards
@@ -221,9 +224,12 @@ void calculateMotorValue(struct joystick_calib	calibration,
 		}
 		else {
 			/* left motor variable forwards; -135 = 0, -180 = full
-			 * right motor full backwards */
-			left /= 45;
+			 * right motor variable direction; -180 to -157.5 = fwd, -157.5 to -135 = bwd */
+			left /= 45; /* 45 degrees of variance range, evenly distribute motor speed across angle */
 			left *= (45 - (angle + 180));
+			right /= 22.5; /* 45 degrees of variance, between 2 directions. lower half denotes forward, upper half denotes backward */
+			right *= ((angle + 180) - 22.5); /* mirror angle in y=-x. offset by 22.5 to normalise the 45 degree range around 0.
+											  * multiply to acheive proportional motor value for angle. */
 		}
 	}
 	
@@ -233,8 +239,10 @@ void calculateMotorValue(struct joystick_calib	calibration,
 	 * make the joystick more interactive by scaling the motor values depending on how far
 	 * the joystick has been pushed. */
 	double hypotenuse = sqrt((dataX*dataX) + (dataY*dataY)); /* combined value the joystick has been pushed by. */
-	unsigned int a = (calibration.left - calibration.neutral.x); a *= a;
-	unsigned int b = (calibration.forward - calibration.neutral.y); b *= b;
+	unsigned int a = (calibration.left - calibration.neutral.x); 
+					 a *= a;
+	unsigned int b = (calibration.forward - calibration.neutral.y); 
+					 b *= b;
 	
 	double maxHyp = sqrt(a + b);
 	double multiplier = hypotenuse/maxHyp;
