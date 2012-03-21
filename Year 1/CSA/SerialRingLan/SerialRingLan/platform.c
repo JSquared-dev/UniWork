@@ -8,12 +8,27 @@
 #include <io.h>
 static COMMTIMEOUTS noblock;
 static DCB dcb;
-#else
+#else /* _WIN32 */
 #include <unistd.h>
-#include <termios.h>
+#include <sys/termios.h>
 #include <time.h>
 static struct termios old;
-#endif
+int usleep(int secs);
+
+
+#ifndef CCTS_OFLOW
+     #define CCTS_OFLOW 0x00010000
+#endif /* CCTS_OFLOW */
+#ifndef CRTS_IFLOW
+     #define CRTS_IFLOW 0x00020000
+#endif /* CRTS_IFLOW */
+#ifndef CRTSCTS
+     #define CRTSCTS (CCTS_OFLOW|CRTS_IFLOW)
+#endif /* CRTSCTS */
+#ifndef ONOEOT
+#define ONOEOT 0x00000008
+#endif 
+#endif /* else !_WIN32 */
 
 /* returns number of seconds since January 1, 1970 */
 time_t getTimeOfDay() {
@@ -92,7 +107,7 @@ void setupCOMPort(int comFileDescriptor) {
 	 * Receive enabled
 	 * 2 stop bits
 	 */
-	new.c_cflag = B9600 | CS8 | CCTS_OFLOW | CRTS_IFLOW | CREAD | CSTOPB;
+	new.c_cflag = B9600 | CS8 | CRTSCTS | CREAD | CSTOPB | CLOCAL;
 	/* ignore parity
 	 * map carriage return to new line character - required for cross platform
 	 */
