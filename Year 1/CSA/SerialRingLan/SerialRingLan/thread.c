@@ -34,7 +34,7 @@ void endThread(thread_t *thread) {
 #ifdef _WIN32
 	TerminateThread(*thread, 0);
 #else
-	pthread_join(*thread);
+	pthread_join(*thread, NULL);
 #endif
 }
 
