@@ -244,6 +244,7 @@ enum progState checkLogin(struct threadData_s *data) {
 			wclear(data->inputWindow);
 			wrefresh(data->inputWindow);
 			destroyPacket(packet);
+			printUserTable(data->userTable, data->userListWindow);
 			return MENU;
 		}
 		else if (packet->packetType == NAK_PACKET) {

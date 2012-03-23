@@ -95,9 +95,12 @@ int checkIfUserActive (struct userTable_s *userTable, char User) {
 
 void printUserTable(struct userTable_s *userTable, WINDOW *window) {
 	int i;
+	char *status;
+	char userID = getCurrentID(userTable);
 	wprintw(window, "Users");
-	for (i = 0; i < 26; i ++) {
-		wprintw(window, "%c%.4s", 'A' + i, (checkIfUserActive(userTable,'A' + i) ? "  on" : " off"));
+	for (i = 0; i < 26; i ++) { 
+		status = ((userID == ('A' + i)) ? " you" : (checkIfUserActive(userTable, 'A' + i) ? "  on" : " off"));
+		wprintw(window, "%c%.4s", 'A' + i, status);
 	}
 	wrefresh(window);
 }
