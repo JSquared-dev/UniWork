@@ -95,13 +95,37 @@ int checkIfUserActive (struct userTable_s *userTable, char User) {
 
 void printUserTable(struct userTable_s *userTable, WINDOW *window) {
 	int i;
+	short pair;
 	char *status;
 	char userID = getCurrentID(userTable);
+	wattr_get(window, NULL, &pair, NULL);
 	wprintw(window, "Users");
 	for (i = 0; i < 26; i ++) { 
-		status = ((userID == ('A' + i)) ? " you" : (checkIfUserActive(userTable, 'A' + i) ? "  on" : " off"));
-		wprintw(window, "%c%.4s", 'A' + i, status);
+		wattron(window, COLOR_PAIR(pair));
+		wprintw(window, "%c", 'A' + i);
+		if ((userID == (i + 'A')) || checkIfUserActive(userTable, 'A' + i)) {
+			if (pair == 1) { /* use colour pair 1 as a guide for what background we need. */
+				wattron(window, COLOR_PAIR(3));
+			}
+			else {
+				wattron(window, COLOR_PAIR(5));
+			}
+		}
+		else {
+			if (pair == 1) { /* use colour pair 1 as a guide for what background we need. */
+				wattron(window, COLOR_PAIR(4));
+			}
+			else {
+				wattron(window, COLOR_PAIR(6));
+			}
+		}
+		wprintw(window, "%.4s", ((userID == ('A' + i)) ? " you" : (checkIfUserActive(userTable, 'A' + i) ? "  on" : " off")));
+		wattroff(window, COLOR_PAIR(3));
+		wattroff(window, COLOR_PAIR(4));
+		wattroff(window, COLOR_PAIR(5));
+		wattroff(window, COLOR_PAIR(6));
 	}
+	wattron(window, COLOR_PAIR(pair));
 	wrefresh(window);
 }
 

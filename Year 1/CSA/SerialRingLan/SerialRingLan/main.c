@@ -94,6 +94,16 @@ enum progState logoutPending(struct threadData_s *data) {
 		return LOGOUT;
 	else if (packet->packetType == LOGOUT_PACKET) {
 		setCurrentID(data->userTable, 0);
+
+		wbkgdset(data->messageWindow,COLOR_PAIR(1));
+		wbkgdset(data->inputWindow,COLOR_PAIR(1));
+		wbkgdset(data->userListWindow,COLOR_PAIR(1));
+		wattrset(data->messageWindow, COLOR_PAIR(1));
+		wattrset(data->inputWindow, COLOR_PAIR(1));
+		wattrset(data->userListWindow, COLOR_PAIR(1));
+		wclear(data->messageWindow);
+		wclear(data->inputWindow);
+		wclear(data->userListWindow);
 		return LOGIN;
 	}
 	else {
@@ -116,7 +126,7 @@ struct lanPacket_s *createMessage(struct threadData_s *data) {
 	
 	int i = 0;
 	while (target == 0) {
-		wprintw(data->inputWindow, "\nTarget: ");
+		wprintw(data->inputWindow, "Target: ");
 		tmp = wgetch(data->inputWindow);
 		switch (tmp) {
 			case CTRL_D:
@@ -160,8 +170,8 @@ struct lanPacket_s *createMessage(struct threadData_s *data) {
 
 enum progState mainMenu(struct threadData_s *data) {
 	
+	static struct lanPacket_s *packet = NULL;
 	char input = wgetch(data->inputWindow);
-	struct lanPacket_s *packet;
 	input = toupper(input);
 	switch (input) {
 		case CTRL_D:
@@ -172,7 +182,17 @@ enum progState mainMenu(struct threadData_s *data) {
 			wprintw(data->inputWindow, "\nCreating message to send to user\n");
 			wrefresh(data->inputWindow);
 			packet = createMessage(data);
+			break;
+		case 'S':
+			if (packet != NULL) {
 			addToQueue(data->transmitQueue, packet);
+			wprintw(data->messageWindow, "Sent message.\n");
+			wrefresh(data->messageWindow);
+			packet = NULL;
+			}
+			else {
+				wprintw(data->messageWindow, "Please compose a message first\n");
+			}
 			break;
 		case 'X':
 			/* post logout packet for transmission */
@@ -238,6 +258,16 @@ enum progState checkLogin(struct threadData_s *data) {
 	
 	if (packet != NULL) {
 		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
+			wbkgdset(data->messageWindow,COLOR_PAIR(2));
+			wbkgdset(data->inputWindow,COLOR_PAIR(2));
+			wbkgdset(data->userListWindow,COLOR_PAIR(2));
+			wattrset(data->messageWindow, COLOR_PAIR(2));
+			wattrset(data->inputWindow, COLOR_PAIR(2));
+			wattrset(data->userListWindow, COLOR_PAIR(2));
+			wclear(data->messageWindow);
+			wclear(data->inputWindow);
+			wclear(data->userListWindow);
+	
 			wprintw(data->messageWindow, "Welcome to the network, %c\n", getCurrentID(data->userTable));
 			wprintw(data->messageWindow, "To send a message, press D. To log out, press X.\n");
 			wrefresh(data->messageWindow);
@@ -274,17 +304,39 @@ void initUI(struct threadData_s *data) {
 	//nonl();
 	noecho();
 	resize_term(27,80);
+	start_color();
+
+	init_pair(1, COLOR_WHITE, COLOR_BLACK); /* logged out colours */
+	init_pair(2, COLOR_BLACK, COLOR_WHITE); /* logged in colours */
+
+	init_pair(3, COLOR_GREEN, COLOR_BLACK); /* logged out, user table logged in */
+	init_pair(4, COLOR_RED, COLOR_BLACK); /* logged out, user table logged out */
+
+	init_pair(5, COLOR_GREEN, COLOR_WHITE); /* logged in, user table logged in */
+	init_pair(6, COLOR_RED, COLOR_WHITE); /* logged in, user table logges out */
+
 	
 	data->userListWindow = newwin(27, 5, 0, 75);
 	data->inputWindow = newwin(5, 75, 22, 0);
 	data->messageWindow = newwin(22,75,0,0);
 	data->debugEnable = 0;
+
 	
 	scrollok(data->inputWindow, TRUE);
 	scrollok(data->userListWindow, TRUE);
 	scrollok(data->messageWindow, TRUE);
 	
 	refresh();
+
+	wbkgdset(data->messageWindow,COLOR_PAIR(1));
+	wbkgdset(data->inputWindow,COLOR_PAIR(1));
+	wbkgdset(data->userListWindow,COLOR_PAIR(1));
+	wattrset(data->messageWindow, COLOR_PAIR(1));
+	wattrset(data->inputWindow, COLOR_PAIR(1));
+	wattrset(data->userListWindow, COLOR_PAIR(1));
+	wclear(data->messageWindow);
+	wclear(data->inputWindow);
+	wclear(data->userListWindow);
 	
 	wprintw(data->userListWindow, "Users logged in");
 	wrefresh(data->userListWindow);
