@@ -296,7 +296,6 @@ void initUI(struct threadData_s *data) {
 void destroyUI(struct threadData_s *data) {
 	delwin(data->inputWindow);
 	delwin(data->userListWindow);
-	delwin(data->display);
 	endwin();
 }
 

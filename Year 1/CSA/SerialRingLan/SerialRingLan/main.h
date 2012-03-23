@@ -56,8 +56,7 @@ struct threadData_s {
 	struct queue_s *receiveQueue;	/* packets received for current user */
 	struct queue_s *transmitQueue;	/* packets to be transmitted */
 	struct userTable_s *userTable;	/* list of stations in a ring */
-	WINDOW *display;				/* Curses main window for data display. sub windows defined for data organisation. */
-	WINDOW *userListWindow, *inputWindow, *messageWindow;
+	WINDOW *userListWindow, *inputWindow, *messageWindow;/* Curses main window for data display. sub windows defined for data organisation. */
 	int debugEnable;
 	/* unique locks for individual data elements */
 	/* indexes in mutex list */
