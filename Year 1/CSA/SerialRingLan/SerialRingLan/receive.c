@@ -38,7 +38,7 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 	char userID = getCurrentID(threadData->userTable);
 	
 	/* print debug information if in debug mode */
-	if (threadData->debugEnable != 0 && (packet->source == userID || packet->destination == userID)) {
+	if (threadData->debugEnable != 0) {
 		wprintw(threadData->messageWindow, "Received packet: {%c%c%c%.10s%.1c}\n", packet->source, packet->destination, packet->packetType, packet->payload, packet->checksum);
 		wrefresh(threadData->messageWindow);
 	}
@@ -77,12 +77,16 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 			/* remove packet from lan, and removce pending packet from transmit queue */
 			destroyPacket(packet);
 		}
+		else if (packet->packetType == LOGOUT_PACKET) {
+		  if (threadData->programState != LOGOUT) {
+		    destroyPacket(packet); /* we're not trying to logout, so stop anyone from forcing us offline */
+		  }
+		  else {
+		    addToQueue(threadData->receiveQueue, packet);
+		  }
+		}
 		/* don't accept packets if we're logging out, only report back with our own logout packet */
-		else if (threadData->programState != LOGOUT || packet->packetType == LOGOUT_PACKET) {
-			if (packet->packetType != LOGIN_PACKET && packet->packetType != LOGOUT_PACKET) {
-				struct lanPacket_s *ackPacket = createLanPacket(packet->destination, packet->source, packet->packetType, packet->payload);
-				addToQueue(threadData->transmitQueue, ackPacket);
-			}
+		else if (threadData->programState != LOGOUT) {
 			addToQueue(threadData->receiveQueue, packet);
 		}
 		else {

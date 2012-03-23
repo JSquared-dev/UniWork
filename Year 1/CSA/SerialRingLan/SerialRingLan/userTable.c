@@ -97,8 +97,9 @@ void printUserTable(struct userTable_s *userTable, WINDOW *window) {
 	int i;
 	short pair;
 	char *status;
+	attr_t attr;
 	char userID = getCurrentID(userTable);
-	wattr_get(window, NULL, &pair, NULL);
+	wattr_get(window, &attr, &pair, NULL);
 	wprintw(window, "Users");
 	for (i = 0; i < 26; i ++) { 
 		wattron(window, COLOR_PAIR(pair));
