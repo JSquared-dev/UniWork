@@ -26,7 +26,10 @@
 	#define COM_PORT "/dev/ttyS0"		/* first serial port available on linux systems */
 #endif
 
+/* control characters to use with curses
+ * calculated by the position in alphabet; A= 1, B= 2 etc. */
 #define CTRL_D 4
+#define CTRL_Q 17
 
 enum progState {
 	LOGIN,		/* login state requires user to choose a user id */

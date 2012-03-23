@@ -204,6 +204,9 @@ enum progState loginPrompt(struct threadData_s *data) {
 		data->debugEnable = ~(data->debugEnable);
 		return LOGIN;
 	}
+	else if (letter == CTRL_Q) {
+		return EXIT;
+	}
 	
 	wprintw(data->inputWindow, "%.1c", letter);
 	wrefresh(data->inputWindow);

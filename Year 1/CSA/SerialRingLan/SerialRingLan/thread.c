@@ -32,10 +32,9 @@ thread_t *createThread(THREAD_RET (*entryPoint)(void *), void *data) {
 /* platform independently end a thread */
 void endThread(thread_t *thread) {
 #ifdef _WIN32
-//	_endthread(); /* is wrong. needs something else instead. ClosHandle()? */
 	TerminateThread(*thread, 0);
 #else
-	pthread_cancel(*thread);
+	pthread_join(*thread);
 #endif
 }
 

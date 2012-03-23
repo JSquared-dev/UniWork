@@ -25,7 +25,7 @@ THREAD_RET transmitStart(void *data) {
 	struct threadData_s *threadData = (struct threadData_s *) data;
 	struct queue_s *transmitQueue = threadData->transmitQueue;
 
-	while (1) {
+	while (threadData->programState != EXIT) {
 		packet = (struct lanPacket_s *) removeFrontOfQueue(transmitQueue);
 		if (packet != NULL) {
 			/* if the packet is coming from the current user, enter pending data and keep track of it. */

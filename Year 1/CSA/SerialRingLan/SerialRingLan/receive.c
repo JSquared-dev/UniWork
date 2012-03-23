@@ -22,7 +22,7 @@ THREAD_RET receiveStart(void *data) {
 	struct lanPacket_s *Packet;
 		
 	/* loop forever, reading packets and processing them */
-	while (/*threadData->programState != EXIT*/ 1) {
+	while (threadData->programState != EXIT) {
 		Packet = readPacket(threadData->comPort);
 		/* if we have received a valid packet, process it. 
 		 * otherwise pause for a short time to wait for more data and free up the CPU */
