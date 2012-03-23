@@ -267,11 +267,11 @@ enum progState checkLogin(struct threadData_s *data) {
 
 void initUI(struct threadData_s *data) {
 	
-	data->display = initscr();
+	initscr();
 	
 	raw();
-	keypad(data->display, TRUE);
-		//	nonl();
+	keypad(stdscr, TRUE);
+	nonl();
 	noecho();
 	resize_term(27,80);
 	
