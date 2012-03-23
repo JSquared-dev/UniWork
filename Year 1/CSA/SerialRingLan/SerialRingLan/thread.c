@@ -31,8 +31,9 @@ thread_t *createThread(THREAD_RET (*entryPoint)(void *), void *data) {
 
 /* platform independently end a thread */
 void endThread(thread_t *thread) {
+	/* wait for thread to exit gracefully. Assuming thread has been signalled to exit before calling this function. */
 #ifdef _WIN32
-	TerminateThread(*thread, 0);
+	WaitForSingleObject(*thread, INFINITE);
 #else
 	pthread_join(*thread, NULL);
 #endif
