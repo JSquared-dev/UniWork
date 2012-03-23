@@ -136,7 +136,7 @@ struct lanPacket_s *createMessage(struct threadData_s *data) {
 	i = 0;
 	while (i < 10) {
 		tmp = wgetch(data->inputWindow);
-		if (tmp == 13) /* 13 magic number for enter key */
+		if (tmp == KEY_ENTER)
 			break;
 		
 		switch (tmp) {
@@ -271,7 +271,7 @@ void initUI(struct threadData_s *data) {
 	
 	raw();
 	keypad(stdscr, TRUE);
-	nonl();
+	//nonl();
 	noecho();
 	resize_term(27,80);
 	

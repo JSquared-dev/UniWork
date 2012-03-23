@@ -30,6 +30,17 @@
  * calculated by the position in alphabet; A= 1, B= 2 etc. */
 #define CTRL_D 4
 #define CTRL_Q 17
+#ifdef _WIN32
+	#ifdef KEY_ENTER
+		#undef KEY_ENTER
+	#endif
+	#define KEY_ENTER 13
+#else
+	#ifdef KEY_ENTER
+		#undef KEY_ENTER
+	#endif
+	#define KEY_ENTER 10
+#endif
 
 enum progState {
 	LOGIN,		/* login state requires user to choose a user id */
