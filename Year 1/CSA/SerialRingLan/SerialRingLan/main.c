@@ -154,7 +154,7 @@ struct lanPacket_s *createMessage(struct threadData_s *data) {
 	packet = createLanPacket(getCurrentID(data->userTable), target, DATA_PACKET, message);
 	
 	wprintw(data->inputWindow, "\n"); /* tidy up the input window a little */
-	
+	wrefresh(data->inputWindow);
 	return packet;
 }
 
