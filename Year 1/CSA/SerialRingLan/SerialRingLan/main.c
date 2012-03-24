@@ -104,6 +104,11 @@ enum progState logoutPending(struct threadData_s *data) {
 		wclear(data->messageWindow);
 		wclear(data->inputWindow);
 		wclear(data->userListWindow);
+
+		printUserTable(data->userTable, data->userListWindow);
+
+		destroyPacket(packet);
+
 		return LOGIN;
 	}
 	else {
@@ -112,7 +117,8 @@ enum progState logoutPending(struct threadData_s *data) {
 }
 
 void logout(struct threadData_s *data) {
-	struct lanPacket_s *logoutPacket = (struct lanPacket_s *) createLanPacket(getCurrentID(data->userTable), getCurrentID(data->userTable), LOGOUT_PACKET, NULL);
+	char userID = getCurrentID(data->userTable);
+	struct lanPacket_s *logoutPacket = (struct lanPacket_s *) createLanPacket(userID, userID, LOGOUT_PACKET, NULL);
 	addToQueue(data->transmitQueue, logoutPacket);
 	wprintw(data->messageWindow, "\nLogging out...\n");
 	wrefresh(data->messageWindow);
@@ -182,13 +188,15 @@ enum progState mainMenu(struct threadData_s *data) {
 			wprintw(data->inputWindow, "\nCreating message to send to user\n");
 			wrefresh(data->inputWindow);
 			packet = createMessage(data);
+			wprintw(data->inputWindow, "\nMessage created, press S to send\n");
+			wrefresh(data->inputWindow);
 			break;
 		case 'S':
 			if (packet != NULL) {
-			addToQueue(data->transmitQueue, packet);
-			wprintw(data->messageWindow, "Sent message.\n");
-			wrefresh(data->messageWindow);
-			packet = NULL;
+				addToQueue(data->transmitQueue, packet);
+				wprintw(data->messageWindow, "Sent message.\n");
+				wrefresh(data->messageWindow);
+				packet = NULL;
 			}
 			else {
 				wprintw(data->messageWindow, "Please compose a message first\n");
@@ -274,7 +282,9 @@ enum progState checkLogin(struct threadData_s *data) {
 			wclear(data->inputWindow);
 			wrefresh(data->inputWindow);
 			destroyPacket(packet);
+
 			printUserTable(data->userTable, data->userListWindow);
+
 			return MENU;
 		}
 		else if (packet->packetType == NAK_PACKET) {

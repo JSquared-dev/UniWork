@@ -54,13 +54,10 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 			if (threadData->programState == LOGIN_PEND)
 				addToQueue(threadData->receiveQueue, packet);
 			else {
-				if (packet->source == userID) {
-					packet->packetType = ACK_PACKET;
-				}
-				addToQueue(threadData->transmitQueue, packet);
+				destroyPacket(packet);
 			}
 		}
-		if (packet->packetType == DATA_PACKET) {
+		else if (packet->packetType == DATA_PACKET) {
 			struct lanPacket_s *ackPacket = createLanPacket(packet->destination, packet->source, ACK_PACKET, packet->payload);
 			addToQueue(threadData->transmitQueue, ackPacket);
 			wprintw(threadData->messageWindow, "Message from %c: %.10s\n", packet->source, packet->payload);
@@ -86,11 +83,8 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		  }
 		}
 		/* don't accept packets if we're logging out, only report back with our own logout packet */
-		else if (threadData->programState != LOGOUT) {
-			addToQueue(threadData->receiveQueue, packet);
-		}
 		else {
-			addToQueue(threadData->transmitQueue, packet); /* feign inactivity as we cannot handle incoming messages while logging out */
+			addToQueue(threadData->receiveQueue, packet);
 		}
 	}
 	else {
