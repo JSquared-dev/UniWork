@@ -88,6 +88,11 @@ int main(int argc, const char **argv) {
 	return 0;
 }
 
+void showHelpMenu(WINDOW *window) {
+	wprintw(window, "\n[X]Logout, [D]Construct message, [^D]Enable debug mode\n");
+	wrefresh(window);
+}
+
 enum progState logoutPending(struct threadData_s *data) {
 	struct lanPacket_s *packet = (struct lanPacket_s *)removeFrontOfQueue(data->receiveQueue);
 	if (packet == NULL)
@@ -206,6 +211,9 @@ enum progState mainMenu(struct threadData_s *data) {
 			/* post logout packet for transmission */
 			logout(data);
 			return LOGOUT;
+			break;
+		case 'H':
+			showHelpMenu(data->messageWindow);
 			break;
 		default:
 			return MENU;

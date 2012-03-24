@@ -46,11 +46,11 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 	if (packet->destination == userID) {
 		/*-----------------------------------------------------------------*/
 		/* make sure packet is valid via checksum */
-
 		if (packet->packetType == LOGIN_PACKET) {
 			/* if we are waiting for a login packet, and we get one, place it on the receive queue
 				otherwise if the packet came from our user ID, transmit ACK PACKET
 				if none of the above, we have a false packet and need to deal with it. */
+			removePendingPacketFromQueue(threadData->transmitQueue, packet);
 			if (threadData->programState == LOGIN_PEND)
 				addToQueue(threadData->receiveQueue, packet);
 			else {
@@ -72,6 +72,7 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		}
 		else if (packet->packetType == ACK_PACKET) {
 			/* remove packet from lan, and removce pending packet from transmit queue */
+			removePendingPacketFromQueue(threadData->transmitQueue, packet);
 			destroyPacket(packet);
 		}
 		else if (packet->packetType == LOGOUT_PACKET) {
@@ -79,6 +80,7 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		    destroyPacket(packet); /* we're not trying to logout, so stop anyone from forcing us offline */
 		  }
 		  else {
+			removePendingPacketFromQueue(threadData->transmitQueue, packet);
 		    addToQueue(threadData->receiveQueue, packet);
 		  }
 		}
@@ -91,7 +93,7 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		/* the packet is not for the current user, so pass it on to the next station, unless it's a LOGIN_PACKET or LOGOUT_PACKET */
 		if (packet->source == userID) {
 			/* packet has returned to us, destroy it */
-			wprintw(threadData->messageWindow, "Failed message send\n");
+			wprintw(threadData->messageWindow, "Failed message send, retrying up to 5 times\n");
 			wrefresh(threadData->messageWindow);
 			destroyPacket(packet);
 		}

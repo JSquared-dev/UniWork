@@ -30,7 +30,6 @@ int increaseQueue(struct queue_s *queue, int amount);
 void *removeFrontOfQueue(struct queue_s *queue);
 void addToQueue(struct queue_s *queue, void *message);
 
-
-int removeItemFromQueue(struct queue_s *queue); /* used automatically, do not use without due care */
+void *removeItemFromQueue(struct queue_s *queue); /* used automatically, do not use without due care */
 
 #endif

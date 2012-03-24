@@ -21,6 +21,7 @@
 
 THREAD_RET transmitStart(void *data) {
 	char tmp;
+	int minlimit;
 	struct lanPacket_s *packet;
 	struct threadData_s *threadData = (struct threadData_s *) data;
 	struct queue_s *transmitQueue = threadData->transmitQueue;
@@ -29,6 +30,22 @@ THREAD_RET transmitStart(void *data) {
 		packet = (struct lanPacket_s *) removeFrontOfQueue(transmitQueue);
 		if (packet != NULL) {
 			/* if the packet is coming from the current user, enter pending data and keep track of it. */
+			if (packet->source == getCurrentID(threadData->userTable)) {
+				if (packet->packetType != ACK_PACKET && packet->packetType != NAK_PACKET) {
+					if (packet->lastTransmit == 0) {
+						packet->pending = 5;
+					}
+					minlimit = getTimeOfDay() - 5;
+					if (packet->lastTransmit > minlimit) {
+						addToQueue(threadData->transmitQueue, packet);
+						waitMilliSecs(20);
+						continue;
+					}
+					else {
+						packet->lastTransmit = getTimeOfDay();
+					}
+				}
+			}
 			if (threadData->debugEnable != 0) {
 				wprintw(threadData->messageWindow, "\nTransmit packet: {%c%c%c%.10s%.1s}", packet->source, packet->destination, packet->packetType, packet->payload, &packet->checksum);
 				wrefresh(threadData->messageWindow);
@@ -44,8 +61,13 @@ THREAD_RET transmitStart(void *data) {
 			tmp = PACKET_END;
 			write(threadData->comPort, &tmp, 1);
 			unlockMutex(threadData->comPort_mutex);
-			packet->pending = 0;
-			destroyPacket(packet);
+			packet->pending -= 1;
+			if (packet->pending == 0) {
+				destroyPacket(packet);
+			}
+			else {
+				addToQueue(threadData->transmitQueue, packet);
+			}
 		}
 		else {
 			waitMilliSecs(20);

@@ -51,19 +51,9 @@ int destroyQueue(struct queue_s *queue) {
 	return 0;
 }
 
-/* Function Name: removeFrontOfqueue
- * Parameters: 
- *		IN:
- *			queue		- pointer to structure to initialise.
- *		OUT:
- *			return		- address of the first object entered into queue.
- *
- * returns the address of the first object placed into queue, and removes it from the queue.
- */
-void *removeFrontOfQueue(struct queue_s *queue) {
-	void *ret = NULL;
+void *removeItemFromQueue(struct queue_s *queue) {
+	void *ret;
 	struct queue_s *nextItem;
-	lockMutex(queue->mutexIndex);
 	if (queue->data == NULL) {
 		// empty queue
 		ret = NULL;
@@ -84,6 +74,22 @@ void *removeFrontOfQueue(struct queue_s *queue) {
 			free(nextItem);
 		}
 	}
+	return ret;
+}
+
+/* Function Name: removeFrontOfqueue
+ * Parameters: 
+ *		IN:
+ *			queue		- pointer to structure to initialise.
+ *		OUT:
+ *			return		- address of the first object entered into queue.
+ *
+ * returns the address of the first object placed into queue, and removes it from the queue.
+ */
+void *removeFrontOfQueue(struct queue_s *queue) {
+	void *ret = NULL;
+	lockMutex(queue->mutexIndex);
+	ret = removeItemFromQueue(queue);
 	unlockMutex(queue->mutexIndex);
 	return ret;
 }
