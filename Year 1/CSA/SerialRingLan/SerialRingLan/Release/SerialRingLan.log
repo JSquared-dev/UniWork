@@ -1,0 +1,67 @@
+﻿Build started 15/03/2012 23:47:16.
+     1>Project "D:\University\CSA\SerialRingLan\SerialRingLan\SerialRingLan\SerialRingLan.vcxproj" on node 2 (build target(s)).
+     1>InitializeBuildStatus:
+         Creating "Release\SerialRingLan.unsuccessfulbuild" because "AlwaysCreate" was specified.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Release\\" /Fd"Release\vc100.pdb" /Gd /TC /analyze- /errorReport:prompt main.c receive.c transmit.c userTable.c
+         main.c
+     1>main.c(236): warning C4996: 'open': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _open. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(312) : see declaration of 'open'
+     1>main.c(265): warning C4996: 'close': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _close. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(302) : see declaration of 'close'
+         receive.c
+     1>receive.c(90): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+     1>receive.c(92): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+     1>receive.c(94): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+     1>receive.c(96): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+     1>receive.c(103): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+     1>receive.c(107): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+     1>receive.c(111): warning C4996: 'read': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _read. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(313) : see declaration of 'read'
+         transmit.c
+     1>transmit.c(41): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>transmit.c(42): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>transmit.c(43): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>transmit.c(44): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>transmit.c(45): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>transmit.c(46): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+     1>transmit.c(48): warning C4996: 'write': The POSIX name for this item is deprecated. Instead, use the ISO C++ conformant name: _write. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\include\io.h(318) : see declaration of 'write'
+         userTable.c
+     1>C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\include\wincon.h(101): warning C4005: 'MOUSE_MOVED' : macro redefinition
+                 d:\university\csa\serialringlan\serialringlan\serialringlan\PDCurses\curses.h(161) : see previous definition of 'MOUSE_MOVED'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\University\CSA\SerialRingLan\SerialRingLan\Release\SerialRingLan.exe" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"Release\SerialRingLan.exe.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\University\CSA\SerialRingLan\SerialRingLan\Release\SerialRingLan.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\University\CSA\SerialRingLan\SerialRingLan\Release\SerialRingLan.lib" /MACHINE:X86 Release\main.obj
+         Release\packet.obj
+         Release\platform.obj
+         Release\queue.obj
+         Release\receive.obj
+         Release\thread.obj
+         Release\transmit.obj
+         Release\userTable.obj
+         PDCurses\pdcurses.lib
+         Generating code
+         Finished generating code
+         SerialRingLan.vcxproj -> D:\University\CSA\SerialRingLan\SerialRingLan\Release\SerialRingLan.exe
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\University\CSA\SerialRingLan\SerialRingLan\Release\SerialRingLan.exe;#1" /manifest Release\SerialRingLan.exe.intermediate.manifest
+       FinalizeBuildStatus:
+         Deleting file "Release\SerialRingLan.unsuccessfulbuild".
+         Touching "Release\SerialRingLan.lastbuildstate".
+     1>Done Building Project "D:\University\CSA\SerialRingLan\SerialRingLan\SerialRingLan\SerialRingLan.vcxproj" (build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.29
