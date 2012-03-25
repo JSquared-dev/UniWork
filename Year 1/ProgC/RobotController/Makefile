@@ -1,6 +1,6 @@
 
 
-OBJECTS := main.o joystick.o 
+OBJECTS := main.o joystick.o replay.o
 UTILS := utils/stop.o
 
 .PHONY: all utils clean RobotController
@@ -18,7 +18,7 @@ RobotController: $(OBJECTS)
 	cc -Wall -o $@ $(OBJECTS) -lcomedi -lncurses -lc -lm
 
 utils: $(UTILS)
-	cc -Wall -o stop utils/stop.c -lcomedi -lc -lm
+	cc -Wall -o stop utils/stop.c -lcomedi -lc -lm -lncurses
 
 .c.o:
 	cc -std=c99 -Wall -c -o $@ $<
