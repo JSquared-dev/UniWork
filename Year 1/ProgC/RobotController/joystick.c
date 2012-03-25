@@ -41,11 +41,20 @@ void calibrateJoystick(comedi_t *device, struct joystick_calib *calibration);
 void readJoystick(comedi_t *device, struct joystick *joystickData);
 void calculateMotorValue(struct joystick_calib calibration, struct joystick joystickValue, struct motor_s *motorValue);
 void runMotors(comedi_t *device, struct motor_s motorValues);
+void recordMovement(int timeLength, struct motor_s *motorValues, FILE *recordFile);
 
-int joystick_start () {
+int main () {
 	
 	struct joystick_calib joystickCalibData;
+	struct joystick joystickData;
+	struct motor_s motorValues;
+	int timeStart = 0;
+	int timeEnd = 0;
+	int timeDiff = 0;
 	char *filename = "/dev/comedi0";
+	char *recFileName = "record.txt";
+	FILE *recordFile = fopen(recFileName, "w");
+	
 	comedi_t *device = comedi_open(filename);
 	if (!device) {
 		comedi_perror(filename);
@@ -53,28 +62,30 @@ int joystick_start () {
 	}
 	/* get the user to calibrate the joystick */
 	calibrateJoystick(device, &joystickCalibData);
-	
-	struct joystick joystickData;
-	struct motor_s motorValues;
-	int time1 = 0;
-	int time2 = 0;
-	
+	timeStart
 	while (1) {
-		/* TODO - fix recording mechanism. wasn't supposed to work in the first place */
-			//	time1 = gettime();
+		
 		readJoystick(device, &joystickData);
 		calculateMotorValue(joystickCalibData, joystickData, &motorValues);
+		
+		/* record time motor activation started and stopped. the difference is the motor time to record */
+		timeEnd = time(NULL);
+		if (timeStart != 0)
+			timeDiff = timeEnd-timeStart;
+		timeStart = time(NULL);
 		runMotors(device, motorValues);
-			//	time2 = gettime();
 		
-			//	int timeDiff = time2 - time1;
-			//recordMovement(timeDiff, motorValues);
-		
-		sleep(1);
+		recordMovement(timeDiff, motorValues, recordFile);
+		usleep(20000);
 	}
 	
 	comedi_close(device);
 	return 0;
+}
+
+void recordMovement(int timeLength, struct motor_s *motorValues, FILE *recordFile) {
+	char *outputString = sprintf("%d %d %d\n", timeLength, motorValue->left, motorValue->right);
+	fwrite(outputString, strlen(outputString), 1, recordFile);
 }
 
 void calibrateJoystick(comedi_t *device, struct joystick_calib *calibration) {
@@ -130,7 +141,7 @@ void calculateMotorValue(struct joystick_calib	calibration,
 	signed int dataX = joystickValue.x;
 	signed int dataY = joystickValue.y;
 	dataX -= calibration.neutral.x; 
-	dataX *= -1; /* X axis is inverted on joysticks. after normalising about X axis, reverse sign to correct inversion */
+//	dataX *= -1; /* X axis is inverted on joysticks. after normalising about X axis, reverse sign to correct inversion */
 	dataY -= calibration.neutral.y;
 	
 		//	printf("\ndata x: %d", dataX);
@@ -155,12 +166,22 @@ void calculateMotorValue(struct joystick_calib	calibration,
 	angle = RAD_TO_DEG(angle);
 	/* angle is the angle created by dataX and dataY. +ve angle means forwards, -ve angle means backwards */
 	/* there are some states we need to deal with, as arctan only gives values between +90 and -90 degrees (+PI/2 and -PI/2 really) */
-	if ((dataX < 0) && (dataY < 0) && angle >= 0) { /* lower left quadrant */
-		angle = (angle - 180);
+//	if ((dataX > 0) && (dataY < 0) && angle >= 0) { /* lower left quadrant */
+//		angle = (angle - 180);
+//	}
+//	else if ((dataX > 0) && dataY >= 0 && angle <= 0) { /* upper left quadrant */
+//		angle = (180 + angle);
+//	} /* else arctan gives angle as it is */
+	/* joystick left > joystick right. all angles should be mirrored in x = 0. */
+	
+	/* double angle is currently the result of an arctan function. It is limited to between +90 and -90 degrees.
+	 * to allow +180 to -180 degrees, move the angles that should be in the 2 left quadrants. */
+	if ((dataX < 0) && (dataY >= 0)) {
+		angle = (180 - angle);
 	}
-	else if ((dataX < 0) && dataY >= 0 && angle <= 0) { /* upper left quadrant */
-		angle = (180 + angle);
-	} /* else arctan gives angle as it is */
+	else if ((dataX < 0) && (dataY < 0)) {
+		angle = (-180 - angle);
+	}
 	printf("\nCalculated angle: %f", angle);
 	
 	if (angle >= 0) {
