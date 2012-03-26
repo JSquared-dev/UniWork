@@ -115,7 +115,7 @@ int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *pack
 		if (tmpPacket->destination == packet->destination && tmpPacket->source == tmpPacket->source && tmpPacket->pending < 5) {
 			/* found our packet */
 			/* remove it from the queue */
-			destroyPacket((struct lanPacket_s *)removeFrontOfQueue(curQueue));
+			destroyPacket((struct lanPacket_s *)removeItemFromQueue(curQueue));
 			break;
 		}
 		else {
