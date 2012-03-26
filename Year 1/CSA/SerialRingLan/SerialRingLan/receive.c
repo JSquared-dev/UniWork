@@ -42,6 +42,18 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		wprintw(threadData->messageWindow, "Received packet: {%c%c%c%.10s%.1c}\n", packet->source, packet->destination, packet->packetType, packet->payload, packet->checksum);
 		wrefresh(threadData->messageWindow);
 	}
+
+	/* check the checksum of the packet. if it is wrong, delete the packet and send a NAK_PACKET to the sender */
+	if (packet->checksum != packetChecksum(packet)) {
+	  /* create a NAK packet to send to packet->source */
+	  /* must be proxied to seem like it was only interchanged between the true source and destinations */
+	  packet->packetType = NAK_PACKET;
+	  userID = packet->source;
+	  packet->source = packet->destination;
+	  packet->destination = userID;
+	  addToQueue(threadData->transmitQueue, packet);
+	  return;
+	}
 	/* if the packet is meant for the user currently logged in, the packet needs to be checked */
 	if (packet->destination == userID) {
 		/*-----------------------------------------------------------------*/
@@ -74,6 +86,9 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 			/* remove packet from lan, and removce pending packet from transmit queue */
 			removePendingPacketFromQueue(threadData->transmitQueue, packet);
 			destroyPacket(packet);
+		}
+		else if (packet->packetType == NAK_PACKET) {
+		  /* find the packet in transmit queue and mark it for transmission ASAP */
 		}
 		else if (packet->packetType == LOGOUT_PACKET) {
 		  if (threadData->programState != LOGOUT) {
