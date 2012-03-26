@@ -205,6 +205,7 @@ enum progState mainMenu(struct threadData_s *data) {
 			}
 			else {
 				wprintw(data->messageWindow, "Please compose a message first\n");
+				wrefresh(data->messageWindow);
 			}
 			break;
 		case 'X':
