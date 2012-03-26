@@ -6,8 +6,20 @@
 #include "platform.h"
 #include "queue.h"
 
-/* convienience method to create a packet.
- * to destroy the packet, just free returned address.
+/* function name: createLanPacket
+ * written by: James Johns
+ * Parameters:
+ *		source		- character ID of packet's origin.
+ *		destination - character ID of packet's destination.
+ *		type		- Type of packet, can be any value described by PacketType enumeration.
+ *		data		- 10 bytes of data to be placed in the packet's payload. Can be NULL.
+ * Returns:
+ *		a lanPacket_s structure populated with the appropriate fields. Return value MUST be destroyed by destroyPacket function
+ *
+ * notes:
+ *		Return value MUST be destroyed by destroyPacket.
+ *		If data parameter is NULL, the current time is placed in the first 4 bytes of the payload.
+ *
  */
 struct lanPacket_s *createLanPacket(char source, char destination, enum PacketType type, char data[10]) {
 	struct lanPacket_s *packet = (struct lanPacket_s *) malloc(sizeof(struct lanPacket_s));
@@ -24,7 +36,6 @@ struct lanPacket_s *createLanPacket(char source, char destination, enum PacketTy
 	else {
 		time = getTimeOfDay();
 		/* place 32 bits into packet data */
-//		sprintf(packet->payload, "%10d", time);
 		packet->payload[0] = (char)((time & (0xFF << 24)) >> 24);
 		packet->payload[1] = (char)((time & (0xFF << 16)) >> 16);
 		packet->payload[2] = (char)((time & (0xFF << 8 )) >> 8);
@@ -38,11 +49,30 @@ struct lanPacket_s *createLanPacket(char source, char destination, enum PacketTy
 	return packet;
 }
 
+/* function name: destroyPacket
+ * written by: James Johns
+ * Parameters:
+ *		packet - lanPacket_s structure to destroy.
+ *
+ * notes:
+ *		destroys packet. all memory allocated to it by createLanPacket is freed.
+ *
+ */
 void destroyPacket(struct lanPacket_s *packet) {
 
 	free(packet);
 }
 
+/* function name: packetChecksum
+ * written by: James Johns
+ * Parameters:
+ *		packet - lanPacket_s structure to calculate checksum of.
+ * Returns:
+ *		8 bit, inverted modulo-128 sum of all bytes in packet - except the checksum itself.
+ *
+ * notes:
+ *
+ */
 char packetChecksum(struct lanPacket_s *packet) {
 	
 	char sum = 0;
@@ -61,6 +91,21 @@ char packetChecksum(struct lanPacket_s *packet) {
 	return sum;
 }
 
+
+/* function name: removePendingPacketFromQueue
+ * written by: James Johns
+ * Parameters:
+ *		queue - queue object which should contain pending packet.
+ *		packet - the ACK_PACKET type packet received indicating the packet has been received.
+ * Returns:
+ *		1 on success, else 0.
+ *
+ * notes:
+ *		return value 0 does not indicate error, only that the packet may already have been transmitted several times, 
+ *		or this ACK packet is not the first to be received.
+ *		If corresponding packet is found, it is removed from the queue and destroyed.
+ *
+ */
 int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *packet) {
 	struct lanPacket_s *tmpPacket;
 	struct queue_s *curQueue = queue;
