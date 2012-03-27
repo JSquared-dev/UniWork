@@ -112,6 +112,13 @@ int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *pack
 	lockMutex(queue->mutexIndex);
 	while (1) {
 		tmpPacket = (struct lanPacket_s *)curQueue->data;
+		if (tmpPacket == NULL) {
+		  curQueue = curQueue->next;
+		  if (curQueue == queue) {
+		    unlockMutex(queue->mutexIndex);
+		    return 0;
+		  }
+		}
 		if (tmpPacket->destination == packet->destination && tmpPacket->source == tmpPacket->source && tmpPacket->pending < 5) {
 			/* found our packet */
 			/* remove it from the queue */
