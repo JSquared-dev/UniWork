@@ -34,5 +34,6 @@ void destroyPacket(struct lanPacket_s *packet);
 char packetChecksum(struct lanPacket_s *packet);
 
 int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *packet);
+struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanPacket_s *packet);
 
 #endif

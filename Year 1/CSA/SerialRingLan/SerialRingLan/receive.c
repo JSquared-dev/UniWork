@@ -116,6 +116,11 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		  /* find the packet in transmit queue and mark it for transmission ASAP */
 			/* find where the packet is in the queue, lock the queue, then move the front of the 
 			 * queue to the position of the packet in the queue to expedited in transmission */
+			struct queue_s *queue = findQueueItemRelativeToPacket(threadData->transmitQueue, packet);
+			if (queue != NULL) {
+				/* expedite queue */
+				expediteQueueItemToFront(threadData->transmitQueue, queue);
+			}
 		}
 		else if (packet->packetType == LOGOUT_PACKET) {
 		  if (threadData->programState != LOGOUT) {
