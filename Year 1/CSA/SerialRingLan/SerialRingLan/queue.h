@@ -1,14 +1,3 @@
-/* Filename: queue.h
- * Written by: James Johns.
- * Date: 16/2/2012
- *
- *
- * Prototype function definitions for external reference.
- *
- * queue is a collection of functions for manipulating a queue_s structure.
- * queue implements a FIFO buffer, or a basic queue. The queue length is dynamically
- * modified as required.
- */
 
 #ifndef _queue_H_
 #define _queue_H_

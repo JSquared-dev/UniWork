@@ -18,12 +18,12 @@ struct lanPacket_s *readPacket(int comPort);
 void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData);
 
 
-/* function name: receiveStart
- * written by: James Johns, Silvestrs Timofojevs
- * Parameters:
+/*	Function name: receiveStart
+ *	Written by: James Johns, Silvestrs Timofojevs
+ *	Parameters:
  *		data - void pointer to a threadData_s structure. stated as void * to maintain compatibility with threading libraries.
  *
- * notes:
+ *	Notes:
  *		Loops constantly until the programState member of data becomes EXIT.
  *		each loop reads a lanPacket_s structure from the comPort file descriptor member of data, and processes it via processPacket function.
  *		
@@ -46,13 +46,14 @@ THREAD_RET receiveStart(void *data) {
 	return (THREAD_RET)NULL;
 }
 
-/* function name: processPacket
- * written by: James Johns, Silvestrs Timofojevs
- * Parameters:
+/*	Function name: processPacket
+ *	Written by: James Johns, Silvestrs Timofojevs
+ *	Date: 28/3/2012
+ *	Parameters:
  *		packet - a packet structure to be processed.
  *		threadData - The data, shared between all threads, that is required for communication between threads and view the programs information.
  *
- * notes:
+ *	Notes:
  *		If the packet is for the current user, it is passed to the main thread through the receiveQueue member of data.
  *		If it is not for the current user, it is passed to the transmitter thread through transmitQueue member of data.
  *		If the main thread would not need to know about the packet, or any other packets are required to be transmitted 
@@ -167,14 +168,15 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 	}
 }
 
-/* function name: readPacket
- * written by: James Johns, Silvestrs Timofojevs
- * Parameters:
+/*	Function name: readPacket
+ *	Written by: James Johns, Silvestrs Timofojevs
+ *	Date: 28/3/2012
+ *	Parameters:
  *		comPort - A file descriptor for the COM port being used for the LAN.
- * Retuns:
+ *	Retuns:
  *		A lanPacket_s structure, created by the createLanPacket function. MUST be destroyed by destroyPacket.
  *
- * notes:
+ *	notes:
  *		Blocks the calling thread until a full packet has been read.
  *		return value must be freed by the caller.
  *
