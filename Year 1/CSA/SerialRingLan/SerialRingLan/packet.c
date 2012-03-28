@@ -86,7 +86,7 @@ char packetChecksum(struct lanPacket_s *packet) {
 	}
 	
 	sum = ~(sum%128);
-	sum |= (1 << 7);
+	sum |= 0x80;
 
 	return sum;
 }
@@ -129,8 +129,11 @@ struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanP
 	do {
 		tmpPacket = (struct lanPacket_s *)curQueue->data;
 		if (tmpPacket == NULL) {
-			toRet = NULL;
-			break;
+		  curQueue = curQueue->next;
+		  if (curQueue == queue) {
+		    unlockMutex(queue->mutexIndex);
+		    return 0;
+		  }
 		}
 		else if (tmpPacket->source == packet->destination && tmpPacket->destination == packet->source && tmpPacket->pending < 5) {
 			toRet = curQueue;
