@@ -122,3 +122,33 @@ void addToQueue(struct queue_s *queue, void *message) {
 	}
 	unlockMutex(queue->mutexIndex);
 }
+
+/* move queueItem to the front of the queue, without changing the order other tha */
+void expediteQueueItemToFront(struct queue_s *frontQueue, struct queue_s *queueItem) {
+	
+	void *dataHolder;
+	struct queue_s *secondSlot;
+	if (frontQueue->next == frontQueue) {
+		/* already at the front of the queue */
+		return;
+	}
+	lockMutex(frontQueue->mutexIndex);
+	secondSlot = frontQueue->next;
+	
+	/* patch over hole where queue item came from */
+	queueItem->previous->next = queueItem->next;
+	queueItem->next->previous = queueItem->previous;
+
+	/* place queue item in second slot */
+	frontQueue->next = queueItem;
+	secondSlot->previous = queueItem;
+	queueItem->previous = frontQueue;
+	queueItem->next = secondSlot;
+
+	/* swap data between second slot and first slot */
+	dataHolder = queueItem->data;
+	queueItem->data = frontQueue->data;
+	frontQueue->data = dataHolder;
+
+	unlockMutex(frontQueue->mutexIndex);
+}

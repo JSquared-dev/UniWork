@@ -116,6 +116,11 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		  /* find the packet in transmit queue and mark it for transmission ASAP */
 			/* find where the packet is in the queue, lock the queue, then move the front of the 
 			 * queue to the position of the packet in the queue to expedited in transmission */
+			struct queue_s *queue = findQueueItemRelativeToPacket(threadData->transmitQueue, packet);
+			if (queue != NULL) {
+				/* expedite queue */
+				expediteQueueItemToFront(threadData->transmitQueue, queue);
+			}
 		}
 		else if (packet->packetType == LOGOUT_PACKET) {
 		  if (threadData->programState != LOGOUT) {
@@ -146,7 +151,9 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 				printUserTable(threadData->userTable, threadData->userListWindow);
 				/* if there is a user currently logged in, transmit a response packet to let new user know the current user is logged in */
 				if (userID != 0) {
-					struct lanPacket_s *respPacket = createLanPacket(userID, userID, RESPONSE_PACKET, NULL);
+					struct lanPacket_s *respPacket = createLanPacket(userID, packet->source, RESPONSE_PACKET, NULL);
+					respPacket->pending = 1; /* stop transmitter from pending the packet for 5 tries by setting last transmit to non-zero */
+					respPacket->lastTransmit = 1;
 					addToQueue (threadData->transmitQueue, respPacket);
 				}
 			}

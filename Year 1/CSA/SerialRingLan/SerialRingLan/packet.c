@@ -110,7 +110,23 @@ int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *pack
 	struct lanPacket_s *tmpPacket;
 	struct queue_s *curQueue = queue;
 	lockMutex(queue->mutexIndex);
-	while (1) {
+	
+	curQueue = findQueueItemRelativeToPacket(queue, packet);
+	if (curQueue != NULL) {
+		tmpPacket = (struct lanPacket_s *)removeItemFromQueue(curQueue);
+		destroyPacket(tmpPacket);
+	}
+	unlockMutex(queue->mutexIndex);
+
+	return 1;
+}
+
+/* lock queue->mutexIndex before calling, else bad things be happening */
+struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanPacket_s *packet) {
+	struct queue_s *toRet;
+	struct queue_s *curQueue = queue;
+	struct lanPacket_s *tmpPacket;
+	do {
 		tmpPacket = (struct lanPacket_s *)curQueue->data;
 		if (tmpPacket == NULL) {
 		  curQueue = curQueue->next;
@@ -125,15 +141,13 @@ int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *pack
 			destroyPacket((struct lanPacket_s *)removeItemFromQueue(curQueue));
 			break;
 		}
-		else {
-			curQueue = curQueue->next;
-			if (curQueue == queue) {
-				unlockMutex(queue->mutexIndex);
-				return 0;
-			}
+		else if (tmpPacket->source == packet->destination && tmpPacket->destination == packet->source && tmpPacket->pending < 5) {
+			toRet = curQueue;
+			break;
 		}
-	}
-	unlockMutex(queue->mutexIndex);
+		curQueue = curQueue->next;
+	} while (curQueue != queue);
+	
 
-	return 1;
+	return toRet;
 }

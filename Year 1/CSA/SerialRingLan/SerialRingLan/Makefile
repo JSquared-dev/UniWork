@@ -5,7 +5,7 @@ OBJECTS := main.o queue.o receive.o transmit.o packet.o thread.o userTable.o pla
 .PHONY: all clean
 
 all: $(OBJECTS)
-	gcc -ansi -o comms $(OBJECTS) -lc -lm -lpthread -lncurses
+	gcc -o comms $(OBJECTS) -lc -lm -lpthread -lncurses
 
 clean:
 	-rm comms

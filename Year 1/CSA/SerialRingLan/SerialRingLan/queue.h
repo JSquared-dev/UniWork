@@ -31,5 +31,6 @@ void *removeFrontOfQueue(struct queue_s *queue);
 void addToQueue(struct queue_s *queue, void *message);
 
 void *removeItemFromQueue(struct queue_s *queue); /* used automatically, do not use without due care */
+void expediteQueueItemToFront(struct queue_s *frontQueue, struct queue_s *queueItem);
 
 #endif
