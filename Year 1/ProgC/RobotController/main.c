@@ -1,110 +1,90 @@
+#include "LIGHT.c"
+#include "LINEFOLLOWING.c"
+#include "STEPMOTOR.c"
+#include "RANDOMWALK.c"
 
+int main () {
+  comedi_t *device;
+  unsigned int subdevice = 2;
+  char *filename = "/dev/comedi0";
+  struct MARCOSETUP_s *MARCOSETUP;
+  int index;
+  char task;
+ 
+   initialization (subdevice, filename, &device);
+   createMARCOSETUP (&MARCOSETUP, device, 3000);
+   stepperSteps(MARCOSETUP);
 
-#include <comedilib.h>
-#include <comedi.h>
-#include <ncurses.h>
-#include <stdio.h>
+   while(task != '0') {
+	system("clear");
+   	printf ("\n ***************************************");
+	printf ("\n *  0) Exit.                           *");
+   	printf ("\n *  1) MARCO buggy line following.     *");
+   	printf ("\n *  2) MARCO buggy light following.    *");
+   	printf ("\n *  3) MARCO buggy joystick drive.     *");
+   	printf ("\n *  4) MARCO buggy path retracing.     *");
+   	printf ("\n *  5) MARCO buggy subsumptional task. *");
+   	printf ("\n ***************************************");
+   
+   	printf ("\n\n Please choose the task ( 0 - 5 ): ");
+   	task = getchar ();
 
-#define VERSION_STRING "v0.1"
-#define MENU_MIN_LINE 3
-#define MENU_MAX_LINE 7
+   	switch (task) {
+		case '1':
+			printf ("\n Line following is currently running!");
+			printf ("\n To stop execution, activate buggy bumpers!");
+			fflush(stdout);
+			line_following(MARCOSETUP);
+		        comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
+		  	comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
+		break;
 
-extern int joystick_start();
-void printMenu();
-void interpretKey(int key);
-void moveCursor(int direction);
-
-int main(int argc, char **argv) {
-
-	initscr();
-	timeout(0);
-	raw();
-	keypad(stdscr, TRUE);
-	printMenu();
-	int ch = ' ';
-	while(ch != 'q') {
-		interpretKey(ch);
-		refresh();
-		ch = getch();
-	}
+		case '2':
+			printf ("\n Light following is currently running!");
+			printf ("\n To stop execution, activate buggy bumpers!");
+			fflush(stdout);
+			lightFollowing(MARCOSETUP);
+		        comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
+		  	comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
+		break;	
 	
-	endwin();
-	return 0;
-}
-
-int runModule(int line) {
-  int ret = -1;
-     switch (line) {
-          case 5:
-	       ret = joystick_start();
-          break;
-          default:
-	      
-          break;
-     }
-     return ret;
-}
-
-void interpretKey(int key) {
-  int ret, y, x;
-	switch (key) {
-		case KEY_UP:
-		case KEY_DOWN:
-			moveCursor(key);
-			break;
-		case '\n':
-		  getyx(stdscr,y,x);
-		  move(0,0);
-		  ret = runModule(y);
-		  printMenu();
-		  if (ret > 0) {
-		    getyx(stdscr,y,x);
-		    move(y-1,x);
-		    printw("Error executing joystick %d", ret);
-		  }
-			break;
+		case '5':
+			index = randomWalk(MARCOSETUP);
+			printf ("\n Main task is running!");
+			printf ("\n To stop execution, activate buggy bumpers!");
+			fflush(stdout);
+			while (1) {
+		   		switch (index) {
+					case 0:
+						index = line_following(MARCOSETUP);
+						if (index == 0) index = 3;
+					
+					break;
+		
+					case 1:
+				   		comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
+		  				comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
+						return 0;
+					break;
+			
+					case 2:
+						index = lightFollowing(MARCOSETUP);
+						if (index == 2) index = 3;
+					break;
+			
+					case 3:
+						index = randomWalk(MARCOSETUP);	
+					break;	
+		   		}
+		   	}
+		break;
 		default:
-			break;
+		break;
 	}
+   } 
+   destroyMARCOSETUP (MARCOSETUP);
+   comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
+   comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
+  return 0;
 }
 
-void printMenu() {
-     clear();
-     move(0,0);
-     printw("Welcome to the Robot Controller %s\n\n", VERSION_STRING);
-     printw("\n\t[ ] Line follower");
-     printw("\n\t[ ] Light follower");
-     printw("\n\t[ ] Joystick free-roaming");
-     printw("\n\t[ ] Retrace last Joystick track");
-     printw("\n\t[ ] Free flow AI");
-     move(0,0);
-     interpretKey(KEY_UP);
-     refresh();
-}
-
-void moveCursor(int direction) {
-	int x, y;
-	getyx(stdscr, y, x);
-	x = 9;
-	if (direction == KEY_UP) {
-		y--;
-		if (y < MENU_MIN_LINE) {
-			y = MENU_MIN_LINE;
-		}
-	}
-	else if (direction == KEY_DOWN) {
-		y++;
-		/* correct for over shooting menu */
-		if (y > MENU_MAX_LINE) {
-			y = MENU_MAX_LINE;
-		}
-	}
-	int i;
-	for (i = MENU_MIN_LINE; i <= MENU_MAX_LINE; i++) {
-		move(i, 9);
-		addch(' ');
-	}
-	move(y,x);
-	addch(' '|A_REVERSE);
-	move(y,x);
-}
