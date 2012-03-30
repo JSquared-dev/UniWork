@@ -1,10 +1,8 @@
 /******************************************************************************
-* Module name           ` : Line Following			              *
+* Module name           ` : Line Following									  *
 * Created by              : Silvestrs Timofejevs, 11000746                    *
 * Date created            : 31.01.2012.                                       *
 ******************************************************************************/ 
-#ifndef _LINEFOLLOWING_C_
-#define _LINEFOLLOWING_C_
                                 
 #include <stdio.h>
 #include <stdlib.h>
@@ -15,8 +13,8 @@
 #include <ctype.h>
 #include <comedi.h>
 #include <comedilib.h>
-#include "INIT.c"
-#include "DIGITALIO.c"
+#include "INIT.h"
+#include "DIGITALIO.h"
 #include "LINEFOLLOWING.h"
 
 

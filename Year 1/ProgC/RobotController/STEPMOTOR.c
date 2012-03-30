@@ -1,11 +1,9 @@
-#ifndef _STEPMOTOR_C_
-#define _STEPMOTOR_C_
 
 #include <comedi.h>
 #include <comedilib.h>
 
 #include "STEPMOTOR.h"
-#include "DIGITALIO.c"
+#include "DIGITALIO.h"
 
 void stepperSteps (struct MARCOSETUP_s *MARCOSETUP) {
 	unsigned int stepperState;
@@ -41,5 +39,3 @@ void stepperSteps (struct MARCOSETUP_s *MARCOSETUP) {
 	}
 }
 
-
-#endif

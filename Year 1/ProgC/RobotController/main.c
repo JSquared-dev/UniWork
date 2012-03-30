@@ -1,7 +1,7 @@
-#include "LIGHT.c"
-#include "LINEFOLLOWING.c"
-#include "STEPMOTOR.c"
-#include "RANDOMWALK.c"
+#include "LIGHT.h"
+#include "LINEFOLLOWING.h"
+#include "STEPMOTOR.h"
+#include "RANDOMWALK.h"
 
 int main () {
   comedi_t *device;

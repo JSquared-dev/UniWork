@@ -1,6 +1,3 @@
-#ifndef _RANDOMWALK_C_
-#define _RANDOMWALK_C_
-
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -12,12 +9,10 @@
 #include <comedi.h>
 #include <comedilib.h>
 #include <time.h>
-#include "DIGITALIO.c"
-#include "LIGHT.c"
-#include "STEPMOTOR.c"
-#include "INIT.c"
-
-int randomWalk (struct MARCOSETUP_s *MARCOSETUP);
+#include "DIGITALIO.h"
+#include "LIGHT.h"
+#include "STEPMOTOR.h"
+#include "INIT.h"
 
 int randomWalk (struct MARCOSETUP_s *MARCOSETUP) {
 	const int degreeDelayUs = 6667;				        /* one grade turn delay in uS */
@@ -111,6 +106,3 @@ int randomWalk (struct MARCOSETUP_s *MARCOSETUP) {
 		}
 	}  
 }
-#endif
-
-

@@ -1,6 +1,6 @@
 
 
-OBJECTS := main.o joystick.o replay.o
+OBJECTS := main.o joystick.o replay.o INIT.o LIGHT.o RANDOMWALK.o DIGITALIO.o LINEFOLLOWING.o STEPPERMOTOR.o
 UTILS := utils/stop.o
 
 .PHONY: all utils clean RobotController

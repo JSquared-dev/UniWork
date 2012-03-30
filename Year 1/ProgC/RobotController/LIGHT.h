@@ -1,5 +1,7 @@
+
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
+
 #include "INIT.h"
 
 const int MININTENSITY = 2250;	/* minimal light intensity */
@@ -35,4 +37,5 @@ void followTheLight (struct MARCOSETUP_s *MARCOSETUP,  struct LIGHTPOSCALC_s *LI
 void centreAngle (struct ANGLECALC_s *ANGLECALC);
 void clearLIGHTPOSCALC(struct LIGHTPOSCALC_s *LIGHTPOSCALC);
 int lightPos (int stepperSteps, int *lightReadings, struct LIGHTPOSCALC_s *LIGHTPOSCALC);
+
 #endif

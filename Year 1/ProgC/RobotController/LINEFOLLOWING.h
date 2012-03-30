@@ -3,8 +3,9 @@
 * Created by              : Silvestrs Timofejevs, 11000746                    *
 * Date created            : 31.01.2012.                                       *
 ******************************************************************************/    
-#ifndef _LIGHTFOLLOWING_C_
-#define _LIGHTFOLLOWING_C_
+
+#ifndef _LIGHTFOLLOWING_H_
+#define _LIGHTFOLLOWING_H_
 
 const int delayUS = 1000;			/* ITERATION DELAY */
 const int TTL = 3000;				/* NOTE: actual delay is calculated iteration (delay x TTL)*/						

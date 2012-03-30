@@ -3,12 +3,10 @@
 * Created by              : Silvestrs Timofejevs, 11000746                    *
 * Date created            : 31.01.2012.                                       *
 ******************************************************************************/    
-#ifndef _INIT_C_
-#define _INIT_C_
 #include <stdio.h>
 #include <stdlib.h>
 #include "INIT.h"
-#include "STEPMOTOR.c"
+#include "STEPMOTOR.h"
 
 
 /************************************************************************************************************************
@@ -92,4 +90,3 @@ void initialization (unsigned int in_subdevice, char *filename, comedi_t **devic
   for(i=0;i<8;i++)
     retval=comedi_dio_config(*device, in_subdevice,i,COMEDI_OUTPUT); 
 }
-#endif

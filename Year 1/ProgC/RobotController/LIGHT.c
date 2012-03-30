@@ -1,5 +1,3 @@
-#ifndef _LIGHT_C_
-#define _LIGHT_C_  
                                  
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,9 +9,9 @@
 #include <comedi.h>
 #include <comedilib.h>
 #include "LIGHT.h"
-#include "INIT.c"
-#include "STEPMOTOR.c"
-#include "DIGITALIO.c"
+#include "INIT.h"
+#include "STEPMOTOR.h"
+#include "DIGITALIO.h"
 
 /********************************************************************************************************************************************
 *	FUNCTION NAME 		: clearLIGHTPOSCALC							   
@@ -291,5 +289,3 @@ int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 	return 0;
 }
 
-
-#endif
