@@ -2,6 +2,7 @@
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
 
+#include <comedi.h>
 #include "INIT.h"
 
 const int MININTENSITY = 2250;	/* minimal light intensity */

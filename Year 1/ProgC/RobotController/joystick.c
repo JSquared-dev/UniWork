@@ -1,11 +1,14 @@
 
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/time.h>
 #include <stdio.h>
+#include <string.h>
 #include <comedilib.h>
 #include <math.h>
+#include <ncurses.h>
 
-	//int usleep(useconds_t usec);
+int usleep(unsigned int usec);
 #define PI 3.1415926535897	/* PI for converting radians to degrees easily */
 #define RAD_TO_DEG(x) ((x/PI)*180)
 #define MOTOR_MAX 2048		/* max value a motor can be in 1 direction. multiply by 2 to get max 
@@ -41,7 +44,7 @@ void calibrateJoystick(comedi_t *device, struct joystick_calib *calibration);
 void readJoystick(comedi_t *device, struct joystick *joystickData);
 void calculateMotorValue(struct joystick_calib calibration, struct joystick joystickValue, struct motor_s *motorValue);
 void runMotors(comedi_t *device, struct motor_s motorValues);
-void recordMovement(int timeLength, struct motor_s *motorValues, FILE *recordFile);
+void recordMovement(int timeLength, struct motor_s motorValues, FILE *recordFile);
 
 int main () {
 	
@@ -49,7 +52,7 @@ int main () {
 	struct joystick joystickData;
 	struct motor_s motorValues;
 	
-	struct timeval timeStart = {0,0};
+	struct timeval timeStart = {0, 0};
 	struct timeval timeEnd = {0,0};
 	int timeDiff = 0;
 	
@@ -68,19 +71,18 @@ int main () {
 	
 	/* get the user to calibrate the joystick */
 	calibrateJoystick(device, &joystickCalibData);
-	timeStart
 	while ((getch() != 'q')) {
 		
 		readJoystick(device, &joystickData);
 		calculateMotorValue(joystickCalibData, joystickData, &motorValues);
 		
 		/* record time motor activation started and stopped. the difference is the motor time to record */
-		timeEnd = gettimeofday(&timeEnd,NULL);
+		gettimeofday(&timeEnd,NULL);
 		if (timeStart.tv_sec != 0) {
 			/* calculate the number of microseconds (millionths of a second) that have passed  */
 			timeDiff = ((timeEnd.tv_sec-timeStart.tv_sec) * 1000000) + (timeEnd.tv_usec-timeStart.tv_usec);
 		}
-		timeStart = time(NULL);
+		gettimeofday(&timeStart,NULL);
 		runMotors(device, motorValues);
 		
 		recordMovement(timeDiff, motorValues, recordFile);
@@ -93,8 +95,9 @@ int main () {
 	return 0;
 }
 
-void recordMovement(struct timeval timeLength, struct motor_s *motorValues, FILE *recordFile) {
-	char *outputString = sprintf("%d %d %d\n", timeLength, motorValue->left, motorValue->right);
+void recordMovement(int timeLength, struct motor_s motorValues, FILE *recordFile) {
+  char outputString[100];
+       sprintf(outputString, "%d %d %d\n", timeLength, motorValues.left, motorValues.right);
 	fwrite(outputString, strlen(outputString), 1, recordFile);
 }
 

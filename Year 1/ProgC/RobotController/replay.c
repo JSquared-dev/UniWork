@@ -6,12 +6,12 @@
 #include <ncurses.h>
 
 #define RECORDFILE "record.txt"
-
-void runMotors(comedi_t *device, struct motor_s motorValues);
+#define MOTOR_MAX 2048
+void runMotors(comedi_t *device, int left, int right);
 
 int main(int argc, char **argv) {
 	
-	int time, left, right;
+	int time, leftMotor, rightMotor;
 	char *filename = "/dev/comedi0";
 	FILE *recordFile = fopen(RECORDFILE, "r");
 	

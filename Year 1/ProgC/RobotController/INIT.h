@@ -2,6 +2,9 @@
 #ifndef _INIT_H_
 #define	_INIT_H_
 
+#include <comedi.h>
+#include <comedilib.h>
+
 /*----------------------- MARCO BUGGY CONFIGURATION, SHARED BETWEEN MODULES ----------------------*/
 struct MARCOSETUP_s {
 	comedi_t *device;		/* comedi_t type device pointer */

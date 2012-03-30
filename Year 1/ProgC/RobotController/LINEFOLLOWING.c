@@ -86,6 +86,5 @@ int line_following (struct MARCOSETUP_s *MARCOSETUP) {
   		usleep (delayUS);									  /* iteration delay */
 	}
 }
-#endif
 
 
