@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: packet.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #ifndef _PACKET_H_
 #define _PACKET_H_

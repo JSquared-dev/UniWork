@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: userTable.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -185,7 +191,8 @@ void printUserTable(struct userTable_s *userTable, WINDOW *window) {
 				wattron(window, COLOR_PAIR(6));
 			}
 		}
-		wprintw(window, "%.4s", ((userID == ('A' + i)) ? " you" : (checkIfUserActive(userTable, 'A' + i) ? "  on" : " off")));
+		wprintw(window, "%.4s", ((userID == ('A' + i)) ? " you" : 
+								 (checkIfUserActive(userTable, 'A' + i) ? "  on" : " off")));
 		wattroff(window, COLOR_PAIR(3));
 		wattroff(window, COLOR_PAIR(4));
 		wattroff(window, COLOR_PAIR(5));

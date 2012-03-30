@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: queue.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include "queue.h"
 #include <stdlib.h>
@@ -10,8 +16,8 @@
  *		An allocated and initialised queue object.
  *
  *	Notes:
- *		Allocates and initialises the structure pointed to by 'queue', and allocates memory for the queue data.
- *		destroyqueue should be called on queue when finished with it.
+ *		Allocates and initialises the structure pointed to by 'queue', and allocates memory for 
+ *		the queue data. destroyqueue should be called on queue when finished with it.
  *
  */
 struct queue_s *createQueue() {

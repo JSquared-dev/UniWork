@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: transmit.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #ifdef _WIN32
 #include <Windows.h>
@@ -29,7 +35,8 @@
  *		If the packet is originating from the current user, its pending data is updated. 
  *		If it does not have pending data, it is initialised to be resent a maximum of 5 times, 
  *		5 seconds apart.
- *		If debug mode is enabled, print out the packet data to the messageWindow (field of data) for debug purposes.
+ *		If debug mode is enabled, print out the packet data to the messageWindow (field of data) 
+ *		for debug purposes.
  *
  */
 THREAD_RET transmitStart(void *data) {
@@ -42,7 +49,7 @@ THREAD_RET transmitStart(void *data) {
 	while (threadData->programState != EXIT) {
 		packet = (struct lanPacket_s *) removeFrontOfQueue(transmitQueue);
 		if (packet != NULL) {
-			/* if the packet is coming from the current user, enter pending data and keep track of it. */
+	/* if the packet is coming from the current user, enter pending data and keep track of it. */
 			if (packet->source == getCurrentID(threadData->userTable)) {
 				if (packet->packetType != ACK_PACKET && packet->packetType != NAK_PACKET) {
 					if (packet->lastTransmit == 0) {
@@ -60,7 +67,9 @@ THREAD_RET transmitStart(void *data) {
 				}
 			}
 			if (threadData->debugEnable != 0) {
-				wprintw(threadData->messageWindow, "\nTransmit packet: {%c%c%c%.10s%.1s}", packet->source, packet->destination, packet->packetType, packet->payload, &packet->checksum);
+				wprintw(threadData->messageWindow, "\nTransmit packet: {%c%c%c%.10s%.1s}", 
+						packet->source, packet->destination, packet->packetType, 
+						packet->payload, &packet->checksum);
 				wrefresh(threadData->messageWindow);
 			}
 			lockMutex(threadData->comPort_mutex);

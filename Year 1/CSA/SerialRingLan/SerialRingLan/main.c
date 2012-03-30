@@ -1,11 +1,13 @@
-/*	Program name: SerialRingLan
+/*****************************************************************************************************
+ *Program name: SerialRingLan
  *	Written by: James Johns, Silvestrs Timofejevs.
  *	Date: 28/3/2012
  *
  *	Implements a Ring network messaging system through the serial port.
  *	Ring LAN must be connected to the first COM port (COM1 or ttyS0).
  *
- *	This program is multithreaded, allowing the transmission and receiving processes to run concurrently.
+ *	This program is multithreaded, allowing the transmission and receiving processes to run 
+ *	concurrently.
  *	NCurses and PDCurses are used to provide a stable user interface in a platform independent way.
  *	WARNING - exiting the program abnormally will cause the terminal window to act strangely until 
  *	it is closed. Only close the program by logging out and pressing CTRL+Q.
@@ -13,6 +15,13 @@
  *
  *
  */
+
+/*************************************************
+ *	Filename: main.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include "main.h"
 #include "queue.h"
@@ -67,7 +76,8 @@ enum progState logoutPending(struct threadData_s *data);
  *		Entry point for program.
  *		Initialises data required for threads, creates Receiver and Transmitter threads, and then
  *		loops until the user requests the program to quit.
- *		When the user requests the program to quit, the threads are destroyed and the shared Thread data is freed.
+ *		When the user requests the program to quit, the threads are destroyed and the shared Thread
+ *		data is freed.
  *	
  */
 int main(int argc, const char **argv) {
@@ -131,7 +141,8 @@ void showHelpMenu(WINDOW *window) {
  * Written by: James Johns 
  * Date: 28/3/2012
  * Parameters:
- *		data - the shared thread data structure, containing all required data that is shared between threads.
+ *		data - the shared thread data structure, containing all required data that is shared between
+ *				threads.
  * Returns:
  *		New program state
  *
@@ -184,7 +195,8 @@ enum progState logoutPending(struct threadData_s *data) {
  */
 void logout(struct threadData_s *data) {
 	char userID = getCurrentID(data->userTable);
-	struct lanPacket_s *logoutPacket = (struct lanPacket_s *) createLanPacket(userID, userID, LOGOUT_PACKET, NULL);
+	struct lanPacket_s *logoutPacket = (struct lanPacket_s *) createLanPacket(userID, userID, 
+																			  LOGOUT_PACKET, NULL);
 	addToQueue(data->transmitQueue, logoutPacket);
 	wprintw(data->messageWindow, "\nLogging out...\n");
 	wrefresh(data->messageWindow);
@@ -322,8 +334,10 @@ enum progState mainMenu(struct threadData_s *data) {
  *
  * notes:
  *		Waits for user to press a key. If the key is a letter, a login packet is created and added 
- *		to the transmit queue and returns LOGIN_PENDING state. If an error occurs, the function returns LOGIN state.
- *		WARNING - function assumes the current state is LOGIN, only call function if program state is LOGIN.
+ *		to the transmit queue and returns LOGIN_PENDING state. If an error occurs, the function 
+ *		returns LOGIN state.
+ *		WARNING - function assumes the current state is LOGIN, only call function if program state 
+ *					is LOGIN.
  *	
  */
 enum progState loginPrompt(struct threadData_s *data) {
@@ -354,7 +368,8 @@ enum progState loginPrompt(struct threadData_s *data) {
 	
 	if (letter < 'A' || letter > 'Z') {
 		scroll(data->inputWindow);
-		wprintw(data->inputWindow, "\nPlease enter a valid login ID.\n ID should be a letter between A and Z\n");
+		wprintw(data->inputWindow, 
+				"\nPlease enter a valid login ID.\n ID should be a letter between A and Z\n");
 		wrefresh(data->inputWindow);
 		return LOGIN;
 	}
@@ -392,7 +407,8 @@ enum progState checkLogin(struct threadData_s *data) {
 	packet = (struct lanPacket_s *)removeFrontOfQueue(data->receiveQueue);
 	
 	if (packet != NULL) {
-		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
+		/* successful round trip login packet so we are now logged in */
+		if (packet->packetType == LOGIN_PACKET) { 
 			wbkgdset(data->messageWindow,COLOR_PAIR(2));
 			wbkgdset(data->inputWindow,COLOR_PAIR(2));
 			wbkgdset(data->userListWindow,COLOR_PAIR(2));
@@ -403,7 +419,8 @@ enum progState checkLogin(struct threadData_s *data) {
 			wclear(data->inputWindow);
 			wclear(data->userListWindow);
 	
-			wprintw(data->messageWindow, "Welcome to the network, %c\n", getCurrentID(data->userTable));
+			wprintw(data->messageWindow, "Welcome to the network, %c\n", 
+					getCurrentID(data->userTable));
 			wprintw(data->messageWindow, "To send a message, press D. To log out, press X.\n");
 			wrefresh(data->messageWindow);
 			wclear(data->inputWindow);
@@ -415,7 +432,8 @@ enum progState checkLogin(struct threadData_s *data) {
 			return MENU;
 		}
 		else if (packet->packetType == NAK_PACKET) {
-			wprintw(data->inputWindow, "\nYour selected login ID is already active, please use another one");
+			wprintw(data->inputWindow, 
+					"\nYour selected login ID is already active, please use another one");
 			wrefresh(data->inputWindow);
 			setCurrentID(data->userTable, 0);
 			return LOGIN; /* user id was taken, so we need a new one */
@@ -424,7 +442,7 @@ enum progState checkLogin(struct threadData_s *data) {
 			wprintw(data->inputWindow, "received early packet\n");
 			wrefresh(data->inputWindow);
 			addToQueue(data->receiveQueue, packet); /* wrong time to read, so leave it for later */
-			return LOGIN_PEND;								/* not logged in, but still waiting to check login so carry on */
+			return LOGIN_PEND;	/* not logged in, but still waiting to check login so carry on */
 		}
 	}
 	else {

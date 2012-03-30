@@ -1,3 +1,8 @@
+/*************************************************
+ *	Filename: platform.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
 
 #include "platform.h"
@@ -38,7 +43,8 @@ int usleep(int secs);
  *		Current time in Unix format (number of seconds since January 1, 1970).
  *
  * notes:
- *		Cross platform compatible. Converts windows system time into unix time via systemTimeToUnixTime().
+ *		Cross platform compatible. Converts windows system time into unix time via 
+ *		systemTimeToUnixTime().
  *
  */
 time_t getTimeOfDay() {
@@ -78,7 +84,8 @@ void waitMilliSecs(unsigned int milli) {
  * Written by: James Johns. 
  * Date: 28/3/2012
  * Parameters:
- *		time - SYSTEMTIME value to convert to unix time (32 bit integer - number of seconds since January 1, 1970)
+ *		time - SYSTEMTIME value to convert to unix time (32 bit integer - number of seconds since 
+ *		January 1, 1970)
  *	Return:
  *		number of seconds since January 1, 1970 (epoch)
  *
@@ -114,7 +121,8 @@ unsigned int systemTimeToUnixTime(SYSTEMTIME time) {
  *		COM port is initialised to 9600 bps, 8 bit bytes, no parity, 2 stop bits, RTS/CTS handshake 
  *		flow control.
  *		Original state on call is saved to static global variable.
- *		WARNING - calling twice will overwrite the saved state, disabling the ability to restore the original state.
+ *		WARNING - calling twice will overwrite the saved state, disabling the ability to restore the
+ *		original state.
  *
  */
 void setupCOMPort(int comFileDescriptor) {
@@ -186,8 +194,8 @@ void setupCOMPort(int comFileDescriptor) {
  * notes:
  *		Restore the COM port settings to how they were before calling setupCOMPort.
  *		WARNING - calling before setupCOMPort hasbeen called will result in an unknown state.
- *		WARNING - restoring the state through this method is non-recoverable. If anything goes wrong,
- *					subsequent calls will restore the same erroneous data.
+ *		WARNING - restoring the state through this method is non-recoverable. If anything goes 
+ *					wrong, subsequent calls will restore the same erroneous data.
  *
  */
 void restoreCOMPort(int comFileDescriptor) {

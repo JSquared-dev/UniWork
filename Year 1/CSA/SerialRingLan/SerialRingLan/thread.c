@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: thread.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include "thread.h"
 #include <stdlib.h>
@@ -44,12 +50,14 @@ thread_t *createThread(THREAD_RET (*entryPoint)(void *), void *data) {
  *
  *	Notes:
  *		Waits for thread to exit and then deletes the memory allocated to the thread structure.
- *		WARNING - does not cancel the thread. The thread must be signalled to end before calling endThread.
+ *		WARNING - does not cancel the thread. The thread must be signalled to end before calling 
+ *					endThread.
  *		WARNING - blocks calling thread until thread ends.
  *		
  */
 void endThread(thread_t *thread) {
-	/* wait for thread to exit gracefully. Assuming thread has been signalled to exit before calling this function. */
+	/* wait for thread to exit gracefully. Assuming thread has been signalled to exit before 
+	 * calling this function. */
 #ifdef _WIN32
 	WaitForSingleObject(*thread, INFINITE);
 #else
@@ -114,7 +122,7 @@ void destroyMutex(mutex_t *mutex) {
  *		Locks mutex object specified by mutex.
  *		Blocks until mutex becomes available if mutex is already locked.
  *		Should be unlocked by unlockMutex().
- *		WARNING - Blocks the calling thread. To do non-blocking mutex acquisition, use trylockMutex().
+ *		WARNING -Blocks the calling thread. To do non-blocking mutex acquisition, use trylockMutex()
  *
  */
 int lockMutex(mutex_t *mutex) {

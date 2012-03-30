@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: queue.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #ifndef _QUEUE_H_
 #define _QUEUE_H_
@@ -19,7 +25,7 @@ int increaseQueue(struct queue_s *queue, int amount);
 void *removeFrontOfQueue(struct queue_s *queue);
 void addToQueue(struct queue_s *queue, void *message);
 
-void *removeItemFromQueue(struct queue_s *queue); /* used automatically, do not use without due care */
+void *removeItemFromQueue(struct queue_s *queue);
 void expediteQueueItemToFront(struct queue_s *frontQueue, struct queue_s *queueItem);
 
 #endif
