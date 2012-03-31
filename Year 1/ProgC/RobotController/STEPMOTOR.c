@@ -5,6 +5,9 @@
 #include "STEPMOTOR.h"
 #include "DIGITALIO.h"
 
+const unsigned int SWIPE_PATTERN_RIGHT[4]= {2,4,1,8};
+const unsigned int SWIPE_PATTERN_LEFT[4] = {8,1,4,2};
+
 void stepperSteps (struct MARCOSETUP_s *MARCOSETUP) {
 	unsigned int stepperState;
 	int i;
