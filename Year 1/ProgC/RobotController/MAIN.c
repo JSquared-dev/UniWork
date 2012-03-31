@@ -14,12 +14,12 @@ int main () {
 	int index;
 	char task;
 	
-	initscr();
-	
 	initialization (subdevice, filename, &device);
 	createMARCOSETUP (&MARCOSETUP, device, 3000);
 	stepperSteps(MARCOSETUP);
 	
+	initscr();
+
 	while(task != '0') {
 		system("clear");
 		printw ("\n ***************************************");
