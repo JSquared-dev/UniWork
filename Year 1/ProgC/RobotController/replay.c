@@ -7,7 +7,7 @@
 
 #define RECORDFILE "record.txt"
 #define MOTOR_MAX 2048
-void runMotors(comedi_t *device, int left, int right);
+extern void runMotors(comedi_t *device, int left, int right);
 
 int replay_start() {
 	
@@ -38,25 +38,4 @@ int replay_start() {
 	comedi_close(device);
 	
 	return 0;
-}
-
-void runMotors(comedi_t *device, int left, int right) {
-	
-	/* values on motors are 0 to 4097 inclusive. make sure we are always within this range */
-	if (left > MOTOR_MAX*2) {
-		left = (MOTOR_MAX*2) - 1;
-	}
-	else if (left < 0) {
-		left = 0;
-	}
-	
-	if (right > MOTOR_MAX*2) {
-		right = (MOTOR_MAX*2) - 1;
-	}
-	else if (right < 0) {
-		right = 0;
-	}
-	
-	comedi_data_write(device, 1, 0, 1, AREF_GROUND, left); /* left motor */
-	comedi_data_write(device, 1, 1, 1, AREF_GROUND, right); /* right motor */
 }
