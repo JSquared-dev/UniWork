@@ -7,17 +7,19 @@
 #ifndef _LIGHTFOLLOWING_H_
 #define _LIGHTFOLLOWING_H_
 
-extern const int delayUS;			/* ITERATION DELAY */
-extern const int TTL;				/* NOTE: actual delay is calculated iteration (delay x TTL)*/						
+#define delayUS 1000			/* ITERATION DELAY */
+#define TTL 3000				/* NOTE: actual delay is calculated iteration (delay x TTL)*/						
+#define STEP_DELAY 150			/* NOTE: actual delay is calculated (iteration delay x stepDelay) */ 
+#define FULLFWD 4000
+#define FULLBCK 0
+
 extern const int table[4];	/* curve table, with motor values */
-extern const int STEP_DELAY; 			/* NOTE: actual delay is calculated (iteration delay x stepDelay) */ 
-extern const int FULLFWD;
-extern const int FULLBCK;
 
 /*--------------- MARCO ANALOGUE INPUT CONFIGURATION ---------------*/
-extern const int subdevice;						
-extern const int rmotor, lmotor;					
-extern const int range;
+#define subdevice 1
+#define rmotor 1
+#define lmotor 0			
+#define range 1
 /*------------------------------------------------------------------*/
 int line_following (struct MARCOSETUP_s *MARCOSETUP);
 
