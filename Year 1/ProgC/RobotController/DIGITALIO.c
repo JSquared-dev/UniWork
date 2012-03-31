@@ -21,7 +21,7 @@
  *					NOTE: on write, last parameter may take any value and is irelevant.
  **************************************************************************************************/
 void digitalIO(comedi_t *device, unsigned int IOMask, unsigned int *data, unsigned int ReadMask) {
-  const unsigned int subdevice = 2; /* IO */ 
+  const unsigned int subdevice = 2; /* Digital IO */ 
  
   comedi_dio_bitfield(device, subdevice, IOMask, data);	 /* comedi device bidirectional IO */
   if (IOMask == DIGITALREAD) {

@@ -4,6 +4,7 @@
 
 #include <comedi.h>
 #include <comedilib.h>
+#include "joystick.h"
 
 /*----------------------- MARCO BUGGY CONFIGURATION, SHARED BETWEEN MODULES ----------------------*/
 struct MARCOSETUP_s {
@@ -19,6 +20,7 @@ struct MARCOSETUP_s {
 	unsigned int EYE;		/* RACK analogue input channel for EYE */
 	unsigned int joystick_X;	/* RACK analogue input channel for Joystick X axis */
 	unsigned int joystick_Y;	/* RACK analogue input channel for Joystick Y axis */
+  struct joystick_calib joystickCalib;  /* joystick calibration value */
 };
 /*-------------------------------------------------------------------------------------------------*/
 

@@ -4,38 +4,28 @@
 #include <stdio.h>
 #include <comedilib.h>
 #include <ncurses.h>
-
+#include "INIT.h"
+#include "joystick.h"
 #define RECORDFILE "record.txt"
 #define MOTOR_MAX 2048
-extern void runMotors(comedi_t *device, int left, int right);
 
-int replay_start() {
+int replay_start(struct MARCOSETUP_s *setup) {
 	
-	int time, leftMotor, rightMotor;
-	char *filename = "/dev/comedi0";
+	int time;
+	struct motor_s *motorValues = malloc(sizeof(struct motor_s));
 	FILE *recordFile = fopen(RECORDFILE, "r");
 	
-	comedi_t *device = comedi_open(filename);
-	if (!device) {
-		comedi_perror(filename);
-		return 1;
-	}
+	comedi_t *device = setup->device;
 	
-	initscr(); /* initialise ncurses */
-	timeout(0);/* nonblock input through ncurses */
-	
-	while ((getch() != 'q')) {
-		fscanf(recordFile, "%d %d %d\n", &time, &leftMotor, &rightMotor);
-		
+	while (1) {
+	  int escape = fscanf(recordFile, "%d %d %d\n", &time, &motorValues->left, &motorValues->right);
+		if (escape == EOF)
+		  break;
 		usleep(time); /* delay time is for the previous motor values, so sleep 
 					   * before changing motors */
 		
-		runMotors(device, leftMotor, rightMotor);
+		runMotors(device, *motorValues);
 	}
-	
-	endwin();
-	
-	comedi_close(device);
 	
 	return 0;
 }

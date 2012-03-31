@@ -226,8 +226,8 @@ void followTheLight (struct MARCOSETUP_s *MARCOSETUP,  struct LIGHTPOSCALC_s *LI
 ********************************************************************************************************************************************/
 int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 	struct LIGHTPOSCALC_s LIGHTPOSCALC;			   /* structure for the brightest step calculation */
-	unsigned int *swipePattern = SWIPE_PATTERN_RIGHT;          /* current stepmotor swipe pattern */
-	unsigned int *nextSwipePattern = SWIPE_PATTERN_LEFT;	   /* next stepmotor swipe pattern */
+	unsigned int *swipePattern = malloc(sizeof(unsigned int *) * 4);          /* current stepmotor swipe pattern */
+	unsigned int *nextSwipePattern = malloc(sizeof(unsigned int *) * 4);	   /* next stepmotor swipe pattern */
 	unsigned int expectedSwitch = MARCOSETUP->stepperRSwitch;  /* current direction swipe stop switch */
 
 	unsigned int stepperState = 0;				   /* variable used to read digital input from rack */
@@ -237,7 +237,16 @@ int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 	int index = 0;						   /* index, when 0 ignores iteration (NOTE: is 0 only durring first iteration) */			
 	
 	LIGHTPOSCALC.ANGLECALC.direction = 'r';			   /* stepmotor direction */
-
+	swipePattern[0] = SWIPE_PATTERN_RIGHT[0];
+	swipePattern[1] = SWIPE_PATTERN_RIGHT[1];
+	swipePattern[2] = SWIPE_PATTERN_RIGHT[2];
+	swipePattern[3] = SWIPE_PATTERN_RIGHT[3];
+	
+	nextSwipePattern[0] = SWIPE_PATTERN_LEFT[0];
+	nextSwipePattern[1] = SWIPE_PATTERN_LEFT[1];
+	nextSwipePattern[2] = SWIPE_PATTERN_LEFT[2];
+	nextSwipePattern[3] = SWIPE_PATTERN_LEFT[3];
+	
 	/* performs initial swipe if have not been made already */
 	if (MARCOSETUP->stepperSteps == 0)
 		stepperSteps(MARCOSETUP);				
@@ -286,7 +295,9 @@ int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 		/*-----------------------------------------------------------------------------------------------------------*/
 		
 	}
-	free (lightReadings);										
+	free (lightReadings);	
+	free(swipePattern);
+	free(nextSwipePattern);
 	return 0;
 }
 

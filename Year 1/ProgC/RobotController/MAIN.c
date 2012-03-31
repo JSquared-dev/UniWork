@@ -1,26 +1,34 @@
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <ncurses.h>
 #include "LIGHT.h"
 #include "LINEFOLLOWING.h"
 #include "STEPMOTOR.h"
 #include "RANDOMWALK.h"
 
+int joystick_start(struct MARCOSETUP_s *setup);
+void calibrateJoystick(comedi_t *device, struct joystick_calib *calib);
+
 int main (int argc, char **argv) {
 	comedi_t *device;
 	unsigned int subdevice = (2);
 	char *filename = "/dev/comedi0";
-	struct MARCOSETUP_s *MARCOSETUP;
+	struct MARCOSETUP_s *MARCOSETUP = malloc(sizeof(struct MARCOSETUP_s));
 	int index;
 	char task;
 	
 	initialization (subdevice, filename, &device);
 	createMARCOSETUP (&MARCOSETUP, device, 3000);
 	stepperSteps(MARCOSETUP);
-	
-	initscr();
 
+	initscr();
+	scrollok(stdscr, TRUE);
+
+	calibrateJoystick(device, &MARCOSETUP->joystickCalib);
+	
 	while(task != '0') {
+	  clear();
 		printw ("\n ***************************************");
 		printw ("\n *  0) Exit.                           *");
 		printw ("\n *  1) MARCO buggy line following.     *");
@@ -52,7 +60,16 @@ int main (int argc, char **argv) {
 		        comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
 				comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
 				break;	
-				
+		case '3':
+		  printw("\n Joystick is running");
+		  refresh();
+		  joystick_start(MARCOSETUP);
+		  break;
+		case '4':
+		  printw("\n Replaying last joystick run");
+		  refresh();
+		  replay_start(MARCOSETUP);
+		  break;
 			case '5':
 				index = randomWalk(MARCOSETUP);
 				printw ("\n Main task is running!");
@@ -90,6 +107,7 @@ int main (int argc, char **argv) {
 	destroyMARCOSETUP (MARCOSETUP);
 	comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
 	comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
+	endwin();
 	return 0;
 }
 

@@ -20,6 +20,6 @@ RobotController: $(OBJECTS)
 utils: $(UTILS)
 	cc -Wall -o stop utils/stop.c -lcomedi -lc -lm -lncurses
 
-.c.o:
-	cc -std=c99 -Wall -c -o $@ $<
+.c.o: Makefile
+	cc -Wall -g -c -o $@ $<
 

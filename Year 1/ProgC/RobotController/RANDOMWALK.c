@@ -18,8 +18,8 @@ int randomWalk (struct MARCOSETUP_s *MARCOSETUP) {
 	const int degreeDelayUs = 6667;				        /* one grade turn delay in uS */
 	int FRWRDTIME = 1000000;					/* MARCO buggy forward move time */
 	unsigned int stepperState;					/* stepper digital readings */
-	unsigned int *stepperDirection = SWIPE_PATTERN_RIGHT;		/* stepper current swipe pattern */
-	unsigned int *nextDirection = SWIPE_PATTERN_LEFT;		/* stepper next swipe pattern */
+	unsigned int *stepperDirection = malloc(sizeof(unsigned int) * 4);		/* stepper current swipe pattern */
+	unsigned int *nextDirection = malloc(sizeof(unsigned int) * 4);		/* stepper next swipe pattern */
 	unsigned int expectedSwitch = MARCOSETUP->stepperRSwitch;	/* current stepper stop switch */
 	char swipeDir = 'r';						/* stepmotor swipe direction */
 	int counter = 0;						/* step counter */
@@ -30,6 +30,17 @@ int randomWalk (struct MARCOSETUP_s *MARCOSETUP) {
 	unsigned int interrupt;						/* reads line or bumper interrupt id */
 	int light;							/* light readings */
 	
+	stepperDirection[0] = SWIPE_PATTERN_RIGHT[0];
+	stepperDirection[1] = SWIPE_PATTERN_RIGHT[1];
+	stepperDirection[2] = SWIPE_PATTERN_RIGHT[2];
+	stepperDirection[3] = SWIPE_PATTERN_RIGHT[3];
+	
+	nextDirection[0] = SWIPE_PATTERN_LEFT[0];
+	nextDirection[1] = SWIPE_PATTERN_LEFT[1];
+	nextDirection[2] = SWIPE_PATTERN_LEFT[2];
+	nextDirection[3] = SWIPE_PATTERN_LEFT[3];
+	
+
 	srand((unsigned)time(0)); 
 
 	while (1) {
