@@ -5,7 +5,7 @@
 #include <comedi.h>
 #include "INIT.h"
 
-#define MININTENSITY = 2250;	/* minimal light intensity */
+#define MININTENSITY 2250	/* minimal light intensity */
 
 /* data to calculate brightest element position from centre */
 struct ANGLECALC_s {
