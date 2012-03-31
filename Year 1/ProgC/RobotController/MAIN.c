@@ -6,9 +6,9 @@
 #include "STEPMOTOR.h"
 #include "RANDOMWALK.h"
 
-int main () {
+int main (int argc, char **argv) {
 	comedi_t *device;
-	unsigned int subdevice = 2;
+	unsigned int subdevice = (2);
 	char *filename = "/dev/comedi0";
 	struct MARCOSETUP_s *MARCOSETUP;
 	int index;
@@ -21,7 +21,6 @@ int main () {
 	initscr();
 
 	while(task != '0') {
-		system("clear");
 		printw ("\n ***************************************");
 		printw ("\n *  0) Exit.                           *");
 		printw ("\n *  1) MARCO buggy line following.     *");

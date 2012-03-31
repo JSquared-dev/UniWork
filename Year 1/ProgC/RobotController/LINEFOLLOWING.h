@@ -16,9 +16,9 @@
 extern const int table[4];	/* curve table, with motor values */
 
 /*--------------- MARCO ANALOGUE INPUT CONFIGURATION ---------------*/
-#define subdevice 1
+#define ANALOGUE_subdevice 1
 #define rmotor 1
-#define lmotor 0			
+#define lmotor 0
 #define range 1
 /*------------------------------------------------------------------*/
 int line_following (struct MARCOSETUP_s *MARCOSETUP);
