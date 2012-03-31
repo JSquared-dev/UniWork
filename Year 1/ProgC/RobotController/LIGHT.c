@@ -13,6 +13,9 @@
 #include "STEPMOTOR.h"
 #include "DIGITALIO.h"
 
+const int MININTENSITY = 2250;	/* minimal light intensity */
+
+
 /********************************************************************************************************************************************
 *	FUNCTION NAME 		: clearLIGHTPOSCALC							   
 *	  RETURNS	  	: no return value
