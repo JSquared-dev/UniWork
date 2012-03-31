@@ -14,17 +14,6 @@ int usleep(unsigned int usec);
 #define MOTOR_MAX 2048		/* max value a motor can be in 1 direction. multiply by 2 to get max 
 * value a motor can be. */
 
-/* for compile testing. remove ASAP */
-#ifndef AREF_GROUND
-typedef unsigned int comedi_t;
-#define AREF_GROUND 0
-extern comedi_t *comedi_open(char *);
-extern void comedi_perror(char *device);
-extern void comedi_close(comedi_t *device);
-extern void comedi_data_read(comedi_t *device, int, int, int, int, int *);
-extern void comedi_data_write(comedi_t *device, int, int, int, int, int);
-#endif
-
 struct joystick {
 	int x, y; /* value of joystick on x and y axes */
 };
@@ -46,7 +35,7 @@ void calculateMotorValue(struct joystick_calib calibration, struct joystick joys
 void runMotors(comedi_t *device, struct motor_s motorValues);
 void recordMovement(int timeLength, struct motor_s motorValues, FILE *recordFile);
 
-int main () {
+int joystick_start () {
 	
 	struct joystick_calib joystickCalibData;
 	struct joystick joystickData;

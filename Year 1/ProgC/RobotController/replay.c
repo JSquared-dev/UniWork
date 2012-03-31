@@ -9,7 +9,7 @@
 #define MOTOR_MAX 2048
 void runMotors(comedi_t *device, int left, int right);
 
-int main(int argc, char **argv) {
+int replay_start() {
 	
 	int time, leftMotor, rightMotor;
 	char *filename = "/dev/comedi0";
