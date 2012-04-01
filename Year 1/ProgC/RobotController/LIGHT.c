@@ -236,16 +236,16 @@ int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 	int i, counter;
 	int index = 0;						   /* index, when 0 ignores iteration (NOTE: is 0 only durring first iteration) */			
 	
-	LIGHTPOSCALC.ANGLECALC.direction = 'r';			   /* stepmotor direction */
-	swipePattern[0] = SWIPE_PATTERN_RIGHT[0];
-	swipePattern[1] = SWIPE_PATTERN_RIGHT[1];
-	swipePattern[2] = SWIPE_PATTERN_RIGHT[2];
-	swipePattern[3] = SWIPE_PATTERN_RIGHT[3];
+	LIGHTPOSCALC.ANGLECALC.direction = 'l';			   /* stepmotor direction */
+	nextSwipePattern[0] = SWIPE_PATTERN_RIGHT[0];
+	nextSwipePattern[1] = SWIPE_PATTERN_RIGHT[1];
+	nextSwipePattern[2] = SWIPE_PATTERN_RIGHT[2];
+	nextSwipePattern[3] = SWIPE_PATTERN_RIGHT[3];
 	
-	nextSwipePattern[0] = SWIPE_PATTERN_LEFT[0];
-	nextSwipePattern[1] = SWIPE_PATTERN_LEFT[1];
-	nextSwipePattern[2] = SWIPE_PATTERN_LEFT[2];
-	nextSwipePattern[3] = SWIPE_PATTERN_LEFT[3];
+	swipePattern[0] = SWIPE_PATTERN_LEFT[0];
+	swipePattern[1] = SWIPE_PATTERN_LEFT[1];
+	swipePattern[2] = SWIPE_PATTERN_LEFT[2];
+	swipePattern[3] = SWIPE_PATTERN_LEFT[3];
 	
 	/* performs initial swipe if have not been made already */
 	if (MARCOSETUP->stepperSteps == 0)
@@ -268,7 +268,6 @@ int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 				/*---------------------------------------------------------------------------------------------------------*/
 				digitalIO(MARCOSETUP->device, DIGITALWRITE, &swipePattern[i], 0);	
 				usleep (MARCOSETUP->stepDelay);
-				
 				/* writes light readings,if step count is less than initial swipe step count (prevents, false data access) */
 				if (counter < MARCOSETUP->stepperSteps)
 					lightReadings[counter] = readLight(MARCOSETUP->device, MARCOSETUP->EYE);
@@ -300,4 +299,5 @@ int lightFollowing (struct MARCOSETUP_s *MARCOSETUP) {
 	free(nextSwipePattern);
 	return 0;
 }
+
 

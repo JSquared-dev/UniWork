@@ -79,14 +79,12 @@ int main (int argc, char **argv) {
 					switch (index) {
 						case 0:
 							index = line_following(MARCOSETUP);
-							if (index == 0) index = 3;
-							
+							if (index == 0) index = 3;						
 							break;
 							
 						case 1:
-							comedi_data_write (device,1, 0, 1, AREF_GROUND, 2047);
-							comedi_data_write (device, 1, 1, 1, AREF_GROUND, 2047);
-							return 0;
+		 					joystick_start(MARCOSETUP);
+							index = 0;
 							break;
 							
 						case 2:
@@ -96,7 +94,7 @@ int main (int argc, char **argv) {
 							
 						case 3:
 							index = randomWalk(MARCOSETUP);	
-							break;	
+							break;
 					}
 				}
 				break;
