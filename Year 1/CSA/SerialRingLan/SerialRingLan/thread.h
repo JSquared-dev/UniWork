@@ -1,9 +1,9 @@
-/* Filename: thread.h
- * Author: James Johns.
- * Date: 21/2/2012.
- *
- * Abstraction layer for cross-platform multithreading.
- */
+/*************************************************
+ *	Filename: thread.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #ifndef _THREAD_H_
 #define _THREAD_H_

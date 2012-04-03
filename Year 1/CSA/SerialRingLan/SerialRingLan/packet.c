@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: packet.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -6,22 +12,25 @@
 #include "platform.h"
 #include "queue.h"
 
-/* function name: createLanPacket
- * written by: James Johns
+/* Function name: createLanPacket
+ * Written by: James Johns, Silvestrs Timofojevs. 
+ * Date: 28/3/2012
  * Parameters:
  *		source		- character ID of packet's origin.
  *		destination - character ID of packet's destination.
  *		type		- Type of packet, can be any value described by PacketType enumeration.
  *		data		- 10 bytes of data to be placed in the packet's payload. Can be NULL.
  * Returns:
- *		a lanPacket_s structure populated with the appropriate fields. Return value MUST be destroyed by destroyPacket function
+ *		a lanPacket_s structure populated with the appropriate fields. Return value MUST be 
+ *		destroyed by destroyPacket function
  *
  * notes:
  *		Return value MUST be destroyed by destroyPacket.
  *		If data parameter is NULL, the current time is placed in the first 4 bytes of the payload.
  *
  */
-struct lanPacket_s *createLanPacket(char source, char destination, enum PacketType type, char data[10]) {
+struct lanPacket_s *createLanPacket(char source, char destination, 
+									enum PacketType type, char data[10]) {
 	struct lanPacket_s *packet = (struct lanPacket_s *) malloc(sizeof(struct lanPacket_s));
 	int i;
 	time_t time;
@@ -51,6 +60,7 @@ struct lanPacket_s *createLanPacket(char source, char destination, enum PacketTy
 
 /* function name: destroyPacket
  * written by: James Johns
+ * Date: 28/3/2012
  * Parameters:
  *		packet - lanPacket_s structure to destroy.
  *
@@ -65,6 +75,7 @@ void destroyPacket(struct lanPacket_s *packet) {
 
 /* function name: packetChecksum
  * written by: James Johns
+ * Date: 28/3/2012
  * Parameters:
  *		packet - lanPacket_s structure to calculate checksum of.
  * Returns:
@@ -85,15 +96,17 @@ char packetChecksum(struct lanPacket_s *packet) {
 		sum += packet->payload[i];
 	}
 	
+	sum += PACKET_START + PACKET_END;
+	
 	sum = ~(sum%128);
-	sum |= (1 << 7);
+	sum |= 0x80;
 
 	return sum;
 }
 
-
 /* function name: removePendingPacketFromQueue
  * written by: James Johns
+ * Date: 28/3/2012
  * Parameters:
  *		queue - queue object which should contain pending packet.
  *		packet - the ACK_PACKET type packet received indicating the packet has been received.
@@ -101,8 +114,8 @@ char packetChecksum(struct lanPacket_s *packet) {
  *		1 on success, else 0.
  *
  * notes:
- *		return value 0 does not indicate error, only that the packet may already have been transmitted several times, 
- *		or this ACK packet is not the first to be received.
+ *		return value 0 does not indicate error, only that the packet may already have been 
+ *		transmitted several times, or this ACK packet is not the first to be received.
  *		If corresponding packet is found, it is removed from the queue and destroyed.
  *
  */
@@ -121,7 +134,22 @@ int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *pack
 	return 1;
 }
 
-/* lock queue->mutexIndex before calling, else bad things be happening */
+/* function name: findQueueItemRelativeToPacket
+ * written by: James Johns
+ * Date: 28/3/2012
+ * Parameters:
+ *		queue - queue object which should contain a packet related to 'packet'.
+ *		packet - the packet that is related to the packet in 'queue'.
+ * Returns:
+ *		Queue item (found in 'queue') containing packet related to 'packet'.
+ *
+ * notes:
+ *		return value 0 does not indicate error, only that the packet may already have been removed 
+ *		from the queue, or this packet is not the first relative to be discovered.
+ *		If corresponding packet is found, the function returns the queue item as it is in the queue.
+ *		WARNING - this function does not lock queue->mutexIndex, but is required to maintain data 
+ *					integrity.
+ */
 struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanPacket_s *packet) {
 	struct queue_s *toRet;
 	struct queue_s *curQueue = queue;
@@ -141,7 +169,8 @@ struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanP
 			destroyPacket((struct lanPacket_s *)removeItemFromQueue(curQueue));
 			break;
 		}
-		else if (tmpPacket->source == packet->destination && tmpPacket->destination == packet->source && tmpPacket->pending < 5) {
+		else if (tmpPacket->source == packet->destination && 
+				 tmpPacket->destination == packet->source && tmpPacket->pending < 5) {
 			toRet = curQueue;
 			break;
 		}

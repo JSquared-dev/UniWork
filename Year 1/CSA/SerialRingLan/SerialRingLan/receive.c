@@ -1,3 +1,9 @@
+/*************************************************
+ *	Filename: receive.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -18,14 +24,16 @@ struct lanPacket_s *readPacket(int comPort);
 void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData);
 
 
-/* function name: receiveStart
- * written by: James Johns, Silvestrs Timofojevs
- * Parameters:
- *		data - void pointer to a threadData_s structure. stated as void * to maintain compatibility with threading libraries.
+/*	Function name: receiveStart
+ *	Written by: James Johns, Silvestrs Timofojevs
+ *	Parameters:
+ *		data - void pointer to a threadData_s structure. stated as void * to maintain compatibility 
+ *				with threading libraries.
  *
- * notes:
+ *	Notes:
  *		Loops constantly until the programState member of data becomes EXIT.
- *		each loop reads a lanPacket_s structure from the comPort file descriptor member of data, and processes it via processPacket function.
+ *		each loop reads a lanPacket_s structure from the comPort file descriptor member of data,
+ *		and processes it via processPacket function.
  *		
  *		
  */
@@ -46,17 +54,20 @@ THREAD_RET receiveStart(void *data) {
 	return (THREAD_RET)NULL;
 }
 
-/* function name: processPacket
- * written by: James Johns, Silvestrs Timofojevs
- * Parameters:
+/*	Function name: processPacket
+ *	Written by: James Johns, Silvestrs Timofojevs
+ *	Date: 28/3/2012
+ *	Parameters:
  *		packet - a packet structure to be processed.
- *		threadData - The data, shared between all threads, that is required for communication between threads and view the programs information.
+ *		threadData - The data, shared between all threads, that is required for communication 
+ *						between threads and view the programs information.
  *
- * notes:
- *		If the packet is for the current user, it is passed to the main thread through the receiveQueue member of data.
- *		If it is not for the current user, it is passed to the transmitter thread through transmitQueue member of data.
- *		If the main thread would not need to know about the packet, or any other packets are required to be transmitted 
- *		in response, it is taken care of here.
+ *	Notes:
+ *		If the packet is for the current user, it is passed to the main thread through the
+ *		receiveQueue member of data. If it is not for the current user, it is passed to the
+ *		transmitter thread through transmitQueue member of data. If the main thread would not need
+ *		to know about the packet, or any other packets are required to be transmitted in response,
+ *		it is taken care of here.
  *
  */
 void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) {
@@ -64,14 +75,16 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 	
 	/* print debug information if in debug mode */
 	if (threadData->debugEnable != 0) {
-		wprintw(threadData->messageWindow, "Received packet: {%c%c%c%.10s%.1c}\n", packet->source, packet->destination, packet->packetType, packet->payload, packet->checksum);
+		wprintw(threadData->messageWindow, "Received packet: {%c%c%c%.10s%.1c}\n", packet->source, 
+				packet->destination, packet->packetType, packet->payload, packet->checksum);
 		wrefresh(threadData->messageWindow);
 	}
 
-	/* check the checksum of the packet. if it is wrong, delete the packet and send a NAK_PACKET to the sender */
+	/* check the checksum of the packet. if it is wrong, delete the packet and send a 
+	 * NAK_PACKET to the sender */
 	if (packet->checksum != packetChecksum(packet)) {
 	  /* create a NAK packet to send to packet->source */
-	  /* must be proxied to seem like it was only interchanged between the true source and destinations */
+/* must be proxied to seem like it was only interchanged between the true source and destinations */
 	  packet->packetType = NAK_PACKET;
 	  userID = packet->source;
 	  packet->source = packet->destination;
@@ -95,9 +108,11 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 			}
 		}
 		else if (packet->packetType == DATA_PACKET) {
-			struct lanPacket_s *ackPacket = createLanPacket(packet->destination, packet->source, ACK_PACKET, packet->payload);
+			struct lanPacket_s *ackPacket = createLanPacket(packet->destination, packet->source, 
+															ACK_PACKET, packet->payload);
 			addToQueue(threadData->transmitQueue, ackPacket);
-			wprintw(threadData->messageWindow, "Message from %c: %.10s\n", packet->source, packet->payload);
+			wprintw(threadData->messageWindow, "Message from %c: %.10s\n", packet->source, 
+					packet->payload);
 			wrefresh(threadData->messageWindow);
 			destroyPacket(packet);
 		}
@@ -124,7 +139,8 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		}
 		else if (packet->packetType == LOGOUT_PACKET) {
 		  if (threadData->programState != LOGOUT) {
-		    destroyPacket(packet); /* we're not trying to logout, so stop anyone from forcing us offline */
+			/* we're not trying to logout, so stop anyone from forcing us offline */
+		    destroyPacket(packet);
 		  }
 		  else {
 			removePendingPacketFromQueue(threadData->transmitQueue, packet);
@@ -137,7 +153,8 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 		}
 	}
 	else {
-		/* the packet is not for the current user, so pass it on to the next station, unless it's a LOGIN_PACKET or LOGOUT_PACKET */
+		/* the packet is not for the current user, so pass it on to the next station, unless it's a 
+		 * LOGIN_PACKET or LOGOUT_PACKET */
 		if (packet->source == userID) {
 			/* packet has returned to us, destroy it */
 			wprintw(threadData->messageWindow, "Failed message send, retrying up to 5 times\n");
@@ -149,10 +166,13 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 				/* new user appears, add entry to user table and update the display */
 				addToUserTable(threadData->userTable, packet->source);
 				printUserTable(threadData->userTable, threadData->userListWindow);
-				/* if there is a user currently logged in, transmit a response packet to let new user know the current user is logged in */
+				/* if there is a user currently logged in, transmit a response packet to let new 
+				 * user know the current user is logged in */
 				if (userID != 0) {
-					struct lanPacket_s *respPacket = createLanPacket(userID, packet->source, RESPONSE_PACKET, NULL);
-					respPacket->pending = 1; /* stop transmitter from pending the packet for 5 tries by setting last transmit to non-zero */
+					struct lanPacket_s *respPacket = createLanPacket(userID, packet->source, 
+																	 RESPONSE_PACKET, NULL);
+					respPacket->pending = 1; /* stop transmitter from pending the packet for 5
+											  * tries by setting last transmit to non-zero */
 					respPacket->lastTransmit = 1;
 					addToQueue (threadData->transmitQueue, respPacket);
 				}
@@ -167,14 +187,16 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 	}
 }
 
-/* function name: readPacket
- * written by: James Johns, Silvestrs Timofojevs
- * Parameters:
+/*	Function name: readPacket
+ *	Written by: James Johns, Silvestrs Timofojevs
+ *	Date: 28/3/2012
+ *	Parameters:
  *		comPort - A file descriptor for the COM port being used for the LAN.
- * Retuns:
- *		A lanPacket_s structure, created by the createLanPacket function. MUST be destroyed by destroyPacket.
+ *	Retuns:
+ *		A lanPacket_s structure, created by the createLanPacket function. MUST be destroyed 
+ *		by destroyPacket.
  *
- * notes:
+ *	notes:
  *		Blocks the calling thread until a full packet has been read.
  *		return value must be freed by the caller.
  *
@@ -184,8 +206,9 @@ struct lanPacket_s *readPacket(int comPort) {
 	char Source, Destination, tmp;
 	struct lanPacket_s *Packet = NULL;
 	enum PacketType packetType;
-	/* try reading from the com port, if there is the beginning of a packet, read in the rest of the packet, 
-	 * otherwise pause execution for a short time to let the CPU do other things, and wait for more data to become available on the COM port */
+	/* try reading from the com port, if there is the beginning of a packet, read in the rest 
+	 * of the packet, otherwise pause execution for a short time to let the CPU do other things,
+	 * and wait for more data to become available on the COM port */
 	if (read(comPort, &tmp, 1) != 0 && (tmp == PACKET_START) ) {
 		/* Async compatible blocking reads.  */
 		while (read(comPort, &Destination, 1) != 1)
@@ -200,12 +223,14 @@ struct lanPacket_s *readPacket(int comPort) {
 		/* read a maximum of 10 bytes over several loops. i keeps count of bytes read so far. */
 		while (i < 10) {
 			i += read(comPort, (Packet->payload)+i, 10-i);
-			if (i < 10) /* not enough bytes read, pause and wait for more bytes to become available */
+			/* not enough bytes read, pause and wait for more bytes to become available */
+			if (i < 10) 
 				waitMilliSecs(20);
 		}
 		while (read(comPort, &Packet->checksum, 1) != 1)
 			waitMilliSecs(20);
-		/* make sure we read to the end of the packet, to synchronise packet reads/writes between stations */
+		/* make sure we read to the end of the packet, to synchronise packet reads/writes between 
+		 * stations */
 		while (1) {
 			if (read(comPort, &tmp, 1) == 1 && tmp == PACKET_END) {
 				break;
