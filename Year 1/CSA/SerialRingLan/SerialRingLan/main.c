@@ -1,10 +1,27 @@
-/* main.c
- * Written by: James Johns.
- * Date: 17/2/2012
+/*****************************************************************************************************
+ *Program name: SerialRingLan
+ *	Written by: James Johns, Silvestrs Timofejevs.
+ *	Date: 28/3/2012
  *
- * main functionality loop. Get and react to user input.
+ *	Implements a Ring network messaging system through the serial port.
+ *	Ring LAN must be connected to the first COM port (COM1 or ttyS0).
+ *
+ *	This program is multithreaded, allowing the transmission and receiving processes to run 
+ *	concurrently.
+ *	NCurses and PDCurses are used to provide a stable user interface in a platform independent way.
+ *	WARNING - exiting the program abnormally will cause the terminal window to act strangely until 
+ *	it is closed. Only close the program by logging out and pressing CTRL+Q.
+ *
+ *
  *
  */
+
+/*************************************************
+ *	Filename: main.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include "main.h"
 #include "queue.h"
@@ -33,8 +50,7 @@
 #define COM_OPEN_FLAGS (O_RDWR | O_NOCTTY | O_NONBLOCK)
 #endif
 
-#define ESC_KEY 0x1B
-
+/* non global function definitions, only required in this object */
 void initThreadData(struct threadData_s *data);
 void destroyThreadData(struct threadData_s *data);
 
@@ -46,6 +62,24 @@ enum progState mainMenu(struct threadData_s *data);
 void logout(struct threadData_s *data);
 enum progState logoutPending(struct threadData_s *data);
 
+
+/* Function name: main
+ * Written by: James Johns, Silvestrs Timofojevs. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		argc - number of items in argv
+ *		argv - char arrays of command line next, delimited by spaces.
+ * Returns:
+ *		program exit status
+ *
+ * notes:
+ *		Entry point for program.
+ *		Initialises data required for threads, creates Receiver and Transmitter threads, and then
+ *		loops until the user requests the program to quit.
+ *		When the user requests the program to quit, the threads are destroyed and the shared Thread
+ *		data is freed.
+ *	
+ */
 int main(int argc, const char **argv) {
 	
 	thread_t *receiveThread, *transmitThread; /* indexes in thread list */
@@ -88,11 +122,37 @@ int main(int argc, const char **argv) {
 	return 0;
 }
 
+/* Function name: showHelpMenu
+ * Written by: James Johns.
+ * Date: 28/3/2012
+ * Parameters:
+ *		window - curses window to print the menu to.
+ *
+ * notes:
+ *		Prints a simple help message to the window specified by 'window'.
+ *	
+ */
 void showHelpMenu(WINDOW *window) {
 	wprintw(window, "\n[X]Logout, [D]Construct message, [^D]Enable debug mode\n");
 	wrefresh(window);
 }
 
+/* Function name: logoutPending
+ * Written by: James Johns 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - the shared thread data structure, containing all required data that is shared between
+ *				threads.
+ * Returns:
+ *		New program state
+ *
+ * notes:
+ *		Removes the item at the front of data->receiveQueue. If the packet removed from the queue 
+ *		is a logout packet, the current userID is cleared, the screen is returned to black 
+ *		background with white text and returns LOGIN program state.
+ *		WARNING - if the packet removed from the queue is not a logout packet, the packet is 
+ *		destroyed without being displayed.
+ */
 enum progState logoutPending(struct threadData_s *data) {
 	struct lanPacket_s *packet = (struct lanPacket_s *)removeFrontOfQueue(data->receiveQueue);
 	if (packet == NULL)
@@ -117,18 +177,44 @@ enum progState logoutPending(struct threadData_s *data) {
 		return LOGIN;
 	}
 	else {
+		destroyPacket(packet);
 		return LOGOUT;
 	}
 }
 
+/* Function name: logout
+ * Written by: James Johns, Silvestrs Timofojevs. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *
+ * notes:
+ *		Creates a logout packet and places it on the transmit queue for retransmission.
+ *		Also prints text to the message window to show the user what is currently happening.
+ *	
+ */
 void logout(struct threadData_s *data) {
 	char userID = getCurrentID(data->userTable);
-	struct lanPacket_s *logoutPacket = (struct lanPacket_s *) createLanPacket(userID, userID, LOGOUT_PACKET, NULL);
+	struct lanPacket_s *logoutPacket = (struct lanPacket_s *) createLanPacket(userID, userID, 
+																			  LOGOUT_PACKET, NULL);
 	addToQueue(data->transmitQueue, logoutPacket);
 	wprintw(data->messageWindow, "\nLogging out...\n");
 	wrefresh(data->messageWindow);
 }
 
+/*	Function name: logout
+ *	Written by: James Johns, Silvestrs Timofojevs. 
+ *	Date: 28/3/2012
+ *	Parameters:
+ *		data - shared thread data object
+ *	Returns:
+ *		A data packet ready for transmission, populated with the user's input.
+ *
+ *	notes:
+ *		Creates a data packet from user input.
+ *		WARNING - backspace does not work to remove a character from the input.
+ *	
+ */
 struct lanPacket_s *createMessage(struct threadData_s *data) {
 	int tmp = 0;
 	struct lanPacket_s *packet;
@@ -179,6 +265,21 @@ struct lanPacket_s *createMessage(struct threadData_s *data) {
 	return packet;
 }
 
+/* Function name: mainMenu
+ * Written by: James Johns, Silvestrs Timofojevs. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *	Returns:
+ *		New program state.
+ *
+ * notes:
+ *		Main functionality loop after logging in. 
+ *		Requests user input and acts appropriately.
+ *		Constructs packets on requests, requires user to create a packet before attempting to send.
+ *		Prints help message on request.
+ *	
+ */
 enum progState mainMenu(struct threadData_s *data) {
 	
 	static struct lanPacket_s *packet = NULL;
@@ -205,6 +306,7 @@ enum progState mainMenu(struct threadData_s *data) {
 			}
 			else {
 				wprintw(data->messageWindow, "Please compose a message first\n");
+				wrefresh(data->messageWindow);
 			}
 			break;
 		case 'X':
@@ -222,6 +324,22 @@ enum progState mainMenu(struct threadData_s *data) {
 	return MENU;
 }
 
+/* Function name: logout
+ * Written by: James Johns, Silvestrs Timofejevs. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *	Returns:
+ *		New program state.
+ *
+ * notes:
+ *		Waits for user to press a key. If the key is a letter, a login packet is created and added 
+ *		to the transmit queue and returns LOGIN_PENDING state. If an error occurs, the function 
+ *		returns LOGIN state.
+ *		WARNING - function assumes the current state is LOGIN, only call function if program state 
+ *					is LOGIN.
+ *	
+ */
 enum progState loginPrompt(struct threadData_s *data) {
 	char letter;
 	struct lanPacket_s *loginPacket;
@@ -250,7 +368,8 @@ enum progState loginPrompt(struct threadData_s *data) {
 	
 	if (letter < 'A' || letter > 'Z') {
 		scroll(data->inputWindow);
-		wprintw(data->inputWindow, "\nPlease enter a valid login ID.\n ID should be a letter between A and Z\n");
+		wprintw(data->inputWindow, 
+				"\nPlease enter a valid login ID.\n ID should be a letter between A and Z\n");
 		wrefresh(data->inputWindow);
 		return LOGIN;
 	}
@@ -266,6 +385,21 @@ enum progState loginPrompt(struct threadData_s *data) {
 	return LOGIN_PEND;
 }
 
+/* Function name: checkLogin
+ * Written by: James Johns, Silvestrs Timofojevs. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *	Returns:
+ *		New program state.
+ *
+ * notes:
+ *		Removes the first packet on the receiveQueue. If the packet is our LOGIN packet sent by 
+ *		loginPrompt(), the screen colours are changed to a white background and black text. 
+ *		If it is a NAK packet, there has been an error trying to login so reset the user ID and 
+ *		return LOGIN state.
+ *	
+ */
 enum progState checkLogin(struct threadData_s *data) {
 	
 	/* receiveQueue only contains packets targetted at us */
@@ -273,7 +407,8 @@ enum progState checkLogin(struct threadData_s *data) {
 	packet = (struct lanPacket_s *)removeFrontOfQueue(data->receiveQueue);
 	
 	if (packet != NULL) {
-		if (packet->packetType == LOGIN_PACKET) { /* successful round trip login packet so we are now logged in */
+		/* successful round trip login packet so we are now logged in */
+		if (packet->packetType == LOGIN_PACKET) { 
 			wbkgdset(data->messageWindow,COLOR_PAIR(2));
 			wbkgdset(data->inputWindow,COLOR_PAIR(2));
 			wbkgdset(data->userListWindow,COLOR_PAIR(2));
@@ -284,7 +419,8 @@ enum progState checkLogin(struct threadData_s *data) {
 			wclear(data->inputWindow);
 			wclear(data->userListWindow);
 	
-			wprintw(data->messageWindow, "Welcome to the network, %c\n", getCurrentID(data->userTable));
+			wprintw(data->messageWindow, "Welcome to the network, %c\n", 
+					getCurrentID(data->userTable));
 			wprintw(data->messageWindow, "To send a message, press D. To log out, press X.\n");
 			wrefresh(data->messageWindow);
 			wclear(data->inputWindow);
@@ -296,7 +432,8 @@ enum progState checkLogin(struct threadData_s *data) {
 			return MENU;
 		}
 		else if (packet->packetType == NAK_PACKET) {
-			wprintw(data->inputWindow, "\nYour selected login ID is already active, please use another one");
+			wprintw(data->inputWindow, 
+					"\nYour selected login ID is already active, please use another one");
 			wrefresh(data->inputWindow);
 			setCurrentID(data->userTable, 0);
 			return LOGIN; /* user id was taken, so we need a new one */
@@ -305,7 +442,7 @@ enum progState checkLogin(struct threadData_s *data) {
 			wprintw(data->inputWindow, "received early packet\n");
 			wrefresh(data->inputWindow);
 			addToQueue(data->receiveQueue, packet); /* wrong time to read, so leave it for later */
-			return LOGIN_PEND;								/* not logged in, but still waiting to check login so carry on */
+			return LOGIN_PEND;	/* not logged in, but still waiting to check login so carry on */
 		}
 	}
 	else {
@@ -313,6 +450,24 @@ enum progState checkLogin(struct threadData_s *data) {
 	}
 }
 
+/* Function name: initUI
+ * Written by: James Johns, Silvestrs Timofojevs. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *
+ * notes:
+ *		Initialise the screen using Curses. 
+ *		Creates 6 colour pairs:
+ *					1 - logged out screen colour,
+ *					2 - logged in screen colour,
+ *					3 - logged out screen colour, user online,
+ *					4 - logged out screen colour, user offline,
+ *					5 - logged in screen colour, user online,
+ *					6 - logged in screen colour, user offline,
+ *					
+ *
+ */
 void initUI(struct threadData_s *data) {
 	
 	initscr();
@@ -363,12 +518,37 @@ void initUI(struct threadData_s *data) {
 	wrefresh(data->messageWindow);
 }
 
+/* Function name: destroyUI
+ * Written by: James Johns 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *
+ * notes:
+ *		destroy curses user interface.
+ *					
+ *
+ */
 void destroyUI(struct threadData_s *data) {
 	delwin(data->inputWindow);
 	delwin(data->userListWindow);
 	endwin();
 }
 
+
+/* Function name: initThreadData
+ * Written by: James Johns. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *
+ * notes:
+ *		Initalises the contents of 'data'.
+ *		Open the serial COM port, initialise it to a standardised configuration.
+ *		Create receive and transmit queues, user table and initialise the user interface.
+ *					
+ *
+ */
 void initThreadData(struct threadData_s *data) {
 	data->comPort = open(COM_PORT, COM_OPEN_FLAGS);
 	if (data->comPort < 0) {
@@ -391,6 +571,18 @@ void initThreadData(struct threadData_s *data) {
 	initUI(data);
 }
 
+/* Function name: destroyThreadData
+ * Written by: James Johns. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		data - shared thread data object
+ *
+ * notes:
+ *		Undo everything done by initThreadData.
+ *		Closes serial COM port, destroys all queues and destroys the curses user interface.
+ *					
+ *
+ */
 void destroyThreadData(struct threadData_s *data) {
 	
 	destroyUserTable(data->userTable);

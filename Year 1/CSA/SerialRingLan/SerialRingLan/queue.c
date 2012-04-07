@@ -1,27 +1,24 @@
-/* Filename: queue.c
- * Written by: James Johns.
- * Date: 16/2/2012
- *
- *
- * queue is a collection of functions for manipulating a queue_s structure.
- * queue implements a FIFO buffer, or a basic queue. The queue length is dynamically
- * modified as required.
- */
+/*************************************************
+ *	Filename: queue.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
+
 
 #include "queue.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-/* Function Name: createqueue
- * Parameters: 
- *		IN:
- *			queue		- pointer to structure to initialise
- *			initialSize - initial number of positions in queue.
- *		OUT:
- *			queue		- fully intialised message queue structure
+/*	Function Name: createqueue
+ *	Written by: James Johns.
+ *	Date: 28/3/2012
+ *	Returns:
+ *		An allocated and initialised queue object.
  *
- * initialises the structure pointed to by 'queue', and allocates memory for the queue data.
- * destroyqueue should be called on queue when finished with it.
+ *	Notes:
+ *		Allocates and initialises the structure pointed to by 'queue', and allocates memory for 
+ *		the queue data. destroyqueue should be called on queue when finished with it.
+ *
  */
 struct queue_s *createQueue() {
 	struct queue_s *queue = (struct queue_s *)malloc(sizeof(struct queue_s));
@@ -31,14 +28,14 @@ struct queue_s *createQueue() {
 	return queue;
 }
 
-/* Function Name: destroyqueue
- * Parameters: 
- *		IN:
- *			queue		- pointer to structure to initialise
+/*	Function Name: destroyqueue
+ *	Parameters:
+ *		queue		- pointer to structure to initialise
  *
- * Destroys the structure pointed to by 'queue', and frees any memory allocated to it 
- * by the message queue functions.
- * If necessary, the address of queue should be freed after this function.
+ *	Notes:
+ *		Destroys the structure pointed to by 'queue', and frees any memory allocated to it 
+ *		by the message queue functions.
+ *		If necessary, the address of queue should be freed after this function.
  */
 int destroyQueue(struct queue_s *queue) {
 	struct queue_s *item = (struct queue_s *)removeFrontOfQueue(queue);
@@ -51,6 +48,20 @@ int destroyQueue(struct queue_s *queue) {
 	return 0;
 }
 
+/*	Function name: setupCOMPort
+ *	Written by: James Johns. 
+ *	Date: 28/3/2012
+ *	Parameters:
+ *		queue - queue item to remove from the queue.
+ *
+ *	Notes:
+ *		Remove the item specified by queue.
+ *		Releases any memory allocated to the queue item if necessary.
+ *		Returns NULL if queue is empty, otherwise returns data field of queue item being removed.
+ *		WARNING - does not lock queue->mutexIndex. Must be locked before calling this function to 
+ *					ensure data integrity.
+ *
+ */
 void *removeItemFromQueue(struct queue_s *queue) {
 	void *ret;
 	struct queue_s *nextItem;
@@ -77,14 +88,18 @@ void *removeItemFromQueue(struct queue_s *queue) {
 	return ret;
 }
 
-/* Function Name: removeFrontOfqueue
- * Parameters: 
- *		IN:
- *			queue		- pointer to structure to initialise.
- *		OUT:
- *			return		- address of the first object entered into queue.
+/*	Function Name: removeFrontOfqueue
+ *	Written by: James Johns.
+ *	Date: 28/3/2012
+ *	Parameters: 
+ *		queue - pointer to structure to initialise.
+ *	Returns:
+ *		data field of first item entered into queue.
  *
- * returns the address of the first object placed into queue, and removes it from the queue.
+ *	Notes:
+ *		Returns the data field of the first object placed into queue, and removes it from the queue.
+ *		Uses removeItemFromQueue() to remove the item from the queue.
+ *
  */
 void *removeFrontOfQueue(struct queue_s *queue) {
 	void *ret = NULL;
@@ -95,13 +110,14 @@ void *removeFrontOfQueue(struct queue_s *queue) {
 }
 
 
-/* Function Name: addMessageToQueue
- * Parameters: 
- *		IN:
- *			queue		- pointer to structure to initialise.
- *			message		- object to place onto queue.
+/*	Function Name: addMessageToQueue
+ *	Parameters:
+ *		queue		- pointer to structure to initialise.
+ *		message		- object to place onto queue.
  *
- * Adds message onto the back of the queue, increasing the size of the queue if necessary.
+ *	Notes:
+ *		Adds message onto the back of the queue, increasing the size of the queue if necessary.
+ *
  */
 void addToQueue(struct queue_s *queue, void *message) {
 	lockMutex(queue->mutexIndex);
@@ -121,4 +137,46 @@ void addToQueue(struct queue_s *queue, void *message) {
 		queue->previous = newItem;
 	}
 	unlockMutex(queue->mutexIndex);
+}
+
+/*	Function name: expediteQueueItemToFront
+ *	Written by: James Johns. 
+ *	Date: 28/3/2012
+ *	Parameters:
+ *		frontQueue - queue item at the front of the queue.
+ *		queueItem - item to move to the front of the queue.
+ *
+ *	Notes:
+ *		Moves the item specified by queueItem to the front of the queue.
+ *		Locks the mutex associated with the queue to maintain data integrity.
+ *
+ */
+void expediteQueueItemToFront(struct queue_s *frontQueue, struct queue_s *queueItem) {
+	
+	void *dataHolder;
+	struct queue_s *secondSlot;
+	lockMutex(frontQueue->mutexIndex);
+	if (frontQueue->next == frontQueue) {
+		/* already at the front of the queue */
+		unlockMutex(frontQueue->mutexIndex);
+		return;
+	}
+	secondSlot = frontQueue->next;
+	
+	/* patch over hole where queue item came from */
+	queueItem->previous->next = queueItem->next;
+	queueItem->next->previous = queueItem->previous;
+
+	/* place queue item in second slot */
+	frontQueue->next = queueItem;
+	secondSlot->previous = queueItem;
+	queueItem->previous = frontQueue;
+	queueItem->next = secondSlot;
+
+	/* swap data between second slot and first slot */
+	dataHolder = queueItem->data;
+	queueItem->data = frontQueue->data;
+	frontQueue->data = dataHolder;
+
+	unlockMutex(frontQueue->mutexIndex);
 }

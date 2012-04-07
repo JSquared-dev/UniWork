@@ -48,9 +48,11 @@ int main () {
 	struct joystick_calib joystickCalibData;
 	struct joystick joystickData;
 	struct motor_s motorValues;
-	int timeStart = 0;
-	int timeEnd = 0;
+	
+	struct timeval timeStart = {0,0};
+	struct timeval timeEnd = {0,0};
 	int timeDiff = 0;
+	
 	char *filename = "/dev/comedi0";
 	char *recFileName = "record.txt";
 	FILE *recordFile = fopen(recFileName, "w");
@@ -60,18 +62,24 @@ int main () {
 		comedi_perror(filename);
 		return 1;
 	}
+	
+	initscr(); /* initialise ncurses */
+	timeout(0);/* nonblock input through ncurses */
+	
 	/* get the user to calibrate the joystick */
 	calibrateJoystick(device, &joystickCalibData);
 	timeStart
-	while (1) {
+	while ((getch() != 'q')) {
 		
 		readJoystick(device, &joystickData);
 		calculateMotorValue(joystickCalibData, joystickData, &motorValues);
 		
 		/* record time motor activation started and stopped. the difference is the motor time to record */
-		timeEnd = time(NULL);
-		if (timeStart != 0)
-			timeDiff = timeEnd-timeStart;
+		timeEnd = gettimeofday(&timeEnd,NULL);
+		if (timeStart.tv_sec != 0) {
+			/* calculate the number of microseconds (millionths of a second) that have passed  */
+			timeDiff = ((timeEnd.tv_sec-timeStart.tv_sec) * 1000000) + (timeEnd.tv_usec-timeStart.tv_usec);
+		}
 		timeStart = time(NULL);
 		runMotors(device, motorValues);
 		
@@ -79,11 +87,13 @@ int main () {
 		usleep(20000);
 	}
 	
+	endwin();
+	
 	comedi_close(device);
 	return 0;
 }
 
-void recordMovement(int timeLength, struct motor_s *motorValues, FILE *recordFile) {
+void recordMovement(struct timeval timeLength, struct motor_s *motorValues, FILE *recordFile) {
 	char *outputString = sprintf("%d %d %d\n", timeLength, motorValue->left, motorValue->right);
 	fwrite(outputString, strlen(outputString), 1, recordFile);
 }

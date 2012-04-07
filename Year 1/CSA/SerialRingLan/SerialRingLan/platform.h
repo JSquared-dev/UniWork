@@ -1,7 +1,8 @@
-/* filename: platform.h
- * Written by: James Johns.
- *
- */
+/*************************************************
+ *	Filename: platform.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
 
 #ifndef _PLATFORM_H_

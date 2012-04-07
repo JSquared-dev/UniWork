@@ -1,0 +1,15 @@
+digraph fsm {
+	graph [ rankdir = TB ];
+	node [shape = "circle" ];
+	ordering="out";
+	{rank=min start}
+	{rankdir=LR  }
+	{rank=max end}
+	start -> GETPACKET [ label = "Init thread" ];
+	GETPACKET:w -> CHECKPACKET:w;// [ label = "Available packet\nfrom queue" ];
+	CHECKPACKET -> TRANSMITPACKET;// [ label = "Timed out pending"];
+	CHECKPACKET -> GETPACKET;// [ label = "Pending"];
+	TRANSMITPACKET -> GETPACKET;
+	GETPACKET -> EXIT;// [ label = "Program state = EXIT" ];
+	EXIT -> end;
+}
