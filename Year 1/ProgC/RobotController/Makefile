@@ -1,6 +1,6 @@
 
 
-OBJECTS := main.o joystick.o replay.o
+OBJECTS := MAIN.o joystick.o replay.o INIT.o LIGHT.o RANDOMWALK.o DIGITALIO.o LINEFOLLOWING.o STEPMOTOR.o
 UTILS := utils/stop.o
 
 .PHONY: all utils clean RobotController
@@ -20,6 +20,6 @@ RobotController: $(OBJECTS)
 utils: $(UTILS)
 	cc -Wall -o stop utils/stop.c -lcomedi -lc -lm -lncurses
 
-.c.o:
-	cc -std=c99 -Wall -c -o $@ $<
+.c.o: Makefile
+	cc -Wall -g -c -o $@ $<
 
