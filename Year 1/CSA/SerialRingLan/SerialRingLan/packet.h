@@ -1,4 +1,8 @@
-
+/*************************************************
+ *	Filename: packet.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
 
 #ifndef _PACKET_H_
@@ -34,5 +38,6 @@ void destroyPacket(struct lanPacket_s *packet);
 char packetChecksum(struct lanPacket_s *packet);
 
 int removePendingPacketFromQueue(struct queue_s *queue, struct lanPacket_s *packet);
+struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanPacket_s *packet);
 
 #endif

@@ -1,3 +1,8 @@
+/*************************************************
+ *	Filename: platform.c
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
 
 #include "platform.h"
@@ -15,7 +20,7 @@ static DCB dcb;
 static struct termios old;
 int usleep(int secs);
 
-
+/* required for termios configuration. not always defined in termios.h but is safe to define here */
 #ifndef CCTS_OFLOW
      #define CCTS_OFLOW 0x00010000
 #endif /* CCTS_OFLOW */
@@ -30,7 +35,18 @@ int usleep(int secs);
 #endif 
 #endif /* else !_WIN32 */
 
-/* returns number of seconds since January 1, 1970 */
+
+/* Function name: getTimeOfDay
+ * Written by: James Johns
+ * Date: 28/3/2012
+ *	Returns:
+ *		Current time in Unix format (number of seconds since January 1, 1970).
+ *
+ * notes:
+ *		Cross platform compatible. Converts windows system time into unix time via 
+ *		systemTimeToUnixTime().
+ *
+ */
 time_t getTimeOfDay() {
 	unsigned long int ret = 0;
 #ifdef _WIN32
@@ -43,6 +59,17 @@ time_t getTimeOfDay() {
 	return ret;
 }
 
+/* Function name: initUI
+ * Written by: James Johns
+ * Date: 28/3/2012
+ * Parameters:
+ *		milli - number of milliseconds to pause for.
+ *
+ * notes:
+ *		Pause the calling thread for 'milli' number of milliseconds.
+ *		Uses usleep on unix, Sleep on windows.
+ *		Allows a single function call to cover all operating systems.
+ */
 void waitMilliSecs(unsigned int milli) {
 #ifdef _WIN32
 	Sleep(milli);
@@ -51,8 +78,22 @@ void waitMilliSecs(unsigned int milli) {
 #endif
 }
 
+/* windows only functionality */
 #ifdef _WIN32
-/* convert system time to time_t compatible value */
+/* Function name: systemTimeToUnixTime
+ * Written by: James Johns. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		time - SYSTEMTIME value to convert to unix time (32 bit integer - number of seconds since 
+ *		January 1, 1970)
+ *	Return:
+ *		number of seconds since January 1, 1970 (epoch)
+ *
+ * notes:
+ *		Uses algorithm described by Microsoft on MSDN to convert SYSTEMTIME to unix time.
+ *					
+ *
+ */
 unsigned int systemTimeToUnixTime(SYSTEMTIME time) {
 	unsigned int ret = 0;
 	FILETIME ft;
@@ -67,6 +108,23 @@ unsigned int systemTimeToUnixTime(SYSTEMTIME time) {
 }
 #endif
 
+
+/* Function name: setupCOMPort
+ * Written by: James Johns. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		comFileDescriptor - file descriptor for serial COM port.
+ *
+ * notes:
+ *		Initialise the com port through by managing the attributes of the file descriptor 
+ *		(using Termios in linux, DCB in windows).
+ *		COM port is initialised to 9600 bps, 8 bit bytes, no parity, 2 stop bits, RTS/CTS handshake 
+ *		flow control.
+ *		Original state on call is saved to static global variable.
+ *		WARNING - calling twice will overwrite the saved state, disabling the ability to restore the
+ *		original state.
+ *
+ */
 void setupCOMPort(int comFileDescriptor) {
 #ifdef _WIN32
 	BOOL fSuccess;
@@ -127,6 +185,19 @@ void setupCOMPort(int comFileDescriptor) {
 #endif
 }
 
+/* Function name: restoreCOMPort
+ * Written by: James Johns. 
+ * Date: 28/3/2012
+ * Parameters:
+ *		comFileDescriptor - file descriptor for serial COM port.
+ *
+ * notes:
+ *		Restore the COM port settings to how they were before calling setupCOMPort.
+ *		WARNING - calling before setupCOMPort hasbeen called will result in an unknown state.
+ *		WARNING - restoring the state through this method is non-recoverable. If anything goes 
+ *					wrong, subsequent calls will restore the same erroneous data.
+ *
+ */
 void restoreCOMPort(int comFileDescriptor) {
 	
 #ifdef _WIN32
