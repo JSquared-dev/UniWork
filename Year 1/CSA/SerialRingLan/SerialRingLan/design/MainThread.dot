@@ -1,0 +1,13 @@
+digraph fsm {
+	node [shape = "circle" ];
+	start -> LOGIN [ label = "Initialise program" ];
+	LOGIN -> LOGIN_PEND [ label = "Valid ID" ];
+	LOGIN_PEND -> MENU [ label = "Received LOGIN packet" ];
+	MENU -> LOGOUT [ label = "'X'" ];
+	LOGOUT -> LOGIN [label = "Received LOGOUT packet" ];
+	MENU -> GETADDRESS [ label = "D" compass_pt = n ];
+	GETADDRESS -> GETMESSAGE [ label = "Valid ID" ];
+	GETMESSAGE -> MENU [label = "10 caracters \nOR return key" ];
+	MENU:w -> MENU:w [ label = "^D" ];
+	MENU:e -> MENU:e [ label = "S" ];
+}

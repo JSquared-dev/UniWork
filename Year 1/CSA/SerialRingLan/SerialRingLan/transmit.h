@@ -1,9 +1,8 @@
-/* File name: transmit.h
- * Written by: James Johns.
- * Date: 21/2/2012
- *
- * 
- */
+/*************************************************
+ *	Filename: transmit.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
 
 #ifndef _TRANSMIT_H_

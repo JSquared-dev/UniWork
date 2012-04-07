@@ -1,0 +1,15 @@
+digraph fsm {
+	graph [ rankdir = TB ];
+	node [shape = "circle" ];
+	ordering="out";
+	{rank=min start}
+	{rankdir=LR  }
+	{rank=max end}
+	start -> READPACKET [ label = "Init thread" ];
+	READPACKET:w -> CHECKPACKET:w;// [ label = "Read 16 characters" ];
+	CHECKPACKET -> PROCESSPACKET;// [ label = "Valid Packet" ];
+	CHECKPACKET -> READPACKET;
+	PROCESSPACKET -> READPACKET;
+	READPACKET -> EXIT;// [ label = "ProgramState = EXIT" ];
+	EXIT -> end;
+}

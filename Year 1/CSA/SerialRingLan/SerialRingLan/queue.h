@@ -1,17 +1,12 @@
-/* Filename: queue.h
- * Written by: James Johns.
- * Date: 16/2/2012
- *
- *
- * Prototype function definitions for external reference.
- *
- * queue is a collection of functions for manipulating a queue_s structure.
- * queue implements a FIFO buffer, or a basic queue. The queue length is dynamically
- * modified as required.
- */
+/*************************************************
+ *	Filename: queue.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
-#ifndef _queue_H_
-#define _queue_H_
+
+#ifndef _QUEUE_H_
+#define _QUEUE_H_
 
 #define MAX_QUEUE_SIZE 64
 
@@ -30,6 +25,7 @@ int increaseQueue(struct queue_s *queue, int amount);
 void *removeFrontOfQueue(struct queue_s *queue);
 void addToQueue(struct queue_s *queue, void *message);
 
-void *removeItemFromQueue(struct queue_s *queue); /* used automatically, do not use without due care */
+void *removeItemFromQueue(struct queue_s *queue);
+void expediteQueueItemToFront(struct queue_s *frontQueue, struct queue_s *queueItem);
 
 #endif

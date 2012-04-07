@@ -1,4 +1,8 @@
-
+/*************************************************
+ *	Filename: main.h
+ *	Written by: James Johns, Silvestrs Timofejevs
+ *	Date: 28/3/2012
+ *************************************************/
 
 
 #ifndef _MAIN_H_
@@ -44,10 +48,12 @@
 
 enum progState {
 	LOGIN,		/* login state requires user to choose a user id */
-	LOGIN_PEND, /* login pending state requires a return packet stating user's selected ID is available */
-	MENU,		/* main interaction state. React to user input. */
-	LOGOUT,		/* logout state requires program to loop and refuse user input until successful logout request has been fulfilled */
-	EXIT		/* when in exit state, all threads halt execution and we exit this program entirely */
+	LOGIN_PEND, /* login pending state requires a return packet stating user's selected ID is 
+				 * available */
+	MENU,	/* main interaction state. React to user input. */
+	LOGOUT,	/* logout state requires program to loop and refuse user input until successful 
+			 * logout request has been fulfilled */
+	EXIT	/* when in exit state, all threads halt execution and we exit this program entirely*/
 };
 
 struct threadData_s {
@@ -56,7 +62,10 @@ struct threadData_s {
 	struct queue_s *receiveQueue;	/* packets received for current user */
 	struct queue_s *transmitQueue;	/* packets to be transmitted */
 	struct userTable_s *userTable;	/* list of stations in a ring */
-	WINDOW *userListWindow, *inputWindow, *messageWindow;/* Curses main window for data display. sub windows defined for data organisation. */
+	WINDOW *userListWindow;
+	WINDOW *inputWindow;
+	WINDOW*messageWindow;/* Curses main window for data display. 
+						  * sub windows defined for data organisation. */
 	int debugEnable;
 	/* unique locks for individual data elements */
 	/* indexes in mutex list */
