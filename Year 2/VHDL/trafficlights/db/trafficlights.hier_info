@@ -1,0 +1,5 @@
+|trafficlights
+placeholder => ~NO_FANOUT~
+clk => current_state~1.DATAIN
+
+
