@@ -163,12 +163,6 @@ struct queue_s *findQueueItemRelativeToPacket(struct queue_s *queue, struct lanP
 		    return 0;
 		  }
 		}
-		if (tmpPacket->destination == packet->destination && tmpPacket->source == tmpPacket->source && tmpPacket->pending < 5) {
-			/* found our packet */
-			/* remove it from the queue */
-			destroyPacket((struct lanPacket_s *)removeItemFromQueue(curQueue));
-			break;
-		}
 		else if (tmpPacket->source == packet->destination && 
 				 tmpPacket->destination == packet->source && tmpPacket->pending < 5) {
 			toRet = curQueue;

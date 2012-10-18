@@ -89,6 +89,7 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 	  userID = packet->source;
 	  packet->source = packet->destination;
 	  packet->destination = userID;
+	  packet->checksum = packetChecksum(packet);
 	  addToQueue(threadData->transmitQueue, packet);
 	  return;
 	}
@@ -104,7 +105,9 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 			if (threadData->programState == LOGIN_PEND)
 				addToQueue(threadData->receiveQueue, packet);
 			else {
-				destroyPacket(packet);
+			  packet->packetType = NAK_PACKET;
+			  packet->checksum = packetChecksum(packet);
+			  addToQueue(threadData->transmitQueue,packet);
 			}
 		}
 		else if (packet->packetType == DATA_PACKET) {
@@ -132,7 +135,11 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 			/* find where the packet is in the queue, lock the queue, then move the front of the 
 			 * queue to the position of the packet in the queue to expedited in transmission */
 			struct queue_s *queue = findQueueItemRelativeToPacket(threadData->transmitQueue, packet);
-			if (queue != NULL) {
+			if (threadData->programState == LOGIN_PEND) {
+			  threadData->programState = LOGIN;
+			  setCurrentID(threadData->userTable, 0);
+			}
+			else if (queue != NULL) {
 				/* expedite queue */
 				expediteQueueItemToFront(threadData->transmitQueue, queue);
 			}
@@ -169,11 +176,11 @@ void processPacket(struct lanPacket_s *packet, struct threadData_s *threadData) 
 				/* if there is a user currently logged in, transmit a response packet to let new 
 				 * user know the current user is logged in */
 				if (userID != 0) {
-					struct lanPacket_s *respPacket = createLanPacket(userID, packet->source, 
-																	 RESPONSE_PACKET, NULL);
+					struct lanPacket_s *respPacket = createLanPacket(userID, packet->source, RESPONSE_PACKET, NULL);
 					respPacket->pending = 1; /* stop transmitter from pending the packet for 5
 											  * tries by setting last transmit to non-zero */
 					respPacket->lastTransmit = 1;
+					respPacket->checksum = packetChecksum(respPacket);
 					addToQueue (threadData->transmitQueue, respPacket);
 				}
 			}
