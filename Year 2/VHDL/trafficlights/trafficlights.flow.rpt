@@ -1,5 +1,5 @@
 Flow report for trafficlights
-Thu Oct 18 16:25:19 2012
+Thu Nov  1 16:50:17 2012
 Quartus II Version 11.0 Build 208 07/03/2011 Service Pack 1 SJ Full Version
 
 
@@ -38,18 +38,18 @@ applicable agreement for further details.
 +-------------------------------------------------------------------------------------+
 ; Flow Summary                                                                        ;
 +------------------------------------+------------------------------------------------+
-; Flow Status                        ; Successful - Thu Oct 18 16:25:19 2012          ;
+; Flow Status                        ; Successful - Thu Nov  1 16:50:17 2012          ;
 ; Quartus II Version                 ; 11.0 Build 208 07/03/2011 SP 1 SJ Full Version ;
 ; Revision Name                      ; trafficlights                                  ;
 ; Top-level Entity Name              ; trafficlights                                  ;
 ; Family                             ; Cyclone III                                    ;
 ; Device                             ; EP3C16F484C6                                   ;
 ; Timing Models                      ; Final                                          ;
-; Total logic elements               ; 0 / 15,408 ( 0 % )                             ;
-;     Total combinational functions  ; 0 / 15,408 ( 0 % )                             ;
-;     Dedicated logic registers      ; 0 / 15,408 ( 0 % )                             ;
-; Total registers                    ; 0                                              ;
-; Total pins                         ; 2 / 347 ( < 1 % )                              ;
+; Total logic elements               ; 362 / 15,408 ( 2 % )                           ;
+;     Total combinational functions  ; 362 / 15,408 ( 2 % )                           ;
+;     Dedicated logic registers      ; 238 / 15,408 ( 2 % )                           ;
+; Total registers                    ; 238                                            ;
+; Total pins                         ; 9 / 347 ( 3 % )                                ;
 ; Total virtual pins                 ; 0                                              ;
 ; Total memory bits                  ; 0 / 516,096 ( 0 % )                            ;
 ; Embedded Multiplier 9-bit elements ; 0 / 112 ( 0 % )                                ;
@@ -62,24 +62,29 @@ applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 10/18/2012 16:25:08 ;
+; Start date & time ; 11/01/2012 16:49:59 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; trafficlights       ;
 +-------------------+---------------------+
 
 
-+-----------------------------------------------------------------------------------------------------------------+
-; Flow Non-Default Global Settings                                                                                ;
-+-------------------------------------+--------------------------------+---------------+-------------+------------+
-; Assignment Name                     ; Value                          ; Default Value ; Entity Name ; Section Id ;
-+-------------------------------------+--------------------------------+---------------+-------------+------------+
-; COMPILER_SIGNATURE_ID               ; 48549624801656.135057390803665 ; --            ; --          ; --         ;
-; MAX_CORE_JUNCTION_TEMP              ; 85                             ; --            ; --          ; --         ;
-; MIN_CORE_JUNCTION_TEMP              ; 0                              ; --            ; --          ; --         ;
-; PARTITION_COLOR                     ; 16764057                       ; --            ; --          ; Top        ;
-; PARTITION_FITTER_PRESERVATION_LEVEL ; PLACEMENT_AND_ROUTING          ; --            ; --          ; Top        ;
-; PARTITION_NETLIST_TYPE              ; SOURCE                         ; --            ; --          ; Top        ;
-+-------------------------------------+--------------------------------+---------------+-------------+------------+
++----------------------------------------------------------------------------------------------------------------------------+
+; Flow Non-Default Global Settings                                                                                           ;
++-------------------------------------+---------------------------------------+---------------+-------------+----------------+
+; Assignment Name                     ; Value                                 ; Default Value ; Entity Name ; Section Id     ;
++-------------------------------------+---------------------------------------+---------------+-------------+----------------+
+; COMPILER_SIGNATURE_ID               ; 48549624916152.135178859904589        ; --            ; --          ; --             ;
+; EDA_OUTPUT_DATA_FORMAT              ; Vhdl                                  ; --            ; --          ; eda_simulation ;
+; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (VHDL)                ; <None>        ; --          ; --             ;
+; MAX_CORE_JUNCTION_TEMP              ; 85                                    ; --            ; --          ; --             ;
+; MIN_CORE_JUNCTION_TEMP              ; 0                                     ; --            ; --          ; --             ;
+; NOMINAL_CORE_SUPPLY_VOLTAGE         ; 1.2V                                  ; --            ; --          ; --             ;
+; PARTITION_COLOR                     ; 16764057                              ; --            ; --          ; Top            ;
+; PARTITION_FITTER_PRESERVATION_LEVEL ; PLACEMENT_AND_ROUTING                 ; --            ; --          ; Top            ;
+; PARTITION_NETLIST_TYPE              ; SOURCE                                ; --            ; --          ; Top            ;
+; POWER_BOARD_THERMAL_MODEL           ; None (CONSERVATIVE)                   ; --            ; --          ; --             ;
+; POWER_PRESET_COOLING_SOLUTION       ; 23 MM HEAT SINK WITH 200 LFPM AIRFLOW ; --            ; --          ; --             ;
++-------------------------------------+---------------------------------------+---------------+-------------+----------------+
 
 
 +-------------------------------------------------------------------------------------------------------------------------------+
@@ -87,24 +92,26 @@ applicable agreement for further details.
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis      ; 00:00:02     ; 1.0                     ; --                  ; 00:00:01                           ;
-; Fitter                    ; 00:00:05     ; 1.0                     ; --                  ; 00:00:05                           ;
+; Analysis & Synthesis      ; 00:00:03     ; 1.0                     ; --                  ; 00:00:02                           ;
+; Fitter                    ; 00:00:06     ; 2.3                     ; --                  ; 00:00:07                           ;
 ; Assembler                 ; 00:00:01     ; 1.0                     ; --                  ; 00:00:01                           ;
-; TimeQuest Timing Analyzer ; 00:00:02     ; 1.0                     ; --                  ; 00:00:02                           ;
-; Total                     ; 00:00:10     ; --                      ; --                  ; 00:00:09                           ;
+; TimeQuest Timing Analyzer ; 00:00:04     ; 1.5                     ; --                  ; 00:00:03                           ;
+; EDA Netlist Writer        ; 00:00:01     ; 1.0                     ; --                  ; 00:00:01                           ;
+; Total                     ; 00:00:15     ; --                      ; --                  ; 00:00:14                           ;
 +---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
-+-------------------------------------------------------------------------------------------+
-; Flow OS Summary                                                                           ;
-+---------------------------+-------------------+-------------+------------+----------------+
-; Module Name               ; Machine Hostname  ; OS Name     ; OS Version ; Processor type ;
-+---------------------------+-------------------+-------------+------------+----------------+
-; Analysis & Synthesis      ; lab2012.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
-; Fitter                    ; lab2012.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
-; Assembler                 ; lab2012.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
-; TimeQuest Timing Analyzer ; lab2012.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
-+---------------------------+-------------------+-------------+------------+----------------+
++-----------------------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                                     ;
++---------------------------+-----------------------------+-------------+------------+----------------+
+; Module Name               ; Machine Hostname            ; OS Name     ; OS Version ; Processor type ;
++---------------------------+-----------------------------+-------------+------------+----------------+
+; Analysis & Synthesis      ; null-2c27d725a8b8.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
+; Fitter                    ; null-2c27d725a8b8.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
+; Assembler                 ; null-2c27d725a8b8.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
+; TimeQuest Timing Analyzer ; null-2c27d725a8b8.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
+; EDA Netlist Writer        ; null-2c27d725a8b8.uwe.ac.uk ; Fedora Core ; 14         ; i686           ;
++---------------------------+-----------------------------+-------------+------------+----------------+
 
 
 ------------
@@ -114,6 +121,7 @@ quartus_map --read_settings_files=on --write_settings_files=off trafficlights -c
 quartus_fit --read_settings_files=off --write_settings_files=off trafficlights -c trafficlights
 quartus_asm --read_settings_files=off --write_settings_files=off trafficlights -c trafficlights
 quartus_sta trafficlights -c trafficlights
+quartus_eda --read_settings_files=off --write_settings_files=off trafficlights -c trafficlights
 
 
 

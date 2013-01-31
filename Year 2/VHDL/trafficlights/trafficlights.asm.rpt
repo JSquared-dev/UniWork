@@ -1,5 +1,5 @@
 Assembler report for trafficlights
-Thu Oct 18 16:25:19 2012
+Thu Nov  1 16:50:12 2012
 Quartus II Version 11.0 Build 208 07/03/2011 Service Pack 1 SJ Full Version
 
 
@@ -37,7 +37,7 @@ applicable agreement for further details.
 +---------------------------------------------------------------+
 ; Assembler Summary                                             ;
 +-----------------------+---------------------------------------+
-; Assembler Status      ; Successful - Thu Oct 18 16:25:19 2012 ;
+; Assembler Status      ; Successful - Thu Nov  1 16:50:12 2012 ;
 ; Revision Name         ; trafficlights                         ;
 ; Top-level Entity Name ; trafficlights                         ;
 ; Family                ; Cyclone III                           ;
@@ -93,7 +93,7 @@ applicable agreement for further details.
 +----------------+----------------------------+
 ; Device         ; EP3C16F484C6               ;
 ; JTAG usercode  ; 0xFFFFFFFF                 ;
-; Checksum       ; 0x000C7989                 ;
+; Checksum       ; 0x000F8C00                 ;
 +----------------+----------------------------+
 
 
@@ -103,13 +103,13 @@ applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus II Assembler
     Info: Version 11.0 Build 208 07/03/2011 Service Pack 1 SJ Full Version
-    Info: Processing started: Thu Oct 18 16:25:18 2012
+    Info: Processing started: Thu Nov  1 16:50:11 2012
 Info: Command: quartus_asm --read_settings_files=off --write_settings_files=off trafficlights -c trafficlights
 Info: Writing out detailed assembly data for power analysis
 Info: Assembler is generating device programming files
 Info: Quartus II Assembler was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 267 megabytes
-    Info: Processing ended: Thu Oct 18 16:25:19 2012
+    Info: Peak virtual memory: 268 megabytes
+    Info: Processing ended: Thu Nov  1 16:50:12 2012
     Info: Elapsed time: 00:00:01
     Info: Total CPU time (on all processors): 00:00:01
 

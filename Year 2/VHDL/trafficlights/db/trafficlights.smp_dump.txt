@@ -1,6 +1,17 @@
 
-State Machine - |trafficlights|current_state
-Name current_state.s2 current_state.s1 current_state.s0 
-current_state.s0 0 0 0 
-current_state.s1 0 1 1 
-current_state.s2 1 0 1 
+State Machine - |trafficlights|trafficlightscontroller:TLC|state
+Name state.FAW state.FA state.FGFW state.FGF state.FGW state.FG state.MR state.MAW state.MA state.MGFW state.MGF state.MGW state.MG state.Init 
+state.Init 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
+state.MG 0 0 0 0 0 0 0 0 0 0 0 0 1 1 
+state.MGW 0 0 0 0 0 0 0 0 0 0 0 1 0 1 
+state.MGF 0 0 0 0 0 0 0 0 0 0 1 0 0 1 
+state.MGFW 0 0 0 0 0 0 0 0 0 1 0 0 0 1 
+state.MA 0 0 0 0 0 0 0 0 1 0 0 0 0 1 
+state.MAW 0 0 0 0 0 0 0 1 0 0 0 0 0 1 
+state.MR 0 0 0 0 0 0 1 0 0 0 0 0 0 1 
+state.FG 0 0 0 0 0 1 0 0 0 0 0 0 0 1 
+state.FGW 0 0 0 0 1 0 0 0 0 0 0 0 0 1 
+state.FGF 0 0 0 1 0 0 0 0 0 0 0 0 0 1 
+state.FGFW 0 0 1 0 0 0 0 0 0 0 0 0 0 1 
+state.FA 0 1 0 0 0 0 0 0 0 0 0 0 0 1 
+state.FAW 1 0 0 0 0 0 0 0 0 0 0 0 0 1 

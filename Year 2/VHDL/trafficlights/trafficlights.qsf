@@ -18,7 +18,7 @@
 #
 # Quartus II
 # Version 11.0 Build 208 07/03/2011 Service Pack 1 SJ Full Version
-# Date created = 14:46:29  October 18, 2012
+# Date created = 15:22:56  November 01, 2012
 #
 # -------------------------------------------------------------------------- #
 #
@@ -40,19 +40,33 @@ set_global_assignment -name FAMILY "Cyclone III"
 set_global_assignment -name DEVICE EP3C16F484C6
 set_global_assignment -name TOP_LEVEL_ENTITY trafficlights
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "11.0 SP1"
-set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:46:29  OCTOBER 18, 2012"
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "15:22:56  NOVEMBER 01, 2012"
 set_global_assignment -name LAST_QUARTUS_VERSION "11.0 SP1"
+set_global_assignment -name VHDL_FILE "../../../../../.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlightscontroller.vhd"
+set_global_assignment -name VHDL_FILE "../../../../../.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlights.vhd"
+set_global_assignment -name VHDL_FILE "../../../../../.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/timer.vhd"
 set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
 set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 484
 set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 6
 set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
-set_global_assignment -name VHDL_FILE trafficlights.vhd
-set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
+set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
-set_location_assignment PIN_C2 -to car_major
-set_location_assignment PIN_J6 -to car_minor
+set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_location_assignment PIN_G21 -to clk
+set_location_assignment PIN_D2 -to major_sensor
+set_location_assignment PIN_J6 -to minor_sensor
+set_location_assignment PIN_J1 -to minor_lights[0]
+set_location_assignment PIN_J2 -to minor_lights[1]
+set_location_assignment PIN_J3 -to minor_lights[2]
+set_location_assignment PIN_B1 -to major_lights[2]
+set_location_assignment PIN_B2 -to major_lights[1]
+set_location_assignment PIN_C2 -to major_lights[0]
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name VHDL_FILE trafficlightdriver.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

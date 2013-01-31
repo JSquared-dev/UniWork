@@ -20,6 +20,82 @@ VHSM_ON
 -- Start VHDL Libraries --
 -- End VHDL Libraries --
 # entity
+trafficlightscontroller
+# storage
+db|trafficlights.(1).cnf
+db|trafficlights.(1).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_insensitive
+# source_file
+|home|netlab|j2-johns|.local|share|Trash|files|trafficlights worksheet|traffic light worksheet|trafficlightscontroller.vhd
+6d7f949a64cb54a7e79a1a3438e41b80
+5
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+}
+# user_parameter {
+ constraint(major_lights)
+1 downto 0
+PARAMETER_STRING
+USR
+ constraint(minor_lights)
+1 downto 0
+PARAMETER_STRING
+USR
+}
+# hierarchies {
+trafficlightscontroller:TLC
+}
+# macro_sequence
+
+# end
+# entity
+timer
+# storage
+db|trafficlights.(2).cnf
+db|trafficlights.(2).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_insensitive
+# source_file
+|home|netlab|j2-johns|.local|share|Trash|files|trafficlights worksheet|traffic light worksheet|timer.vhd
+dfb6d508ef72afdddd0db1f61edb88
+5
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+}
+# hierarchies {
+timer:TT
+timer:T3
+timer:T5
+trafficlightdriver:TLDM|timer:TT1
+trafficlightdriver:TLDM|timer:TT2
+trafficlightdriver:TLDF|timer:TT1
+trafficlightdriver:TLDF|timer:TT2
+}
+# macro_sequence
+
+# end
+# entity
 trafficlights
 # storage
 db|trafficlights.(0).cnf
@@ -30,8 +106,8 @@ ON
 }
 # case_insensitive
 # source_file
-trafficlights.vhd
-a1c9e458e8d0d22476b15d51695e3
+|home|netlab|j2-johns|.local|share|Trash|files|trafficlights worksheet|traffic light worksheet|trafficlights.vhd
+dea55d778da45a26fd6e2e3fcf3c1d
 5
 # internal_option {
 HDL_INITIAL_FANOUT_LIMIT
@@ -45,6 +121,43 @@ ON
 }
 # hierarchies {
 |
+}
+# macro_sequence
+
+# end
+# entity
+trafficlightdriver
+# storage
+db|trafficlights.(3).cnf
+db|trafficlights.(3).cnf
+# logic_option {
+AUTO_RAM_RECOGNITION
+ON
+}
+# case_insensitive
+# source_file
+trafficlightdriver.vhd
+f51e65f4adba6f1dcabe7f4b0cc3293
+5
+# internal_option {
+HDL_INITIAL_FANOUT_LIMIT
+OFF
+AUTO_RESOURCE_SHARING
+OFF
+AUTO_RAM_RECOGNITION
+ON
+AUTO_ROM_RECOGNITION
+ON
+}
+# user_parameter {
+ constraint(encoded_light)
+1 downto 0
+PARAMETER_STRING
+USR
+}
+# hierarchies {
+trafficlightdriver:TLDM
+trafficlightdriver:TLDF
 }
 # macro_sequence
 
