@@ -1,0 +1,94 @@
+CPU = ARMSA110
+TOOL = gnu
+APPNAME=strings
+
+AR=arm-linux-ar
+AS=arm-linux-as
+CC=arm-linux-gcc
+LD=arm-linux-ld
+RANLIB=arm-linux-ranlib
+NM=arm-linux-nm
+
+CC_ARCH_SPEC    = -mcpu=strongarm110 -mapcs-32
+CC_COMPILER	= -nostdinc
+CC_OPTIM        = -O2 -mno-sched-prolog -fno-builtin -fvolatile
+CC_WARNINGS	= -Wall
+CC_INCLUDE      =
+CC_DEFINES	= -DCPU=$(CPU) $(DEFINE_CC) $(EXTRA_DEFINE)
+
+CFLAGS		= $(CC_ARCH_SPEC)  \
+                  $(CC_COMPILER)   \
+                  $(CC_OPTIM)      \
+                  $(CC_WARNINGS)   \
+		  $(CC_INCLUDE)    \
+                  $(CC_DEFINES)    \
+                  $(ADDED_CFLAGS)
+
+CFLAGS_AS	= $(CC_ARCH_SPEC)  \
+                  $(CC_COMPILER)   \
+                  $(CC_OPTIM)      \
+                  $(CC_INCLUDE)    \
+                  $(CC_DEFINES)    \
+                  $(ADDED_CFLAGS)  \
+                  -P -x assembler-with-cpp
+
+ROM_TEXT_BASE_ADDRESS=0x00100000
+RAM_TEXT_BASE_ADDRESS=0xc0000000
+
+LIBS          =  lib/lib.a libgcc.a
+ADDED_CFLAGS  = -g -I./include -I. -DNO_MMU
+
+
+.s.o :
+	@ $(RM) $@
+	$(CC) $(CFLAGS_AS) -c -o $@ $< 
+
+.c.o :
+	@ $(RM) $@
+	$(CC) $(CFLAGS) -c $<
+
+
+
+
+
+
+default	: $(APPNAME).bin
+
+
+release : $(RELEASE)
+
+all : $(APPNAME).bin $(APPNAME).lst
+
+bare   :
+	- $(RM) *.o 
+	- $(RM) *.i
+	- $(RM) $(APPNAME)
+	- $(RM) $(APPNAME).lst
+	- $(RM) $(APPNAME).bin
+
+clean   :
+	- $(RM) *.o 
+	- $(RM) *.i 
+	- $(RM) $(APPNAME)
+
+
+OBJ_FILES=  boot.o $(APPNAME).o main.o
+
+
+boot.o:
+
+$(APPNAME).o : 
+
+
+$(APPNAME) : $(OBJ_FILES) 
+	$(LD) $(LDFLAGS) -e _romInit -Ttext $(RAM_TEXT_BASE_ADDRESS) -o $@ ${OBJ_FILES} $(LIBS)
+
+
+$(APPNAME).bin : $(APPNAME)
+	elf2bin $(APPNAME) $@ >nul
+
+$(APPNAME).lst : $(APPNAME)
+	arm-linux-objdump -d $(APPNAME) >$@
+
+
+

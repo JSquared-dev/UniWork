@@ -1,0 +1,438 @@
+Analysis & Synthesis report for trafficlights
+Thu Nov  1 16:50:01 2012
+Quartus II Version 11.0 Build 208 07/03/2011 Service Pack 1 SJ Full Version
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. State Machine - |trafficlights|trafficlightscontroller:TLC|state
+  9. User-Specified and Inferred Latches
+ 10. General Register Statistics
+ 11. Port Connectivity Checks: "trafficlightdriver:TLDM|timer:TT2"
+ 12. Port Connectivity Checks: "trafficlightdriver:TLDM|timer:TT1"
+ 13. Port Connectivity Checks: "timer:T5"
+ 14. Port Connectivity Checks: "timer:T3"
+ 15. Port Connectivity Checks: "timer:TT"
+ 16. Elapsed Time Per Partition
+ 17. Analysis & Synthesis Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 1991-2011 Altera Corporation
+Your use of Altera Corporation's design tools, logic functions 
+and other software and tools, and its AMPP partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Altera Program License 
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
+
+
+
++-------------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                        ;
++------------------------------------+------------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Thu Nov  1 16:50:01 2012          ;
+; Quartus II Version                 ; 11.0 Build 208 07/03/2011 SP 1 SJ Full Version ;
+; Revision Name                      ; trafficlights                                  ;
+; Top-level Entity Name              ; trafficlights                                  ;
+; Family                             ; Cyclone III                                    ;
+; Total logic elements               ; 362                                            ;
+;     Total combinational functions  ; 362                                            ;
+;     Dedicated logic registers      ; 238                                            ;
+; Total registers                    ; 238                                            ;
+; Total pins                         ; 9                                              ;
+; Total virtual pins                 ; 0                                              ;
+; Total memory bits                  ; 0                                              ;
+; Embedded Multiplier 9-bit elements ; 0                                              ;
+; Total PLLs                         ; 0                                              ;
++------------------------------------+------------------------------------------------+
+
+
++----------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                                        ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                                     ; Setting            ; Default Value      ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                                     ; EP3C16F484C6       ;                    ;
+; Top-level entity name                                                      ; trafficlights      ; trafficlights      ;
+; Family name                                                                ; Cyclone III        ; Cyclone IV GX      ;
+; Use smart compilation                                                      ; Off                ; Off                ;
+; Enable parallel Assembler and TimeQuest Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                                ; Off                ; Off                ;
+; Restructure Multiplexers                                                   ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                                        ; Off                ; Off                ;
+; Preserve fewer node names                                                  ; On                 ; On                 ;
+; Disable OpenCore Plus hardware evaluation                                  ; Off                ; Off                ;
+; Verilog Version                                                            ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                               ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                                   ; Auto               ; Auto               ;
+; Safe State Machine                                                         ; Off                ; Off                ;
+; Extract Verilog State Machines                                             ; On                 ; On                 ;
+; Extract VHDL State Machines                                                ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                          ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                                 ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                             ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                                    ; On                 ; On                 ;
+; Parallel Synthesis                                                         ; On                 ; On                 ;
+; DSP Block Balancing                                                        ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                                         ; On                 ; On                 ;
+; Power-Up Don't Care                                                        ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                               ; Off                ; Off                ;
+; Remove Duplicate Registers                                                 ; On                 ; On                 ;
+; Ignore CARRY Buffers                                                       ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                                     ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                                      ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                                  ; Off                ; Off                ;
+; Ignore LCELL Buffers                                                       ; Off                ; Off                ;
+; Ignore SOFT Buffers                                                        ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                             ; Off                ; Off                ;
+; Optimization Technique                                                     ; Balanced           ; Balanced           ;
+; Carry Chain Length                                                         ; 70                 ; 70                 ;
+; Auto Carry Chains                                                          ; On                 ; On                 ;
+; Auto Open-Drain Pins                                                       ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                                      ; Off                ; Off                ;
+; Auto ROM Replacement                                                       ; On                 ; On                 ;
+; Auto RAM Replacement                                                       ; On                 ; On                 ;
+; Auto DSP Block Replacement                                                 ; On                 ; On                 ;
+; Auto Shift Register Replacement                                            ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                            ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                              ; On                 ; On                 ;
+; Strict RAM Replacement                                                     ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                          ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                                     ; Off                ; Off                ;
+; Auto RAM Block Balancing                                                   ; On                 ; On                 ;
+; Auto RAM to Logic Cell Conversion                                          ; Off                ; Off                ;
+; Auto Resource Sharing                                                      ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                                         ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                              ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing                        ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                          ; Off                ; Off                ;
+; Timing-Driven Synthesis                                                    ; On                 ; On                 ;
+; Report Parameter Settings                                                  ; On                 ; On                 ;
+; Report Source Assignments                                                  ; On                 ; On                 ;
+; Report Connectivity Checks                                                 ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                                         ; Off                ; Off                ;
+; Synchronization Register Chain Length                                      ; 2                  ; 2                  ;
+; PowerPlay Power Optimization                                               ; Normal compilation ; Normal compilation ;
+; HDL message level                                                          ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                            ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report                   ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report                  ; 100                ; 100                ;
+; Clock MUX Protection                                                       ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                                ; Off                ; Off                ;
+; Block Design Naming                                                        ; Auto               ; Auto               ;
+; SDC constraint protection                                                  ; Off                ; Off                ;
+; Synthesis Effort                                                           ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal               ; On                 ; On                 ;
+; Analysis & Synthesis Message Level                                         ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                                ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                                     ; On                 ; On                 ;
+; Synthesis Seed                                                             ; 1                  ; 1                  ;
++----------------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 4           ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 1           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     1 processor            ; 100.0%      ;
+;     2-4 processors         ;   0.0%      ;
++----------------------------+-------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                                                                                                                                               ;
++---------------------------------------------------------------------------------------------------------------------+-----------------+-----------------+----------------------------------------------------------------------------------------------------------------------------+
+; File Name with User-Entered Path                                                                                    ; Used in Netlist ; File Type       ; File Name with Absolute Path                                                                                               ;
++---------------------------------------------------------------------------------------------------------------------+-----------------+-----------------+----------------------------------------------------------------------------------------------------------------------------+
+; ../../../../../.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlightscontroller.vhd ; yes             ; User VHDL File  ; /home/netlab/j2-johns/.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlightscontroller.vhd ;
+; ../../../../../.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlights.vhd           ; yes             ; User VHDL File  ; /home/netlab/j2-johns/.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlights.vhd           ;
+; ../../../../../.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/timer.vhd                   ; yes             ; User VHDL File  ; /home/netlab/j2-johns/.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/timer.vhd                   ;
+; trafficlightdriver.vhd                                                                                              ; yes             ; User VHDL File  ; /home/netlab/j2-johns/Documents/UniWork/Year 2/VHDL/trafficlights/trafficlightdriver.vhd                                   ;
++---------------------------------------------------------------------------------------------------------------------+-----------------+-----------------+----------------------------------------------------------------------------------------------------------------------------+
+
+
++---------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary             ;
++---------------------------------------------+-----------+
+; Resource                                    ; Usage     ;
++---------------------------------------------+-----------+
+; Estimated Total logic elements              ; 362       ;
+;                                             ;           ;
+; Total combinational functions               ; 362       ;
+; Logic element usage by number of LUT inputs ;           ;
+;     -- 4 input functions                    ; 98        ;
+;     -- 3 input functions                    ; 36        ;
+;     -- <=2 input functions                  ; 228       ;
+;                                             ;           ;
+; Logic elements by mode                      ;           ;
+;     -- normal mode                          ; 152       ;
+;     -- arithmetic mode                      ; 210       ;
+;                                             ;           ;
+; Total registers                             ; 238       ;
+;     -- Dedicated logic registers            ; 238       ;
+;     -- I/O registers                        ; 0         ;
+;                                             ;           ;
+; I/O pins                                    ; 9         ;
+; Maximum fan-out node                        ; clk~input ;
+; Maximum fan-out                             ; 238       ;
+; Total fan-out                               ; 1881      ;
+; Average fan-out                             ; 3.04      ;
++---------------------------------------------+-----------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                            ;
++----------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------+--------------+
+; Compilation Hierarchy Node       ; LC Combinationals ; LC Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name                              ; Library Name ;
++----------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------+--------------+
+; |trafficlights                   ; 362 (0)           ; 238 (0)      ; 0           ; 0            ; 0       ; 0         ; 9    ; 0            ; |trafficlights                                   ;              ;
+;    |timer:T3|                    ; 44 (44)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|timer:T3                          ;              ;
+;    |timer:T5|                    ; 32 (32)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|timer:T5                          ;              ;
+;    |timer:TT|                    ; 45 (45)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|timer:TT                          ;              ;
+;    |trafficlightdriver:TLDF|     ; 101 (15)          ; 64 (0)       ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightdriver:TLDF           ;              ;
+;       |timer:TT1|                ; 45 (45)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightdriver:TLDF|timer:TT1 ;              ;
+;       |timer:TT2|                ; 41 (41)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightdriver:TLDF|timer:TT2 ;              ;
+;    |trafficlightdriver:TLDM|     ; 100 (14)          ; 64 (0)       ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightdriver:TLDM           ;              ;
+;       |timer:TT1|                ; 45 (45)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightdriver:TLDM|timer:TT1 ;              ;
+;       |timer:TT2|                ; 41 (41)           ; 32 (32)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightdriver:TLDM|timer:TT2 ;              ;
+;    |trafficlightscontroller:TLC| ; 40 (40)           ; 14 (14)      ; 0           ; 0            ; 0       ; 0         ; 0    ; 0            ; |trafficlights|trafficlightscontroller:TLC       ;              ;
++----------------------------------+-------------------+--------------+-------------+--------------+---------+-----------+------+--------------+--------------------------------------------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
+Encoding Type:  One-Hot
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |trafficlights|trafficlightscontroller:TLC|state                                                                                                                 ;
++------------+-----------+----------+------------+-----------+-----------+----------+----------+-----------+----------+------------+-----------+-----------+----------+------------+
+; Name       ; state.FAW ; state.FA ; state.FGFW ; state.FGF ; state.FGW ; state.FG ; state.MR ; state.MAW ; state.MA ; state.MGFW ; state.MGF ; state.MGW ; state.MG ; state.Init ;
++------------+-----------+----------+------------+-----------+-----------+----------+----------+-----------+----------+------------+-----------+-----------+----------+------------+
+; state.Init ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0          ;
+; state.MG   ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 1        ; 1          ;
+; state.MGW  ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 1         ; 0        ; 1          ;
+; state.MGF  ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 1         ; 0         ; 0        ; 1          ;
+; state.MGFW ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 1          ; 0         ; 0         ; 0        ; 1          ;
+; state.MA   ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 1        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.MAW  ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 1         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.MR   ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.FG   ; 0         ; 0        ; 0          ; 0         ; 0         ; 1        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.FGW  ; 0         ; 0        ; 0          ; 0         ; 1         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.FGF  ; 0         ; 0        ; 0          ; 1         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.FGFW ; 0         ; 0        ; 1          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.FA   ; 0         ; 1        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
+; state.FAW  ; 1         ; 0        ; 0          ; 0         ; 0         ; 0        ; 0        ; 0         ; 0        ; 0          ; 0         ; 0         ; 0        ; 1          ;
++------------+-----------+----------+------------+-----------+-----------+----------+----------+-----------+----------+------------+-----------+-----------+----------+------------+
+
+
++--------------------------------------------------------------------------------------------------------------------+
+; User-Specified and Inferred Latches                                                                                ;
++-----------------------------------------------------+-------------------------------------+------------------------+
+; Latch Name                                          ; Latch Enable Signal                 ; Free of Timing Hazards ;
++-----------------------------------------------------+-------------------------------------+------------------------+
+; trafficlightdriver:TLDM|green_light                 ; trafficlightdriver:TLDM|green_light ; no                     ;
+; trafficlightdriver:TLDF|green_light                 ; trafficlightdriver:TLDF|green_light ; no                     ;
+; trafficlightdriver:TLDM|tt1_reset                   ; trafficlightdriver:TLDM|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDM|tt1_enable                  ; trafficlightdriver:TLDM|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDM|tt2_reset                   ; trafficlightdriver:TLDM|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDM|tt2_enable                  ; trafficlightdriver:TLDM|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDF|tt1_reset                   ; trafficlightdriver:TLDF|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDF|tt1_enable                  ; trafficlightdriver:TLDF|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDF|tt2_reset                   ; trafficlightdriver:TLDF|tt2_reset   ; yes                    ;
+; trafficlightdriver:TLDF|tt2_enable                  ; trafficlightdriver:TLDF|tt2_reset   ; yes                    ;
+; Number of user-specified and inferred latches = 10  ;                                     ;                        ;
++-----------------------------------------------------+-------------------------------------+------------------------+
+Note: All latches listed above may not be present at the end of synthesis due to various synthesis optimizations.
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 238   ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 224   ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 224   ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++---------------------------------------------------------------+
+; Port Connectivity Checks: "trafficlightdriver:TLDM|timer:TT2" ;
++------------------------+-------+----------+-------------------+
+; Port                   ; Type  ; Severity ; Details           ;
++------------------------+-------+----------+-------------------+
+; seconds_timeout[31..1] ; Input ; Info     ; Stuck at GND      ;
+; seconds_timeout[0]     ; Input ; Info     ; Stuck at VCC      ;
++------------------------+-------+----------+-------------------+
+
+
++---------------------------------------------------------------+
+; Port Connectivity Checks: "trafficlightdriver:TLDM|timer:TT1" ;
++------------------------+-------+----------+-------------------+
+; Port                   ; Type  ; Severity ; Details           ;
++------------------------+-------+----------+-------------------+
+; seconds_timeout[31..1] ; Input ; Info     ; Stuck at GND      ;
+; seconds_timeout[0]     ; Input ; Info     ; Stuck at VCC      ;
++------------------------+-------+----------+-------------------+
+
+
++----------------------------------------------------------+
+; Port Connectivity Checks: "timer:T5"                     ;
++------------------------+-------+----------+--------------+
+; Port                   ; Type  ; Severity ; Details      ;
++------------------------+-------+----------+--------------+
+; seconds_timeout[31..3] ; Input ; Info     ; Stuck at GND ;
+; seconds_timeout[2]     ; Input ; Info     ; Stuck at VCC ;
+; seconds_timeout[1]     ; Input ; Info     ; Stuck at GND ;
+; seconds_timeout[0]     ; Input ; Info     ; Stuck at VCC ;
++------------------------+-------+----------+--------------+
+
+
++----------------------------------------------------------+
+; Port Connectivity Checks: "timer:T3"                     ;
++------------------------+-------+----------+--------------+
+; Port                   ; Type  ; Severity ; Details      ;
++------------------------+-------+----------+--------------+
+; seconds_timeout[1..0]  ; Input ; Info     ; Stuck at VCC ;
+; seconds_timeout[31..2] ; Input ; Info     ; Stuck at GND ;
++------------------------+-------+----------+--------------+
+
+
++----------------------------------------------------------+
+; Port Connectivity Checks: "timer:TT"                     ;
++------------------------+-------+----------+--------------+
+; Port                   ; Type  ; Severity ; Details      ;
++------------------------+-------+----------+--------------+
+; seconds_timeout[31..1] ; Input ; Info     ; Stuck at GND ;
+; seconds_timeout[0]     ; Input ; Info     ; Stuck at VCC ;
++------------------------+-------+----------+--------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:01     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus II Analysis & Synthesis
+    Info: Version 11.0 Build 208 07/03/2011 Service Pack 1 SJ Full Version
+    Info: Processing started: Thu Nov  1 16:49:58 2012
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off trafficlights -c trafficlights
+Info: Parallel compilation is enabled and will use 4 of the 4 processors detected
+Info: Found 2 design units, including 1 entities, in source file /home/netlab/j2-johns/.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlightscontroller.vhd
+    Info: Found design unit 1: trafficlightscontroller-fsm
+    Info: Found entity 1: trafficlightscontroller
+Info: Found 2 design units, including 1 entities, in source file /home/netlab/j2-johns/.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/trafficlights.vhd
+    Info: Found design unit 1: trafficlights-Behavioural
+    Info: Found entity 1: trafficlights
+Info: Found 2 design units, including 1 entities, in source file /home/netlab/j2-johns/.local/share/Trash/files/trafficlights worksheet/traffic light worksheet/timer.vhd
+    Info: Found design unit 1: timer-Behavioural
+    Info: Found entity 1: timer
+Info: Found 2 design units, including 1 entities, in source file trafficlightdriver.vhd
+    Info: Found design unit 1: trafficlightdriver-Behavioural
+    Info: Found entity 1: trafficlightdriver
+Info: Elaborating entity "trafficlights" for the top level hierarchy
+Info: Elaborating entity "trafficlightscontroller" for hierarchy "trafficlightscontroller:TLC"
+Info: Elaborating entity "timer" for hierarchy "timer:TT"
+Warning (10492): VHDL Process Statement warning at timer.vhd(25): signal "current_count" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Warning (10492): VHDL Process Statement warning at timer.vhd(32): signal "seconds_timeout" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Info: Elaborating entity "trafficlightdriver" for hierarchy "trafficlightdriver:TLDM"
+Warning (10492): VHDL Process Statement warning at trafficlightdriver.vhd(46): signal "tt1_fire" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Warning (10492): VHDL Process Statement warning at trafficlightdriver.vhd(52): signal "tt2_fire" is read inside the Process Statement but isn't in the Process Statement's sensitivity list
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "red_light", which holds its previous value in one or more paths through the process
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "amber_light", which holds its previous value in one or more paths through the process
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "green_light", which holds its previous value in one or more paths through the process
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "tt1_reset", which holds its previous value in one or more paths through the process
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "tt1_enable", which holds its previous value in one or more paths through the process
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "tt2_reset", which holds its previous value in one or more paths through the process
+Warning (10631): VHDL Process Statement warning at trafficlightdriver.vhd(29): inferring latch(es) for signal or variable "tt2_enable", which holds its previous value in one or more paths through the process
+Info (10041): Inferred latch for "tt2_enable" at trafficlightdriver.vhd(29)
+Info (10041): Inferred latch for "tt2_reset" at trafficlightdriver.vhd(29)
+Info (10041): Inferred latch for "tt1_enable" at trafficlightdriver.vhd(29)
+Info (10041): Inferred latch for "tt1_reset" at trafficlightdriver.vhd(29)
+Info (10041): Inferred latch for "green_light" at trafficlightdriver.vhd(29)
+Info (10041): Inferred latch for "amber_light" at trafficlightdriver.vhd(29)
+Info (10041): Inferred latch for "red_light" at trafficlightdriver.vhd(29)
+Info: Duplicate LATCH primitives merged into single LATCH primitive
+    Info: Duplicate LATCH primitive "trafficlightdriver:TLDM|tt2_enable" merged with LATCH primitive "trafficlightdriver:TLDM|tt1_reset"
+    Info: Duplicate LATCH primitive "trafficlightdriver:TLDM|tt2_reset" merged with LATCH primitive "trafficlightdriver:TLDM|tt1_enable"
+    Info: Duplicate LATCH primitive "trafficlightdriver:TLDF|tt2_enable" merged with LATCH primitive "trafficlightdriver:TLDF|tt1_reset"
+    Info: Duplicate LATCH primitive "trafficlightdriver:TLDF|tt2_reset" merged with LATCH primitive "trafficlightdriver:TLDF|tt1_enable"
+Warning: Latch trafficlightdriver:TLDM|green_light has unsafe behavior
+    Warning: Ports D and ENA on the latch are fed by the same signal trafficlightdriver:TLDM|timer:TT1|current_count[31]
+    Warning: Ports ENA and PRE on the latch are fed by the same signal trafficlightscontroller:TLC|WideOr7
+Warning: Latch trafficlightdriver:TLDF|green_light has unsafe behavior
+    Warning: Ports D and ENA on the latch are fed by the same signal trafficlightdriver:TLDF|timer:TT1|current_count[31]
+    Warning: Ports ENA and PRE on the latch are fed by the same signal trafficlightscontroller:TLC|WideOr9
+Warning: Latch trafficlightdriver:TLDM|tt1_reset has unsafe behavior
+    Warning: Ports D and ENA on the latch are fed by the same signal trafficlightdriver:TLDM|timer:TT1|current_count[31]
+Warning: Latch trafficlightdriver:TLDM|tt1_enable has unsafe behavior
+    Warning: Ports D and ENA on the latch are fed by the same signal trafficlightdriver:TLDM|timer:TT1|current_count[31]
+Warning: Latch trafficlightdriver:TLDF|tt1_reset has unsafe behavior
+    Warning: Ports D and ENA on the latch are fed by the same signal trafficlightdriver:TLDF|timer:TT1|current_count[31]
+Warning: Latch trafficlightdriver:TLDF|tt1_enable has unsafe behavior
+    Warning: Ports D and ENA on the latch are fed by the same signal trafficlightdriver:TLDF|timer:TT1|current_count[31]
+Critical Warning: Ignored Power-Up Level option on the following registers
+    Critical Warning (18010): Register trafficlightdriver:TLDM|timer:TT1|current_count[31] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDM|timer:TT1|current_count[0] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDM|timer:TT2|current_count[31] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDM|timer:TT2|current_count[0] will power up to Low
+    Critical Warning (18010): Register timer:T5|current_count[31] will power up to Low
+    Critical Warning (18010): Register timer:T5|current_count[0] will power up to Low
+    Critical Warning (18010): Register timer:TT|current_count[31] will power up to Low
+    Critical Warning (18010): Register timer:TT|current_count[0] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDF|timer:TT1|current_count[31] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDF|timer:TT1|current_count[0] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDF|timer:TT2|current_count[31] will power up to Low
+    Critical Warning (18010): Register trafficlightdriver:TLDF|timer:TT2|current_count[0] will power up to Low
+    Critical Warning (18010): Register timer:T3|current_count[31] will power up to Low
+    Critical Warning (18010): Register timer:T3|current_count[0] will power up to Low
+Info: Timing-Driven Synthesis is running
+Info: Generating hard_block partition "hard_block:auto_generated_inst"
+Info: Implemented 371 device resources after synthesis - the final resource count might be different
+    Info: Implemented 3 input pins
+    Info: Implemented 6 output pins
+    Info: Implemented 362 logic cells
+Info: Quartus II Analysis & Synthesis was successful. 0 errors, 40 warnings
+    Info: Peak virtual memory: 295 megabytes
+    Info: Processing ended: Thu Nov  1 16:50:01 2012
+    Info: Elapsed time: 00:00:03
+    Info: Total CPU time (on all processors): 00:00:03
+
+

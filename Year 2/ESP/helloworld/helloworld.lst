@@ -1,0 +1,143 @@
+
+helloworld:     file format elf32-littlearm
+
+Disassembly of section .text:
+
+c0000000 <_start>:
+c0000000:	e3a01000 	mov	r1, #0	; 0x0
+c0000004:	ee011f10 	mcr	15, 0, r1, cr1, cr0, {0}
+c0000008:	e1a00000 	nop			(mov r0,r0)
+c000000c:	e1a00000 	nop			(mov r0,r0)
+c0000010:	e1a00000 	nop			(mov r0,r0)
+c0000014:	e59fd1e0 	ldr	sp, [pc, #1e0]	; c00001fc <stack_addr>
+c0000018:	eaffffff 	b	c000001c <main>
+
+c000001c <main>:
+c000001c:	e59f11dc 	ldr	r1, [pc, #1dc]	; c0000200 <stack_addr+0x4>
+c0000020:	e3a0000a 	mov	r0, #10	; 0xa
+c0000024:	eb00000a 	bl	c0000054 <wb>
+c0000028:	e3a00068 	mov	r0, #104	; 0x68
+c000002c:	eb000008 	bl	c0000054 <wb>
+c0000030:	e3a00065 	mov	r0, #101	; 0x65
+c0000034:	eb000006 	bl	c0000054 <wb>
+c0000038:	e3a0006c 	mov	r0, #108	; 0x6c
+c000003c:	eb000004 	bl	c0000054 <wb>
+c0000040:	e3a0006c 	mov	r0, #108	; 0x6c
+c0000044:	eb000002 	bl	c0000054 <wb>
+c0000048:	e3a0006f 	mov	r0, #111	; 0x6f
+c000004c:	eb000000 	bl	c0000054 <wb>
+c0000050:	ea000004 	b	c0000068 <halt>
+
+c0000054 <wb>:
+c0000054:	e5d12020 	ldrb	r2, [r1, #32]
+c0000058:	e3120004 	tst	r2, #4	; 0x4
+c000005c:	0afffffc 	beq	c0000054 <wb>
+c0000060:	e5c10014 	strb	r0, [r1, #20]
+c0000064:	e1a0f00e 	mov	pc, lr
+
+c0000068 <halt>:
+c0000068:	eafffffe 	b	c0000068 <halt>
+c000006c:	e1a00000 	nop			(mov r0,r0)
+c0000070:	e1a00000 	nop			(mov r0,r0)
+c0000074:	e1a00000 	nop			(mov r0,r0)
+c0000078:	e1a00000 	nop			(mov r0,r0)
+c000007c:	e1a00000 	nop			(mov r0,r0)
+c0000080:	e1a00000 	nop			(mov r0,r0)
+c0000084:	e1a00000 	nop			(mov r0,r0)
+c0000088:	e1a00000 	nop			(mov r0,r0)
+c000008c:	e1a00000 	nop			(mov r0,r0)
+c0000090:	e1a00000 	nop			(mov r0,r0)
+c0000094:	e1a00000 	nop			(mov r0,r0)
+c0000098:	e1a00000 	nop			(mov r0,r0)
+c000009c:	e1a00000 	nop			(mov r0,r0)
+c00000a0:	e1a00000 	nop			(mov r0,r0)
+c00000a4:	e1a00000 	nop			(mov r0,r0)
+c00000a8:	e1a00000 	nop			(mov r0,r0)
+c00000ac:	e1a00000 	nop			(mov r0,r0)
+c00000b0:	e1a00000 	nop			(mov r0,r0)
+c00000b4:	e1a00000 	nop			(mov r0,r0)
+c00000b8:	e1a00000 	nop			(mov r0,r0)
+c00000bc:	e1a00000 	nop			(mov r0,r0)
+c00000c0:	e1a00000 	nop			(mov r0,r0)
+c00000c4:	e1a00000 	nop			(mov r0,r0)
+c00000c8:	e1a00000 	nop			(mov r0,r0)
+c00000cc:	e1a00000 	nop			(mov r0,r0)
+c00000d0:	e1a00000 	nop			(mov r0,r0)
+c00000d4:	e1a00000 	nop			(mov r0,r0)
+c00000d8:	e1a00000 	nop			(mov r0,r0)
+c00000dc:	e1a00000 	nop			(mov r0,r0)
+c00000e0:	e1a00000 	nop			(mov r0,r0)
+c00000e4:	e1a00000 	nop			(mov r0,r0)
+c00000e8:	e1a00000 	nop			(mov r0,r0)
+c00000ec:	e1a00000 	nop			(mov r0,r0)
+c00000f0:	e1a00000 	nop			(mov r0,r0)
+c00000f4:	e1a00000 	nop			(mov r0,r0)
+c00000f8:	e1a00000 	nop			(mov r0,r0)
+c00000fc:	e1a00000 	nop			(mov r0,r0)
+c0000100:	e1a00000 	nop			(mov r0,r0)
+c0000104:	e1a00000 	nop			(mov r0,r0)
+c0000108:	e1a00000 	nop			(mov r0,r0)
+c000010c:	e1a00000 	nop			(mov r0,r0)
+c0000110:	e1a00000 	nop			(mov r0,r0)
+c0000114:	e1a00000 	nop			(mov r0,r0)
+c0000118:	e1a00000 	nop			(mov r0,r0)
+c000011c:	e1a00000 	nop			(mov r0,r0)
+c0000120:	e1a00000 	nop			(mov r0,r0)
+c0000124:	e1a00000 	nop			(mov r0,r0)
+c0000128:	e1a00000 	nop			(mov r0,r0)
+c000012c:	e1a00000 	nop			(mov r0,r0)
+c0000130:	e1a00000 	nop			(mov r0,r0)
+c0000134:	e1a00000 	nop			(mov r0,r0)
+c0000138:	e1a00000 	nop			(mov r0,r0)
+c000013c:	e1a00000 	nop			(mov r0,r0)
+c0000140:	e1a00000 	nop			(mov r0,r0)
+c0000144:	e1a00000 	nop			(mov r0,r0)
+c0000148:	e1a00000 	nop			(mov r0,r0)
+c000014c:	e1a00000 	nop			(mov r0,r0)
+c0000150:	e1a00000 	nop			(mov r0,r0)
+c0000154:	e1a00000 	nop			(mov r0,r0)
+c0000158:	e1a00000 	nop			(mov r0,r0)
+c000015c:	e1a00000 	nop			(mov r0,r0)
+c0000160:	e1a00000 	nop			(mov r0,r0)
+c0000164:	e1a00000 	nop			(mov r0,r0)
+c0000168:	e1a00000 	nop			(mov r0,r0)
+c000016c:	e1a00000 	nop			(mov r0,r0)
+c0000170:	e1a00000 	nop			(mov r0,r0)
+c0000174:	e1a00000 	nop			(mov r0,r0)
+c0000178:	e1a00000 	nop			(mov r0,r0)
+c000017c:	e1a00000 	nop			(mov r0,r0)
+c0000180:	e1a00000 	nop			(mov r0,r0)
+c0000184:	e1a00000 	nop			(mov r0,r0)
+c0000188:	e1a00000 	nop			(mov r0,r0)
+c000018c:	e1a00000 	nop			(mov r0,r0)
+c0000190:	e1a00000 	nop			(mov r0,r0)
+c0000194:	e1a00000 	nop			(mov r0,r0)
+c0000198:	e1a00000 	nop			(mov r0,r0)
+c000019c:	e1a00000 	nop			(mov r0,r0)
+c00001a0:	e1a00000 	nop			(mov r0,r0)
+c00001a4:	e1a00000 	nop			(mov r0,r0)
+c00001a8:	e1a00000 	nop			(mov r0,r0)
+c00001ac:	e1a00000 	nop			(mov r0,r0)
+c00001b0:	e1a00000 	nop			(mov r0,r0)
+c00001b4:	e1a00000 	nop			(mov r0,r0)
+c00001b8:	e1a00000 	nop			(mov r0,r0)
+c00001bc:	e1a00000 	nop			(mov r0,r0)
+c00001c0:	e1a00000 	nop			(mov r0,r0)
+c00001c4:	e1a00000 	nop			(mov r0,r0)
+c00001c8:	e1a00000 	nop			(mov r0,r0)
+c00001cc:	e1a00000 	nop			(mov r0,r0)
+c00001d0:	e1a00000 	nop			(mov r0,r0)
+c00001d4:	e1a00000 	nop			(mov r0,r0)
+c00001d8:	e1a00000 	nop			(mov r0,r0)
+c00001dc:	e1a00000 	nop			(mov r0,r0)
+c00001e0:	e1a00000 	nop			(mov r0,r0)
+c00001e4:	e1a00000 	nop			(mov r0,r0)
+c00001e8:	e1a00000 	nop			(mov r0,r0)
+c00001ec:	e1a00000 	nop			(mov r0,r0)
+c00001f0:	e1a00000 	nop			(mov r0,r0)
+c00001f4:	e1a00000 	nop			(mov r0,r0)
+c00001f8:	e1a00000 	nop			(mov r0,r0)
+
+c00001fc <stack_addr>:
+c00001fc:	c0004000 	andgt	r4, r0, r0
+c0000200:	80010000 	andhi	r0, r1, r0

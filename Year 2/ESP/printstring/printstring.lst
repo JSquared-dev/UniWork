@@ -1,0 +1,12 @@
+
+printstring:     file format elf32-littlearm
+
+Disassembly of section .text:
+
+c0000000 <_romInit>:
+c0000000:	eaffffff 	b	c0000004 <_start>
+
+c0000004 <_start>:
+c0000004:	eafffffe 	b	c0000004 <_start>
+c0000008:	e1a00000 	nop			(mov r0,r0)
+c000000c:	e1a00000 	nop			(mov r0,r0)
