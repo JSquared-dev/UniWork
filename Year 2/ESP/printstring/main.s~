@@ -1,0 +1,12 @@
+
+
+
+.text
+.align 4
+
+_romInit:
+	b _start
+	
+_start:
+	b _start
+	
